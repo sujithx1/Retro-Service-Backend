@@ -42,27 +42,38 @@ const userSchema = new mongoose_1.Schema({
     },
     email: {
         type: String,
+        unique: true,
         required: true,
     },
     phone: {
         type: String,
-        required: true,
+        default: "",
     },
     isActive: {
         type: Boolean,
-        default: false,
+        default: true,
     },
     password: {
         type: String,
-        required: true,
+        default: ""
     },
     profilePic: {
         type: String,
-        default: "https://example.com/default-profile-pic.png",
+        default: ""
     },
     isAdmin: {
         type: Boolean,
         default: false
+    },
+    authSource: {
+        type: String,
+        enum: ["self", "google"],
+        default: "self",
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: "user"
     }
 }, {
     timestamps: true,

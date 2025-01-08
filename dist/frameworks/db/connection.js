@@ -6,8 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectdb = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const connectdb = () => {
+    const dbUrl = process.env.dbUrl;
     mongoose_1.default
-        .connect("mongodb://localhost:27017/Retro_Service")
+        .connect(`${dbUrl}`)
         .then(() => console.log("mongoDb connected"))
         .catch((err) => console.log("mongodb not connected", err));
 };

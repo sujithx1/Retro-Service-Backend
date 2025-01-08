@@ -1,6 +1,6 @@
-import { UserIntities } from "../../entities/Userentities";
-import { IUserRepositories } from "../../interfaces/repositories/userSide/IUserrRepositories";
-import { hashpass } from "../../utils/hashPassword";
+import { UserIntities } from "../../../entities/Userentities";
+import { IUserRepositories } from "../../../interfaces/repositories/userSide/IUserrRepositories";
+import { hashpass } from "../../../utils/hashPassword";
 
 
 export class CreateUser{
@@ -9,9 +9,7 @@ export class CreateUser{
     async exicute(data:{username:string,email:string,phone:string,password:string}):Promise<UserIntities>
     {
         const {username,email,phone,password}=data
-        const existUser=await this.userRepositores.findByemail(email)
-        if(existUser) throw new Error("User Already Exist")
-
+       
         const hashPassword=await hashpass(password)
         const user=new UserIntities(
             "",
@@ -21,9 +19,9 @@ export class CreateUser{
             hashPassword
         )
 
-        await this.userRepositores.save(user)   
-
-        return user
+       const newUser=await this.userRepositores.save(user)   
+        
+        return newUser
 
 
     }

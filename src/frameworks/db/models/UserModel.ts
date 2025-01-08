@@ -1,6 +1,23 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
-const userSchema = new Schema(
+
+export interface IuserTypes extends Document{
+  _id:Schema.Types.ObjectId,
+  username:string,
+  email:string,
+  phone:string,
+  isActive:boolean,
+  password:string,
+  profilePic:string,
+  isAdmin:boolean
+  authSource:"self"|"google",
+  role:"user"|"admin",
+  createdAt:Date,
+  updatedAt:Date,
+
+}
+
+const userSchema = new Schema<IuserTypes>(
   {
     username: {
       type: String,
@@ -8,27 +25,38 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
+      unique:true,
       required: true,
     },
     phone: {
       type: String,
-      required: true,
+      default:"",
     },
     isActive: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     password: {
       type: String,
-      required: true,
+      default:""
     },
     profilePic: {
       type: String,
-      default: "https://example.com/default-profile-pic.png",
+      default:""
     },
   isAdmin:{
     type:Boolean,
     default:false
+  },
+  authSource: {
+    type: String, 
+    enum: ["self", "google"], 
+    default: "self",
+  },
+  role:{
+    type:String,
+    enum:['user','admin'],
+    default:"user"  
   }
 },
   {
