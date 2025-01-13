@@ -80,6 +80,10 @@ const EmployeSchema = new mongoose_1.Schema({
     role: {
         type: String,
         default: "employee"
+    },
+    revenue: {
+        type: Number,
+        default: 0
     }
 }, {
     timestamps: true

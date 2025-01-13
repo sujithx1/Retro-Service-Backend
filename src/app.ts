@@ -9,7 +9,6 @@ import { errorHandler } from "./interfaces/middleware/Errorhadler"
 import morgan from "morgan"
   
 const app=express()
-
   
 app.use(express.json({
   limit:"20mb"

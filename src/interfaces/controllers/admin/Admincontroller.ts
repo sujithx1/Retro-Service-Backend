@@ -1,29 +1,29 @@
 import { NextFunction, Request, Response } from "express";
-import { AdminLogin } from "../../use-cases/admin/adminLogin";
+import { AdminLogin } from "../../../use-cases/admin/adminLogin";
 import {
   category_Validation,
   loginValidates,
-} from "../../utils/helper/Validation";
+} from "../../../utils/helper/Validation";
 import {
   GenerateAccessToken,
   GenerateRefreshToken,
-} from "../jwt/jwt_auth_token";
-import { Admin_add_product_Usecase } from "../../use-cases/admin/product/Admin_add_product_usecase";
-import { Admin_add_Category_useCase } from "../../use-cases/admin/category/Admin_add_category";
-import { Admin_edit_Category_useCase } from "../../use-cases/admin/category/Admin_edit_categoty";
-import { Admin_Del_Category_useCase } from "../../use-cases/admin/category/admin_del_useCase";
-import { Admin_add_jobs_useCase } from "../../use-cases/admin/jobs/admin_addjobs";
-import { Admin_edit_jobs_useCase } from "../../use-cases/admin/jobs/adminEditJobs";
-import { Admin_del_job_useCase } from "../../use-cases/admin/jobs/del_admin_jobs";
-import { Admin_get_allEmployees_useCase } from "../../use-cases/admin/workerManageMent/get_employees";
-import { Admin_put_employee_useCase } from "../../use-cases/admin/workerManageMent/putEmployees";
-import { Admin_del_employee_useCase } from "../../use-cases/admin/workerManageMent/del_employee_admin";
-import { Admin_get_allUsers_useCase } from "../../use-cases/admin/userMangement/getUsersAdmin";
-import { Admin_put_user_useCase } from "../../use-cases/admin/userMangement/put_userAdmin";
-import { admin_Block_UnBlock_User_useCase } from "../../use-cases/admin/userMangement/del_User_admin";
-import { Admin_get_categories_useCase } from "../../use-cases/admin/category/get_categories_admin";
-import { Admin_get_jobs_useCase } from "../../use-cases/admin/jobs/getJobs";
-import { Admin_get_feedbacks_useCase } from "../../use-cases/admin/feedbacks/get_feedbacks";
+} from "../../jwt/jwt_auth_token";
+import { Admin_add_product_Usecase } from "../../../use-cases/admin/product/Admin_add_product_usecase";
+import { Admin_add_Category_useCase } from "../../../use-cases/admin/category/Admin_add_category";
+import { Admin_edit_Category_useCase } from "../../../use-cases/admin/category/Admin_edit_categoty";
+import { Admin_Del_Category_useCase } from "../../../use-cases/admin/category/admin_del_useCase";
+import { Admin_add_jobs_useCase } from "../../../use-cases/admin/jobs/admin_addjobs";
+import { Admin_edit_jobs_useCase } from "../../../use-cases/admin/jobs/adminEditJobs";
+import { Admin_del_job_useCase } from "../../../use-cases/admin/jobs/del_admin_jobs";
+import { Admin_get_allEmployees_useCase } from "../../../use-cases/admin/workerManageMent/get_employees";
+import { Admin_put_employee_useCase } from "../../../use-cases/admin/workerManageMent/putEmployees";
+import { Admin_del_employee_useCase } from "../../../use-cases/admin/workerManageMent/del_employee_admin";
+import { Admin_get_allUsers_useCase } from "../../../use-cases/admin/userMangement/getUsersAdmin";
+import { Admin_put_user_useCase } from "../../../use-cases/admin/userMangement/put_userAdmin";
+import { admin_Block_UnBlock_User_useCase } from "../../../use-cases/admin/userMangement/del_User_admin";
+import { Admin_get_categories_useCase } from "../../../use-cases/admin/category/get_categories_admin";
+import { Admin_get_jobs_useCase } from "../../../use-cases/admin/jobs/getJobs";
+import { Admin_get_feedbacks_useCase } from "../../../use-cases/admin/feedbacks/get_feedbacks";
 
 export class AdminController {
   constructor(

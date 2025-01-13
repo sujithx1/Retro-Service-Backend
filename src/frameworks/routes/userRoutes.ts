@@ -1,11 +1,11 @@
 import express from "express";
 import { UserMongodbRepositories } from "../../interfaces/repositories/userSide/UserMongoRepositories";
 import { CreateUser } from "../../use-cases/userside/auth/createUser";
-import { Usercontroller } from "../../interfaces/controllers/userController";
+import { Usercontroller } from "../../interfaces/controllers/user/userController";
 import { SendOtp } from "../../use-cases/userside/auth/SendOtp";
 import { CheckOtp } from "../../use-cases/userside/auth/otpchecking";
 import { UserLogin } from "../../use-cases/userside/auth/userLogin";
-import { User_Google_Auth_useCase } from "../../use-cases/userside/auth/Authservice"; 
+import { User_Google_Auth_useCase } from "../../use-cases/userside/auth/Authservice";
 import { User_Edit_useCase } from "../../use-cases/userside/edit/UserEdit";
 import { Authentication } from "../../interfaces/middleware/userside/userAuthentication";
 import { createAccessToken } from "../../interfaces/jwt/jwt_auth_token";
@@ -23,14 +23,22 @@ import { Report_FeedBack_user_MongoRepositories } from "../../interfaces/reposit
 import { Report_feedBack_user_useCase } from "../../use-cases/userside/report-feedback/Report_feedBack_useCase";
 import { Forgot_PasswordotpUseCase } from "../../use-cases/userside/auth/forgototpuseCase";
 import { NewPassword } from "../../use-cases/userside/auth/newPassword";
-import { ServiceController } from "../../interfaces/controllers/serviceController";
+import { UserServiceController } from "../../interfaces/controllers/user/UserserviceController";
+import { MongoReqServiceMechnics } from "../../interfaces/repositories/reqservicemechanics/mongoreqservicemechrep";
+import { ReqEmployeeServices_useCase } from "../../use-cases/userside/service/req.employeeservice";
+import { User_getReqServiceuseCase } from "../../use-cases/userside/service/get_req_service";
+import { UserServiceRazorpayPayment } from "../../use-cases/userside/payments/serviceRazorpayuseCase";
+import { ServicePaymentMongoRepositories } from "../../interfaces/repositories/payments/mongoservicePaymentRepositories";
+import { UserServiceBookingHistoryusecase } from "../../use-cases/userside/payments/getSevicePaymentCompleted";
 const userRepositories = new UserMongodbRepositories();
 const jobRepositories = new Mongo_Job_admin_Repositories();
 const Admin_employeeRepositories = new Mongo_Admin_Employees_Repositories();
 const employeeRepositories = new EmployeeMongoRepositories();
 const serviceRepositories = new Mongo_Service_Booking_Repositories();
-const Report_FeedBackRepositoires =new Report_FeedBack_user_MongoRepositories();
-
+const Report_FeedBackRepositoires =
+  new Report_FeedBack_user_MongoRepositories();
+const reqServiceMechanicsRepositories = new MongoReqServiceMechnics();
+const servicepaymentRepositoires = new ServicePaymentMongoRepositories();
 
 const createUser = new CreateUser(userRepositories);
 const sendmailOtp = new SendOtp(userRepositories);
@@ -55,8 +63,28 @@ const get_service_booking = new User_get_Service_Booking_useCase(
 const post_Report_user = new Report_feedBack_user_useCase(
   Report_FeedBackRepositoires
 );
-const forgotUserCase=new Forgot_PasswordotpUseCase(userRepositories)
-const newPassword=new NewPassword(userRepositories)
+const forgotUserCase = new Forgot_PasswordotpUseCase(userRepositories);
+const newPassword = new NewPassword(userRepositories);
+
+const createreqservicemechanics = new ReqEmployeeServices_useCase(
+  userRepositories,
+  employeeRepositories,
+  reqServiceMechanicsRepositories
+);
+
+const getreqservice = new User_getReqServiceuseCase(
+  reqServiceMechanicsRepositories
+);
+
+const createServicepayment = new UserServiceRazorpayPayment(
+  servicepaymentRepositoires,
+  employeeRepositories,
+  reqServiceMechanicsRepositories
+  
+);
+const getbookingHistory = new UserServiceBookingHistoryusecase(
+  servicepaymentRepositoires
+);
 
 const userController = new Usercontroller(
   createUser,
@@ -73,16 +101,19 @@ const userController = new Usercontroller(
   post_Report_user,
   forgotUserCase,
   newPassword
-
 );
 
-
-const serviceController=new ServiceController()
+const serviceController = new UserServiceController(
+  createreqservicemechanics,
+  getreqservice,
+  createServicepayment,
+  getbookingHistory
+);
 
 const userRouter = express.Router();
 
 userRouter.post("/refresh-token", (req, res) => {
-  createAccessToken(req, res,"user_refreshToken");
+  createAccessToken(req, res, "user_refreshToken");
 });
 userRouter.post("/signup", (req, res) => userController.signUp(req, res));
 userRouter.post("/signup/otp", (req, res) =>
@@ -110,10 +141,8 @@ userRouter.post(
   }
 );
 
-userRouter.put("/profile/:id",
-  Authentication,
-   (req, res, next) => {
-    userController.User_Put_controll(req, res, next);
+userRouter.put("/profile/:id", Authentication, (req, res, next) => {
+  userController.User_Put_controll(req, res, next);
 });
 
 userRouter.get(
@@ -141,19 +170,54 @@ userRouter.post("/report-feedBack", Authentication, (req, res, next) => {
   userController.User_post_report_feedBack_employee_controll(req, res, next);
 });
 
-userRouter.post('/forgot-password/otp',(req,res,next)=>{
-  userController.User_Post_forgot_password_controll(req,res,next)
-})
-userRouter.post('/forgot-password/check',(req,res,next)=>{
-  userController.user_post_forgot_password_otpcheckcontroll(req,res,next)
-})
-userRouter.post('/forgot-password',(req,res,next)=>{
-  userController.user_post_newpassword(req,res,next)
-})
+userRouter.post("/forgot-password/otp", (req, res, next) => {
+  userController.User_Post_forgot_password_controll(req, res, next);
+});
+userRouter.post("/forgot-password/check", (req, res, next) => {
+  userController.user_post_forgot_password_otpcheckcontroll(req, res, next);
+});
+userRouter.post("/forgot-password", (req, res, next) => {
+  userController.user_post_newpassword(req, res, next);
+});
 
-userRouter.post('/req-services',Authentication,(req,res,next)=>{
-  serviceController.reqserviceEmployee(req,res,next)
-})
+userRouter.post("/req-services", Authentication, (req, res, next) => {
+  serviceController.reqserviceEmployee(req, res, next);
+});
+
+userRouter.get(
+  "/req-service/:id",
+
+  Authentication,
+  (req, res, next) => {
+    console.log("get requset");
+
+    serviceController.get_reqServicecontrolle(req, res, next);
+  }
+);
+userRouter.post(
+  "/service/payment/razorpay",
+
+  // Authentication,
+  (req, res, next) => {
+    console.log("payment razorpay");
+
+    serviceController.userServiceRazorpaypayment_Controll(req, res, next);
+  }
+);
+userRouter.post(
+"/service/payment/razorpay/confirm",
+Authentication,
+  (req, res, next) => {
+ serviceController.userServiceRazorpaypayment_Confirm_Controll(req,res,next);
+  }
+);
+userRouter.get(
+"/booking-history/:id",
+Authentication,
+  (req, res, next) => {
+ serviceController.userService_Bookin_history_Controll(req,res,next);
+  }
+);
 
 
 export default userRouter;

@@ -32,6 +32,7 @@ export class Admin_put_employee_useCase{
                 update.location,
                 update.authSource,
                 update.role,
+                update.revenue,
                 update.createdAt,
                 update.updatedAt
                 

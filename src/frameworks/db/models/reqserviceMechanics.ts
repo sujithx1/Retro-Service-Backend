@@ -1,0 +1,77 @@
+import mongoose, { Document, Schema } from "mongoose";
+import { IEmployee_types } from "./EmployeeModel";
+import { IuserTypes } from "./UserModel";
+import { IJobTypes } from "./JobsModal";
+import { FinduserLocation } from "../../../types/user";
+
+
+export interface IReq_Mechanics_service_types extends Document{
+    _id:Schema.Types.ObjectId,
+    userId: IuserTypes;
+    userName: string,
+    userEmail: string,
+    userLocation: FinduserLocation,
+    jobId:  IJobTypes;
+    jobName: string,
+    minWage: number,
+    problem: string,
+    mechanics: Array<IEmployee_types | Schema.Types.ObjectId>;
+    status: "PENDING" | "CONFIRMED" | "CANCELLED"|"COMPLETED",
+    bookingDate:Date,
+    acceptEmployee: {
+        employeeId: Schema.Types.ObjectId | IEmployee_types | null;
+        acceptTime: Date | null;
+      } | null;
+  }
+
+
+const requestSchema = new mongoose.Schema<IReq_Mechanics_service_types>({
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      userName: { type: String, required: true },
+      userEmail: { type: String, required: true },
+      userLocation: {
+        lat: { type: Number, required: true },
+        lng: { type: Number, required: true },
+        address: { type: String, required: true }
+      },
+      jobId: {
+        type: Schema.Types.ObjectId,
+        ref: "Jobs",
+        required: true,
+      },
+      jobName: { type: String, required: true },
+      minWage: { type: Number, required: true },
+      problem: { type: String, required: true },
+      status: {
+        type: String,
+        enum: ["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED"],
+        default: "PENDING",
+      },
+      mechanics: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "employee",
+        },
+      ],
+      bookingDate: { type: Date, required: true },
+
+      acceptEmployee: {
+        employeeId: {
+          type: Schema.Types.ObjectId,
+          ref: "employee",
+          default: null,
+        },
+        acceptTime: {
+          type: Date,
+          default: null,
+        },
+      },
+  });
+  
+
+
+  export const Request_Service_Mech_model=mongoose.model('RequestMechanics',requestSchema)

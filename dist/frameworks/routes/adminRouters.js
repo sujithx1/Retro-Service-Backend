@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Admincontroller_1 = require("../../interfaces/controllers/Admincontroller");
+const Admincontroller_1 = require("../../interfaces/controllers/admin/Admincontroller");
 const Mongo_adminRepositories_1 = require("../../interfaces/repositories/admin/Mongo_adminRepositories");
 const Admin_add_category_1 = require("../../use-cases/admin/category/Admin_add_category");
 const Admin_edit_categoty_1 = require("../../use-cases/admin/category/Admin_edit_categoty");

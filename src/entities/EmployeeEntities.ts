@@ -14,6 +14,7 @@ export class EmployeeEntities{
         public location:string="",
         public authSource?: 'self' | 'google',
         public role:string="employee",
+        public revenue?:number,
         public createdAt?: Date,
         public updatedAt?: Date
     ) {}

@@ -1,22 +1,22 @@
 import { NextFunction, Request, Response } from "express";
-import { EmployeeSignup } from "../../use-cases/employeeside/createEmploye";
-import { EmployeeSignupValidate } from "../../utils/helper/Validation";
-import { generate_otp } from "../../utils/otp";
-import redisClient from "../../utils/helper/redis";
-import { CheckOtp } from "../../use-cases/userside/auth/otpchecking";
-import { EmployeeSendOtp } from "../../use-cases/employeeside/sendotp";
-import { Emp_Login_useCase } from "../../use-cases/employeeside/Emp_login";
+import { EmployeeSignup } from "../../../use-cases/employeeside/createEmploye";
+import { EmployeeSignupValidate } from "../../../utils/helper/Validation";
+import { generate_otp } from "../../../utils/otp";
+import redisClient from "../../../utils/helper/redis";
+import { CheckOtp } from "../../../use-cases/userside/auth/otpchecking";
+import { EmployeeSendOtp } from "../../../use-cases/employeeside/sendotp";
+import { Emp_Login_useCase } from "../../../use-cases/employeeside/Emp_login";
 import {
   GenerateAccessToken,
   GenerateRefreshToken,
-} from "../jwt/jwt_auth_token";
-import cloudinary from "../../utils/helper/cloudinary";
-import { Employee_put_Profile_useCase } from "../../use-cases/employeeside/edit/Emp_put_profile";
-import { Employee_put_job_useCase } from "../../use-cases/employeeside/putJobs/emp_put_jobs";
-import { Employee_Service_Booking_useCase } from "../../use-cases/employeeside/service_booking/Empl_service_booking";
-import { Employee_put_Service_booking_useCase } from "../../use-cases/employeeside/service_booking/put_employee_service_booking";
-import { Employee_get_details_useCase } from "../../use-cases/employeeside/getEmployee";
-import { Admin_get_jobs_useCase } from "../../use-cases/admin/jobs/getJobs";
+} from "../../jwt/jwt_auth_token";
+import cloudinary from "../../../utils/helper/cloudinary";
+import { Employee_put_Profile_useCase } from "../../../use-cases/employeeside/edit/Emp_put_profile";
+import { Employee_put_job_useCase } from "../../../use-cases/employeeside/putJobs/emp_put_jobs";
+import { Employee_Service_Booking_useCase } from "../../../use-cases/employeeside/service_booking/Empl_service_booking";
+import { Employee_put_Service_booking_useCase } from "../../../use-cases/employeeside/service_booking/put_employee_service_booking";
+import { Employee_get_details_useCase } from "../../../use-cases/employeeside/getEmployee";
+import { Admin_get_jobs_useCase } from "../../../use-cases/admin/jobs/getJobs";
 
 export class EmployeeController {
   constructor(

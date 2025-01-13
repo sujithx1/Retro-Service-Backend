@@ -15,6 +15,7 @@ export interface IEmployee_types extends Document{
   location?:string
   authSource:"self"|"google",
   role:string,
+  revenue:number,
   createdAt:Date,
   updatedAt:Date,
 
@@ -68,10 +69,11 @@ const EmployeSchema=new Schema<IEmployee_types>({
     role:{
         type:String,
         default:"employee"
+    },
+    revenue:{
+        type:Number,
+        default:0
     }
-
-
-    
 },
 
 {

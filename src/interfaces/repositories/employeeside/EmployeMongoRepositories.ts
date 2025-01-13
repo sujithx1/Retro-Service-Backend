@@ -21,6 +21,7 @@ export class EmployeeMongoRepositories implements IEmployeeRepositories{
             employee.location,
             employee.authSource,
             employee.role,
+            employee.revenue,
             employee.createdAt,
             employee.updatedAt
         )
@@ -54,6 +55,7 @@ export class EmployeeMongoRepositories implements IEmployeeRepositories{
             employee.location,
             employee.authSource,
             employee.role,
+            employee.revenue,
             employee.createdAt,
             employee.updatedAt
       )
@@ -67,7 +69,8 @@ export class EmployeeMongoRepositories implements IEmployeeRepositories{
           profilePic:emmployee.profilePic,
           skills:emmployee.skills,
           experience:emmployee.experience,
-          location:emmployee.location
+          location:emmployee.location,
+      
         },{new:true}
       )
       if(!employee) return null
@@ -85,11 +88,69 @@ export class EmployeeMongoRepositories implements IEmployeeRepositories{
         employee.location,
         employee.authSource,
         employee.role,
+        employee.revenue,
         employee.createdAt,
         employee.updatedAt
       )
     
           
       }
+      
+      async  findAll(): Promise<EmployeeEntities[]> {
+        const employees = await EmployeeModel.find();
+           return employees.length?employees.map(
+             (item) =>
+               new EmployeeEntities(
+                 item.id,
+                 item.username,
+                 item.email,
+                 item.phone,
+                 item.password,
+                 item.skills,
+                 item.experience,
+                 item.isActive,
+                 item.profilePic,
+                 item.location,
+                 item.authSource,
+                 item.role,
+                 item.revenue,
+                 item.createdAt,
+                 item.updatedAt
+               )
+           ):[]
+   }
+async findIdAndUpdateRevenue(id: string, revenue: number): Promise<EmployeeEntities | null> {
+
+  const employee = await EmployeeModel.findByIdAndUpdate(
+    id,
+    { $inc: { revenue: revenue } }, // Increment the revenue field
+    { new: true } // Return the updated document
+);
+  
+
+if(!employee) return null
+
+return new EmployeeEntities(
+  employee.id,
+  employee.username,
+  employee.email,
+  employee.phone,
+  employee.password,
+  employee.skills,
+  employee.experience,
+  employee.isActive,
+  employee.profilePic,
+  employee.location,
+  employee.authSource,
+  employee.role,
+  employee.revenue,
+  employee.createdAt,
+  employee.updatedAt
+)
+
+    
+
+    
+}
 
 }

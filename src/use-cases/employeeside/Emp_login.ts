@@ -23,7 +23,14 @@ export class Emp_Login_useCase{
     employee.skills,
     employee.experience,
     employee.isActive,
-    employee.profilePic
+    employee.profilePic,
+    employee.location,
+    employee.authSource,
+    employee.role,
+    employee.revenue,
+    employee.createdAt,
+    employee.updatedAt,
+    
     )
     }
 }

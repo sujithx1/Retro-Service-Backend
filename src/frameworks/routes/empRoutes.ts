@@ -1,4 +1,4 @@
-import { EmployeeController } from "../../interfaces/controllers/EmployeeController";
+import { EmployeeController } from "../../interfaces/controllers/employee/EmployeeController";
 import { createAccessToken } from "../../interfaces/jwt/jwt_auth_token";
 import { Authentication } from "../../interfaces/middleware/userside/userAuthentication";
 import { Mongo_Job_admin_Repositories } from "../../interfaces/repositories/admin/jobs/mongoJobRepositories";
@@ -15,11 +15,21 @@ import { Employee_Service_Booking_useCase } from "../../use-cases/employeeside/s
 import { Employee_put_Service_booking_useCase } from "../../use-cases/employeeside/service_booking/put_employee_service_booking";
 import { CheckOtp } from "../../use-cases/userside/auth/otpchecking";
 import express from "express";
+import { EmpgetReqservice_useCase } from "../../use-cases/userside/service/getreqservicewithemployeeid.usecase";
+import { EmpServiceController } from "../../interfaces/controllers/employee/EmpServiceController";
+import { MongoReqServiceMechnics } from "../../interfaces/repositories/reqservicemechanics/mongoreqservicemechrep";
+import { Accept_reqServiceEmployee } from "../../use-cases/employeeside/service_booking/put_acceptreqacceptEmployee";
 
+
+// repositories
 const empRepositories = new EmployeeMongoRepositories();
 const service_bookingRep = new Mongo_Service_Booking_Repositories();
 const adminjobRepositoies=new Mongo_Job_admin_Repositories()
+const reqServiceMechanicsRepositories=new MongoReqServiceMechnics()
 
+
+
+// usecases
 const createEmployee = new EmployeeSignup(empRepositories);
 const sendmailOtp = new EmployeeSendOtp(empRepositories);
 const checkOtp = new CheckOtp();
@@ -35,6 +45,11 @@ const putEmpl_Service_booking_status = new Employee_put_Service_booking_useCase(
 const getEmployee=new Employee_get_details_useCase(empRepositories)
 const getJobs=new Admin_get_jobs_useCase(adminjobRepositoies)
 
+
+const getreqservice=new EmpgetReqservice_useCase(reqServiceMechanicsRepositories)
+const putreqservice=new Accept_reqServiceEmployee(reqServiceMechanicsRepositories)
+
+
 const employeeController = new EmployeeController(
   createEmployee,
   sendmailOtp,
@@ -47,6 +62,10 @@ const employeeController = new EmployeeController(
   getEmployee,
   getJobs
 );
+
+
+const servicecontroller=new EmpServiceController(getreqservice,putreqservice)
+
 const router = express.Router();
 
   router.post("/refresh-token", (req, res) => {
@@ -96,6 +115,16 @@ router.put("/service-booking/status/:id", Authentication, (req, res, next) => {
 router.get("/employee/:id", Authentication, (req, res, next) => {
   employeeController.Employee_get_details_controll(req, res, next);
 });
+
+router.get("/req-services/:id", Authentication, (req, res, next) => {
+  servicecontroller.employee_getReqServiceCntroll(req, res, next);
+});
+
+router.put("/req-serivce/acceptemployee/:id", Authentication, (req, res, next) => {
+  servicecontroller.employee_putreqServceacceptcntroll(req, res, next);
+});
+
+
 
 
 

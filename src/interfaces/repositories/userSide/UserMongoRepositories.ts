@@ -119,6 +119,7 @@ export class UserMongodbRepositories implements IUserRepositories {
             item.location,
             item.authSource,
             item.role,
+            item.revenue,
             item.createdAt,
             item.updatedAt
           )

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const UserMongoRepositories_1 = require("../../interfaces/repositories/userSide/UserMongoRepositories");
 const createUser_1 = require("../../use-cases/userside/auth/createUser");
-const userController_1 = require("../../interfaces/controllers/userController");
+const userController_1 = require("../../interfaces/controllers/user/userController");
 const SendOtp_1 = require("../../use-cases/userside/auth/SendOtp");
 const otpchecking_1 = require("../../use-cases/userside/auth/otpchecking");
 const userLogin_1 = require("../../use-cases/userside/auth/userLogin");
@@ -28,13 +28,21 @@ const FeedBack_mongo_Repositories_1 = require("../../interfaces/repositories/use
 const Report_feedBack_useCase_1 = require("../../use-cases/userside/report-feedback/Report_feedBack_useCase");
 const forgototpuseCase_1 = require("../../use-cases/userside/auth/forgototpuseCase");
 const newPassword_1 = require("../../use-cases/userside/auth/newPassword");
-const serviceController_1 = require("../../interfaces/controllers/serviceController");
+const UserserviceController_1 = require("../../interfaces/controllers/user/UserserviceController");
+const mongoreqservicemechrep_1 = require("../../interfaces/repositories/reqservicemechanics/mongoreqservicemechrep");
+const req_employeeservice_1 = require("../../use-cases/userside/service/req.employeeservice");
+const get_req_service_1 = require("../../use-cases/userside/service/get_req_service");
+const serviceRazorpayuseCase_1 = require("../../use-cases/userside/payments/serviceRazorpayuseCase");
+const mongoservicePaymentRepositories_1 = require("../../interfaces/repositories/payments/mongoservicePaymentRepositories");
+const getSevicePaymentCompleted_1 = require("../../use-cases/userside/payments/getSevicePaymentCompleted");
 const userRepositories = new UserMongoRepositories_1.UserMongodbRepositories();
 const jobRepositories = new mongoJobRepositories_1.Mongo_Job_admin_Repositories();
 const Admin_employeeRepositories = new Mongo_Empl_repositories_1.Mongo_Admin_Employees_Repositories();
 const employeeRepositories = new EmployeMongoRepositories_1.EmployeeMongoRepositories();
 const serviceRepositories = new mongoServiceRepositories_1.Mongo_Service_Booking_Repositories();
 const Report_FeedBackRepositoires = new FeedBack_mongo_Repositories_1.Report_FeedBack_user_MongoRepositories();
+const reqServiceMechanicsRepositories = new mongoreqservicemechrep_1.MongoReqServiceMechnics();
+const servicepaymentRepositoires = new mongoservicePaymentRepositories_1.ServicePaymentMongoRepositories();
 const createUser = new createUser_1.CreateUser(userRepositories);
 const sendmailOtp = new SendOtp_1.SendOtp(userRepositories);
 const checkotpMail = new otpchecking_1.CheckOtp();
@@ -49,8 +57,12 @@ const get_service_booking = new get_service_booking_1.User_get_Service_Booking_u
 const post_Report_user = new Report_feedBack_useCase_1.Report_feedBack_user_useCase(Report_FeedBackRepositoires);
 const forgotUserCase = new forgototpuseCase_1.Forgot_PasswordotpUseCase(userRepositories);
 const newPassword = new newPassword_1.NewPassword(userRepositories);
+const createreqservicemechanics = new req_employeeservice_1.ReqEmployeeServices_useCase(userRepositories, employeeRepositories, reqServiceMechanicsRepositories);
+const getreqservice = new get_req_service_1.User_getReqServiceuseCase(reqServiceMechanicsRepositories);
+const createServicepayment = new serviceRazorpayuseCase_1.UserServiceRazorpayPayment(servicepaymentRepositoires, employeeRepositories, reqServiceMechanicsRepositories);
+const getbookingHistory = new getSevicePaymentCompleted_1.UserServiceBookingHistoryusecase(servicepaymentRepositoires);
 const userController = new userController_1.Usercontroller(createUser, sendmailOtp, checkotpMail, Loginuser, googleSignin, userEdit, userProfileimage, getallJobs, getAllEmployees, PostServiceBooking, get_service_booking, post_Report_user, forgotUserCase, newPassword);
-const serviceController = new serviceController_1.ServiceController();
+const serviceController = new UserserviceController_1.UserServiceController(createreqservicemechanics, getreqservice, createServicepayment, getbookingHistory);
 const userRouter = express_1.default.Router();
 userRouter.post("/refresh-token", (req, res) => {
     (0, jwt_auth_token_1.createAccessToken)(req, res, "user_refreshToken");
@@ -84,16 +96,32 @@ userRouter.get("/service-booking/:id", userAuthentication_1.Authentication, (req
 userRouter.post("/report-feedBack", userAuthentication_1.Authentication, (req, res, next) => {
     userController.User_post_report_feedBack_employee_controll(req, res, next);
 });
-userRouter.post('/forgot-password/otp', (req, res, next) => {
+userRouter.post("/forgot-password/otp", (req, res, next) => {
     userController.User_Post_forgot_password_controll(req, res, next);
 });
-userRouter.post('/forgot-password/check', (req, res, next) => {
+userRouter.post("/forgot-password/check", (req, res, next) => {
     userController.user_post_forgot_password_otpcheckcontroll(req, res, next);
 });
-userRouter.post('/forgot-password', (req, res, next) => {
+userRouter.post("/forgot-password", (req, res, next) => {
     userController.user_post_newpassword(req, res, next);
 });
-userRouter.post('/req-services', userAuthentication_1.Authentication, (req, res, next) => {
+userRouter.post("/req-services", userAuthentication_1.Authentication, (req, res, next) => {
     serviceController.reqserviceEmployee(req, res, next);
+});
+userRouter.get("/req-service/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    console.log("get requset");
+    serviceController.get_reqServicecontrolle(req, res, next);
+});
+userRouter.post("/service/payment/razorpay", 
+// Authentication,
+(req, res, next) => {
+    console.log("payment razorpay");
+    serviceController.userServiceRazorpaypayment_Controll(req, res, next);
+});
+userRouter.post("/service/payment/razorpay/confirm", userAuthentication_1.Authentication, (req, res, next) => {
+    serviceController.userServiceRazorpaypayment_Confirm_Controll(req, res, next);
+});
+userRouter.get("/booking-history/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    serviceController.userService_Bookin_history_Controll(req, res, next);
 });
 exports.default = userRouter;

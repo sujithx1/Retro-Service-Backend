@@ -1,8 +1,6 @@
-import { AdminController } from "../../interfaces/controllers/Admincontroller";
+import { AdminController } from "../../interfaces/controllers/admin/Admincontroller";
 import { MongoAdminRepositories } from "../../interfaces/repositories/admin/Mongo_adminRepositories";
-import { UserMongodbRepositories } from "../../interfaces/repositories/userSide/UserMongoRepositories";
 import { Admin_add_Category_useCase } from "../../use-cases/admin/category/Admin_add_category";
-import { Admin_add_product_Usecase } from "../../use-cases/admin/product/Admin_add_product_usecase";
 import { Admin_edit_Category_useCase } from "../../use-cases/admin/category/Admin_edit_categoty";
 import { AdminLogin } from "../../use-cases/admin/adminLogin";
 import express from "express";
@@ -94,7 +92,7 @@ router.post("/refresh-token", (req, res) => {
   createAccessToken(req, res,"employee_resfrehToken");
 });
 
-router.post("/login", (req, res, next) =>{
+router.post("/login", (req, res, next) =>{ 
   admincontroller.login(req, res, next)}
 );
 router.get("/categories", 

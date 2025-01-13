@@ -18,7 +18,7 @@ class EmployeeMongoRepositories {
             const employee = yield EmployeeModel_1.EmployeeModel.findOne({ email: email });
             if (!employee)
                 return null;
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.createdAt, employee.updatedAt);
         });
     }
     save(employee) {
@@ -32,7 +32,7 @@ class EmployeeMongoRepositories {
             const employee = yield EmployeeModel_1.EmployeeModel.findById(id);
             if (!employee)
                 return null;
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.createdAt, employee.updatedAt);
         });
     }
     findByIdAndUpdate(emmployee) {
@@ -43,11 +43,27 @@ class EmployeeMongoRepositories {
                 profilePic: emmployee.profilePic,
                 skills: emmployee.skills,
                 experience: emmployee.experience,
-                location: emmployee.location
+                location: emmployee.location,
             }, { new: true });
             if (!employee)
                 return null;
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.createdAt, employee.updatedAt);
+        });
+    }
+    findAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const employees = yield EmployeeModel_1.EmployeeModel.find();
+            return employees.length ? employees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.id, item.username, item.email, item.phone, item.password, item.skills, item.experience, item.isActive, item.profilePic, item.location, item.authSource, item.role, item.revenue, item.createdAt, item.updatedAt)) : [];
+        });
+    }
+    findIdAndUpdateRevenue(id, revenue) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const employee = yield EmployeeModel_1.EmployeeModel.findByIdAndUpdate(id, { $inc: { revenue: revenue } }, // Increment the revenue field
+            { new: true } // Return the updated document
+            );
+            if (!employee)
+                return null;
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.createdAt, employee.updatedAt);
         });
     }
 }

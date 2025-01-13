@@ -21,6 +21,7 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
                   item.location,
                   item.authSource,
                   item.role,
+                  item.revenue,
                   item.createdAt,
                   item.updatedAt
                 )
@@ -43,6 +44,7 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
             employee.location,
             employee.authSource,
             employee.role,
+            employee.revenue,
             employee.createdAt,
             employee.updatedAt
         )
@@ -74,6 +76,7 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
         employedata.location,
         employedata.authSource,
         employedata.role,
+        employedata.revenue,
         employedata.createdAt,
         employedata.updatedAt
         
