@@ -65,7 +65,7 @@ export class EmployeeMongoRepositories implements IEmployeeRepositories{
       async findByIdAndUpdate(emmployee: EmployeeEntities): Promise<EmployeeEntities|null> {
         const employee=await EmployeeModel.findByIdAndUpdate(emmployee.id,{
           username:emmployee.username,
-          phone:emmployee.phone,
+           phone:emmployee.phone,
           profilePic:emmployee.profilePic,
           skills:emmployee.skills,
           experience:emmployee.experience,
@@ -151,6 +151,13 @@ return new EmployeeEntities(
     
 
     
+}
+
+
+async findByIdAndUpdatePassword(id: string, password: string): Promise<void | null> {
+
+      const employee=await EmployeeModel.findByIdAndUpdate(id,{password:password},{new:true})
+        if(!employee)return null
 }
 
 }

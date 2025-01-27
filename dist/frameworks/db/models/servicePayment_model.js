@@ -55,15 +55,6 @@ const ServicePaymentSchema = new mongoose_1.Schema({
         type: Number,
         required: true,
     },
-    currency: {
-        type: String,
-        default: 'INR',
-        required: true,
-    },
-    receipt: {
-        type: String,
-        required: true,
-    },
     paymentId: {
         type: String,
     },

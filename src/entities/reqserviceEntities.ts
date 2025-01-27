@@ -21,9 +21,7 @@ export class RequestserviceMechEntities{
         public mechanics:string[],
        public status: "PENDING" | "CONFIRMED" | "CANCELLED"|"COMPLETED"="PENDING",
        public bookingDate:Date,
-       public acceptEmployee:AcceptEmployee_types|null=null 
-
-
-
-    ){}
+       public acceptEmployee:AcceptEmployee_types|null=null ,
+       public paymentId?:string
+   ){}
 }

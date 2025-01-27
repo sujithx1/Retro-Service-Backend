@@ -28,15 +28,14 @@ serviceId:string){
             employeeId,
             serviceId,
             amount,
-            "INR",
-            "receipt#1",
+            
             {  name,
                 phone,
                 problem,
                 vehicleNumber
             },
             "COMPLETED",
-            "",
+            "", 
             jobName,
            
 
@@ -48,6 +47,7 @@ serviceId:string){
         const service=await this.serviceRepositories.findbyId(serviceId)
         if (!service) throw new CustomError("Service Not Found",401,AppError.ResourceNotFound);
         service.status="COMPLETED"
+        service.paymentId=Servicepayment.id
         await this.serviceRepositories.findByIdAndUpdate(service,employeeId)
         
         await this.employeeRepositories.findIdAndUpdateRevenue(employee.id,Servicepayment.amount)

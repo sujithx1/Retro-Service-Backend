@@ -6,13 +6,20 @@ import { User_getReqServiceuseCase } from "../../../use-cases/userside/service/g
 import Razorpay from "razorpay";
 import { UserServiceRazorpayPayment } from "../../../use-cases/userside/payments/serviceRazorpayuseCase";
 import { UserServiceBookingHistoryusecase } from "../../../use-cases/userside/payments/getSevicePaymentCompleted";
+import { User_putReqserviceUsecase } from "../../../use-cases/userside/service/putReqserviceuseCase";
+import { User_getServiceBookingHistoryByUserId } from "../../../use-cases/userside/payments/getservicebookingHistory";
+import { Emp_getPaymentDetails } from "../../../use-cases/employeeside/payment/getPaymentDetails";
+import { User_serchjobsuseCase  } from "../../../use-cases/userside/service/searchservices";
 
 export class UserServiceController {
   constructor(
     private createrewservicesmech: ReqEmployeeServices_useCase,
     private getreqServiceUsecase: User_getReqServiceuseCase,
     private createServicepayment: UserServiceRazorpayPayment,
-    private getbookingHistory: UserServiceBookingHistoryusecase
+    private getbookingHistory: User_getServiceBookingHistoryByUserId,
+    private putReqserviceuseCase:User_putReqserviceUsecase,
+    private getServicePayment:Emp_getPaymentDetails,
+    private getsrachjobsUser:User_serchjobsuseCase
   ) {}
 
   async reqserviceEmployee(req: Request, res: Response, next: NextFunction) {
@@ -110,8 +117,8 @@ export class UserServiceController {
         );
 
       const razorpay = new Razorpay({
-        key_id: process.env.RazorPayId || "",
-        key_secret: process.env.RazorPaySecret,
+        key_id: process.env.RAZORPAYID || "",
+        key_secret: process.env.RAZORPAYSECRECT,
       });
 
       const order = await razorpay.orders.create({
@@ -194,8 +201,7 @@ export class UserServiceController {
         return next(
           new CustomError("Missing field", 401, AppError.ValidationError)
         );
-      const history = await this.getbookingHistory.execute(id);
-      console.log(history);
+      const history = await this.getbookingHistory.execute(id) 
       
 
       return res
@@ -205,4 +211,97 @@ export class UserServiceController {
       return next(error);
     }
   }
+  async userService_PutReqservecontroll(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.params;
+      const {status}=req.body
+      
+
+      if (!id)
+        return next(
+          new CustomError("Missing field", 401, AppError.ValidationError)
+        );
+      if (!status)
+        return next(
+          new CustomError("Missing status", 401, AppError.ValidationError)
+        );
+      const service = await this.putReqserviceuseCase.execute(id,status)
+      
+
+      return res
+        .status(200)
+        .json({ message: "success", success: true, service });
+    } catch (error) {
+      return next(error);
+    }
+  }
+  async userService_GETservicePayment(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.params;
+     
+      console.log("service booking-hsitory", id);
+
+      if (!id)
+        return next(
+          new CustomError("Missing field", 401, AppError.ValidationError)
+        );
+     
+      const service = await this.getServicePayment.execute(id)
+      console.log("service payment",service);
+      
+      
+
+      return res
+        .status(200)
+        .json({ message: "success", success: true, service });
+    } catch (error) {
+      return next(error);
+    }
+  }
+  async userService_GETsearch(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const query = req.query.query as string;     
+      console.log("service search", query);
+
+      if (!query)
+        return next(
+          new CustomError("Missing quary", 401, AppError.ValidationError)
+        );
+     
+      const jobs = await this.getsrachjobsUser.execute(query)
+      // console.log("service payment",service);
+      
+      
+
+      return res
+        .status(200)
+        .json({ message: "success", success: true,services:jobs });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+  
 }

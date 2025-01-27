@@ -15,9 +15,9 @@ class Report_feedBack_user_useCase {
     constructor(reportRep) {
         this.reportRep = reportRep;
     }
-    execute(userId, name, employeeId, feedback) {
+    execute(userId, employeeId, feedback, rating) {
         return __awaiter(this, void 0, void 0, function* () {
-            const feedBack = new Report_FeedBack_user_1.Report_feedBack_User_Entities("", userId, name, "", employeeId, "", feedback, "");
+            const feedBack = new Report_FeedBack_user_1.Report_feedBack_User_Entities("", userId, "", "", employeeId, "", feedback, "", rating);
             return yield this.reportRep.create(feedBack);
         });
     }

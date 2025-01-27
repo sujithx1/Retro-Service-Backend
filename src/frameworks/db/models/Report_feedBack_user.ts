@@ -6,7 +6,7 @@ import { IEmployee_types } from "./EmployeeModel";
 
 export interface IReport_FeedBack_user_Types extends Document {
     _id: Schema.Types.ObjectId;
-    name: string;
+    rating:number,
     feedBack:string;
     user:IuserTypes;
     employee:IEmployee_types;
@@ -22,10 +22,11 @@ const Report_FeedBack_user_Schema=new Schema<IReport_FeedBack_user_Types>({
         type:mongoose.Schema.ObjectId,
         ref:"User"
     },
-    name:{
-        type:String,
+    rating:{
+        type:Number,
         required:true
     },
+    
     feedBack:{
         type:String,
         required:true

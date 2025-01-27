@@ -22,6 +22,8 @@ export interface IReq_Mechanics_service_types extends Document{
         employeeId: Schema.Types.ObjectId | IEmployee_types | null;
         acceptTime: Date | null;
       } | null;
+
+     paymentId:string 
   }
 
 
@@ -70,6 +72,12 @@ const requestSchema = new mongoose.Schema<IReq_Mechanics_service_types>({
           default: null,
         },
       },
+      paymentId:{
+        type:String,
+        default:""
+
+      }
+
   });
   
 

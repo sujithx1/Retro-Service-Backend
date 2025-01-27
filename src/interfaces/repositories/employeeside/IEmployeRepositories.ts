@@ -9,5 +9,7 @@ export interface IEmployeeRepositories{
      findByIdAndUpdate(employee:EmployeeEntities):Promise<EmployeeEntities|null>
      findAll():Promise<EmployeeEntities[]>
      findIdAndUpdateRevenue(id:string,revenue:number):Promise<EmployeeEntities|null>
+     findByIdAndUpdatePassword(id:string,password:string):Promise<void|null>
+
 
 }

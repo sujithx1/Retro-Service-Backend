@@ -70,7 +70,7 @@ export class AdminController {
       );
 
      return res
-        .cookie("admin_refreshtoken", refresh_token, {
+        .cookie("admin_refresTtoken", refresh_token, {
           httpOnly: true,
         })
         .status(200)

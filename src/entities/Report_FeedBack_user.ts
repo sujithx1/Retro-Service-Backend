@@ -10,6 +10,7 @@ export class Report_feedBack_User_Entities{
         public EmployeeName:string,
         public feedBack:string,
         public employeeEmail:string,
+        public rating:number,
         public createdAt?:Date,
         public updatedAt?:Date,
         

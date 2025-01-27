@@ -29,8 +29,10 @@ const otp_1 = require("../../../utils/otp");
 const redis_1 = __importDefault(require("../../../utils/helper/redis"));
 const jwt_auth_token_1 = require("../../jwt/jwt_auth_token");
 const cloudinary_1 = __importDefault(require("../../../utils/helper/cloudinary"));
+const custom_errors_1 = require("../../../utils/errors/custom.errors");
+const error_enum_1 = require("../../../utils/errors/error.enum");
 class EmployeeController {
-    constructor(createEmploye, sendOtp, otpcheking, loginemp, putProfile, putEMp_job, getEmpl_Bopoking, putEmpl_serviceBooking_status, getEmployee, getJobs) {
+    constructor(createEmploye, sendOtp, otpcheking, loginemp, putProfile, putEMp_job, getEmpl_Bopoking, putEmpl_serviceBooking_status, getEmployee, getJobs, getuserDetails, postforgot_passwordservice, newPassworduseCase) {
         this.createEmploye = createEmploye;
         this.sendOtp = sendOtp;
         this.otpcheking = otpcheking;
@@ -41,6 +43,9 @@ class EmployeeController {
         this.putEmpl_serviceBooking_status = putEmpl_serviceBooking_status;
         this.getEmployee = getEmployee;
         this.getJobs = getJobs;
+        this.getuserDetails = getuserDetails;
+        this.postforgot_passwordservice = postforgot_passwordservice;
+        this.newPassworduseCase = newPassworduseCase;
     }
     Signup(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -112,7 +117,7 @@ class EmployeeController {
                 const access_token = (0, jwt_auth_token_1.GenerateAccessToken)(employee.id, employee.role);
                 const { password: _ } = employee, withoutpassword = __rest(employee, ["password"]);
                 res
-                    .cookie("employee_resfrehToken", refresh_token, {
+                    .cookie("employee_refrehToken", refresh_token, {
                     httpOnly: true,
                 })
                     .status(200)
@@ -212,7 +217,7 @@ class EmployeeController {
                     return next(new Error("id missing"));
                 }
                 const services = yield this.getEmpl_Bopoking.execute(id);
-                console.log(services);
+                // console.log(services);
                 res.status(200).json({ message: "success", services });
             }
             catch (error) {
@@ -250,7 +255,9 @@ class EmployeeController {
                 const { password: _ } = employe, without = __rest(employe, ["password"]);
                 return res.status(200).json({ message: "success", employee: without });
             }
-            catch (error) { }
+            catch (error) {
+                return next(error);
+            }
         });
     }
     admin_get_Jobs_controll(req, res, next) {
@@ -262,6 +269,67 @@ class EmployeeController {
             }
             catch (error) {
                 console.log("error-> admin-getjob controller", error.message);
+                return next(error);
+            }
+        });
+    }
+    Employee_get_userdetailsControl(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("id missing", 401, error_enum_1.AppError.ValidationError));
+                const user = yield this.getuserDetails.execute(id);
+                const { password: _ } = user, without = __rest(user, ["password"]);
+                return res.status(200).json({ message: "success", user: without });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    Employee_Post_forgot_password_controll(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { email } = req.body;
+                console.log("forgot password", email);
+                yield this.postforgot_passwordservice.execute(email);
+                res.status(200).json({ message: "check Your Email", email });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    Employee_post_forgot_password_otpcheckcontroll(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { otp } = req.body;
+                if (!otp)
+                    throw new custom_errors_1.CustomError("missig filed", 401, error_enum_1.AppError.ValidationError);
+                console.log(otp);
+                const storedOtp = yield redis_1.default.get("forgot-password-otp");
+                if (!storedOtp)
+                    throw new custom_errors_1.CustomError("OTP expired", 401, error_enum_1.AppError.OtpExpired);
+                yield this.otpcheking.execute(Number(otp), Number(storedOtp));
+                res.status(200).json({ message: "change your password" });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    Employee_post_newpassword(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { email, password } = req.body;
+                if (!email || !password)
+                    throw new custom_errors_1.CustomError("missig filed", 401, error_enum_1.AppError.ValidationError);
+                console.log(email, password);
+                yield this.newPassworduseCase.execute(email, password);
+                res.status(200).json({ message: "success", success: true });
+            }
+            catch (error) {
                 return next(error);
             }
         });

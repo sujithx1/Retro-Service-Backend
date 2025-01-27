@@ -24,16 +24,30 @@ const getreqservicewithemployeeid_usecase_1 = require("../../use-cases/userside/
 const EmpServiceController_1 = require("../../interfaces/controllers/employee/EmpServiceController");
 const mongoreqservicemechrep_1 = require("../../interfaces/repositories/reqservicemechanics/mongoreqservicemechrep");
 const put_acceptreqacceptEmployee_1 = require("../../use-cases/employeeside/service_booking/put_acceptreqacceptEmployee");
+const mongoservicePaymentRepositories_1 = require("../../interfaces/repositories/payments/mongoservicePaymentRepositories");
+const getPaymentDetails_1 = require("../../use-cases/employeeside/payment/getPaymentDetails");
+const employeechatcontroller_1 = require("../../interfaces/controllers/employee/employeechatcontroller");
+const MongoChatsReposotories_1 = require("../../interfaces/repositories/chats/MongoChatsReposotories");
+const getchatbyEmployeeid_1 = require("../../use-cases/chat/getchatbyEmployeeid");
+const getUserdetails_usCase_1 = require("../../use-cases/userside/auth/getUserdetails.usCase");
+const UserMongoRepositories_1 = require("../../interfaces/repositories/userSide/UserMongoRepositories");
+const forgotpassword_1 = require("../../use-cases/employeeside/forgotpassword");
+const postnewpassword_1 = require("../../use-cases/employeeside/postnewpassword");
 // repositories
 const empRepositories = new EmployeMongoRepositories_1.EmployeeMongoRepositories();
 const service_bookingRep = new mongoServiceRepositories_1.Mongo_Service_Booking_Repositories();
 const adminjobRepositoies = new mongoJobRepositories_1.Mongo_Job_admin_Repositories();
 const reqServiceMechanicsRepositories = new mongoreqservicemechrep_1.MongoReqServiceMechnics();
+const servce_paymentRepositories = new mongoservicePaymentRepositories_1.ServicePaymentMongoRepositories();
+const chatrepositories = new MongoChatsReposotories_1.Message_mongoRepositories();
+const userRepositories = new UserMongoRepositories_1.UserMongodbRepositories();
 // usecases
 const createEmployee = new createEmploye_1.EmployeeSignup(empRepositories);
 const sendmailOtp = new sendotp_1.EmployeeSendOtp(empRepositories);
 const checkOtp = new otpchecking_1.CheckOtp();
 const login = new Emp_login_1.Emp_Login_useCase(empRepositories);
+const forgotUserCase = new forgotpassword_1.Emp_Forgot_PasswordotpUseCase(empRepositories);
+const newPassword = new postnewpassword_1.Emp_NewPassword(empRepositories);
 const putProfieEMployee = new Emp_put_profile_1.Employee_put_Profile_useCase(empRepositories);
 const putEmp_job = new emp_put_jobs_1.Employee_put_job_useCase(empRepositories);
 const getEmpl_Booking = new Empl_service_booking_1.Employee_Service_Booking_useCase(service_bookingRep);
@@ -42,8 +56,13 @@ const getEmployee = new getEmployee_1.Employee_get_details_useCase(empRepositori
 const getJobs = new getJobs_1.Admin_get_jobs_useCase(adminjobRepositoies);
 const getreqservice = new getreqservicewithemployeeid_usecase_1.EmpgetReqservice_useCase(reqServiceMechanicsRepositories);
 const putreqservice = new put_acceptreqacceptEmployee_1.Accept_reqServiceEmployee(reqServiceMechanicsRepositories);
-const employeeController = new EmployeeController_1.EmployeeController(createEmployee, sendmailOtp, checkOtp, login, putProfieEMployee, putEmp_job, getEmpl_Booking, putEmpl_Service_booking_status, getEmployee, getJobs);
-const servicecontroller = new EmpServiceController_1.EmpServiceController(getreqservice, putreqservice);
+const getServicePayment = new getPaymentDetails_1.Emp_getPaymentDetails(servce_paymentRepositories);
+// chats
+const getchatbyEmployeeside = new getchatbyEmployeeid_1.Get_chatbyEmployeeId(chatrepositories);
+const getuserDetails = new getUserdetails_usCase_1.User_getdetails(userRepositories);
+const employeeController = new EmployeeController_1.EmployeeController(createEmployee, sendmailOtp, checkOtp, login, putProfieEMployee, putEmp_job, getEmpl_Booking, putEmpl_Service_booking_status, getEmployee, getJobs, getuserDetails, forgotUserCase, newPassword);
+const servicecontroller = new EmpServiceController_1.EmpServiceController(getreqservice, putreqservice, getServicePayment);
+const chatcontroller = new employeechatcontroller_1.EmployeeChatcontroller(getchatbyEmployeeside);
 const router = express_1.default.Router();
 router.post("/refresh-token", (req, res) => {
     (0, jwt_auth_token_1.createAccessToken)(req, res, "employee_resfrehToken");
@@ -53,6 +72,15 @@ router.post("/signup/otp", (req, res) => employeeController.OtpChecking_Employee
 router.post("/signup/resendotp", (req, res) => employeeController.Signup(req, res));
 router.post("/login", (req, res) => employeeController.Emp_logiConroll(req, res));
 router.get("/logout", (req, res, next) => employeeController.Employee_get_Logout_controll(req, res, next));
+router.post("/forgot-password/otp", (req, res, next) => {
+    employeeController.Employee_Post_forgot_password_controll(req, res, next);
+});
+router.post("/forgot-password/check", (req, res, next) => {
+    employeeController.Employee_post_forgot_password_otpcheckcontroll(req, res, next);
+});
+router.post("/forgot-password", (req, res, next) => {
+    employeeController.Employee_post_newpassword(req, res, next);
+});
 router.get('/jobs', userAuthentication_1.Authentication, (req, res, next) => {
     employeeController.admin_get_Jobs_controll(req, res, next);
 });
@@ -74,5 +102,14 @@ router.get("/req-services/:id", userAuthentication_1.Authentication, (req, res, 
 });
 router.put("/req-serivce/acceptemployee/:id", userAuthentication_1.Authentication, (req, res, next) => {
     servicecontroller.employee_putreqServceacceptcntroll(req, res, next);
+});
+router.get("/service-payment/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    servicecontroller.employee_getPaymentDetails(req, res, next);
+});
+router.get("/chats-employeeid/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    chatcontroller.getemployeeChat_employeeid(req, res, next);
+});
+router.get("/user/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    employeeController.Employee_get_userdetailsControl(req, res, next);
 });
 exports.default = router;

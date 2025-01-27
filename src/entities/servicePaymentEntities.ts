@@ -8,8 +8,6 @@ export class ServicePaymentEntity {
     public employeeId: string,
     public serviceId:string,
     public amount: number,
-    public currency: string = "INR",
-    public receipt: string,
     public serviceDetails: ServiceDetails,
     public status:  "PENDING" | "COMPLETED" | "FAILED"="PENDING",
     public paymentId?:string,

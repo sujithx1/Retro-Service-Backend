@@ -18,6 +18,7 @@ class EmpgetReqservice_useCase {
     }
     execute(empId) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(empId, "usecase");
             const reqservice = yield this.reqServiceRep.findbyempId(empId);
             if (reqservice.length == 0)
                 throw new custom_errors_1.CustomError("No services found for this employee", 401, error_enum_1.AppError.ResourceNotFound);

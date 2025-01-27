@@ -308,12 +308,12 @@ class Usercontroller {
     User_post_report_feedBack_employee_controll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { userid, userEmail, name, feedBack, employeeId } = req.body;
+                const { userId, feedback, employeeId, rating } = req.body;
                 console.log(req.body);
-                if (!userid || !userEmail || !name || !feedBack || !employeeId)
-                    return next(new Error(" missing Feild"));
-                const feedback = yield this.postUser_report_feedback.execute(userid, name, employeeId, feedBack);
-                return res.status(200).json({ message: "success", feedback });
+                if (!userId || !rating || !feedback || !employeeId)
+                    return next(new custom_errors_1.CustomError(" missing Feild", 401, error_enum_1.AppError.ValidationError));
+                const feedBack = yield this.postUser_report_feedback.execute(userId, employeeId, feedback, Number(rating));
+                return res.status(200).json({ message: "success", feedBack });
             }
             catch (error) {
                 console.log("err->User_get_service_Booking_controll", error);

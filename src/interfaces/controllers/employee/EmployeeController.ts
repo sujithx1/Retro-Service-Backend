@@ -17,6 +17,11 @@ import { Employee_Service_Booking_useCase } from "../../../use-cases/employeesid
 import { Employee_put_Service_booking_useCase } from "../../../use-cases/employeeside/service_booking/put_employee_service_booking";
 import { Employee_get_details_useCase } from "../../../use-cases/employeeside/getEmployee";
 import { Admin_get_jobs_useCase } from "../../../use-cases/admin/jobs/getJobs";
+import { CustomError } from "../../../utils/errors/custom.errors";
+import { AppError } from "../../../utils/errors/error.enum";
+import { User_getdetails } from "../../../use-cases/userside/auth/getUserdetails.usCase";
+import { Emp_NewPassword } from "../../../use-cases/employeeside/postnewpassword";
+import { Emp_Forgot_PasswordotpUseCase } from "../../../use-cases/employeeside/forgotpassword";
 
 export class EmployeeController {
   constructor(
@@ -29,7 +34,10 @@ export class EmployeeController {
     private getEmpl_Bopoking: Employee_Service_Booking_useCase,
     private putEmpl_serviceBooking_status: Employee_put_Service_booking_useCase,
     private getEmployee: Employee_get_details_useCase,
-    private getJobs: Admin_get_jobs_useCase
+    private getJobs: Admin_get_jobs_useCase,
+    private getuserDetails:User_getdetails,
+        private postforgot_passwordservice:Emp_Forgot_PasswordotpUseCase,
+        private newPassworduseCase:Emp_NewPassword
   ) {}
 
   async Signup(req: Request, res: Response) {
@@ -101,7 +109,7 @@ export class EmployeeController {
       const access_token = GenerateAccessToken(employee.id, employee.role);
       const { password: _, ...withoutpassword } = employee;
       res
-        .cookie("employee_resfrehToken", refresh_token, {
+        .cookie("employee_refrehToken", refresh_token, {
           httpOnly: true,
         })
         .status(200)
@@ -228,7 +236,7 @@ export class EmployeeController {
       }
       const services = await this.getEmpl_Bopoking.execute(id);
 
-      console.log(services);
+      // console.log(services);
 
       res.status(200).json({ message: "success", services });
     } catch (error: any) {
@@ -272,7 +280,9 @@ export class EmployeeController {
       const employe = await this.getEmployee.execute(id);
       const { password: _, ...without } = employe;
       return res.status(200).json({ message: "success", employee: without });
-    } catch (error) {}
+    } catch (error) {
+      return next(error)
+    }
   }
 
   async admin_get_Jobs_controll(
@@ -290,4 +300,77 @@ export class EmployeeController {
       return next(error);
     }
   }
+  async Employee_get_userdetailsControl(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.params;
+      if (!id) return next(new CustomError("id missing",401,AppError.ValidationError));
+      const user = await this.getuserDetails.execute(id)
+      const { password: _, ...without } = user;
+      return res.status(200).json({ message: "success", user: without });
+    } catch (error) {
+      return next(error)
+
+    }
+  }
+  async Employee_Post_forgot_password_controll(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const {email} = req.body;
+      console.log("forgot password",email);
+      
+      await this.postforgot_passwordservice.execute(email)
+
+      res.status(200).json({message:"check Your Email",email})
+    } catch (error) {
+      return next(error)
+
+    }
+  }
+  async Employee_post_forgot_password_otpcheckcontroll(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const {otp} = req.body;
+      if(!otp)  throw new CustomError("missig filed",401,AppError.ValidationError)
+        console.log(otp);
+      const storedOtp = await redisClient.get("forgot-password-otp");
+      if (!storedOtp) throw new CustomError("OTP expired",401,AppError.OtpExpired);
+      await this.otpcheking.execute(Number(otp),Number(storedOtp))
+
+        
+      res.status(200).json({message:"change your password"})
+    } catch (error) {
+      return next(error)
+
+    }
+  }
+
+  
+  async Employee_post_newpassword(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const {email,password} = req.body;
+      if(!email|| !password)  throw new CustomError("missig filed",401,AppError.ValidationError)
+        console.log(email,password);    
+      await this.newPassworduseCase.execute(email,password)
+      res.status(200).json({message:"success",success:true})
+    } catch (error) {
+      return next(error)
+
+    }
+  }
+
+  
 }

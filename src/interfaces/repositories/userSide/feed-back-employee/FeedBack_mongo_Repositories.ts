@@ -22,6 +22,7 @@ export class Report_FeedBack_user_MongoRepositories implements IReport_FeedBack_
             feedback.employee.username,
             feedback.feedBack,
             feedback.employee.email,
+            feedback.rating,
             feedback.createdAt,
             feedback.updatedAt,
             
@@ -44,6 +45,7 @@ export class Report_FeedBack_user_MongoRepositories implements IReport_FeedBack_
             feedback.employee.username,
             feedback.feedBack,
             "", 
+            feedBack.rating,
             feedback.createdAt,
             feedback.updatedAt,
         )
@@ -63,6 +65,7 @@ export class Report_FeedBack_user_MongoRepositories implements IReport_FeedBack_
                 report.employee.username,
                 report.feedBack,
                 report.employee.email,
+                report.rating,
                 report.createdAt,
                 report.updatedAt,
                 

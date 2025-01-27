@@ -55,5 +55,15 @@ class Mongo_Job_admin_Repositories {
             return jobs.map((item) => new JobsEntities_1.JobsEntities(item.id, item.name, item.description, item.minimum_wage, item.isBlock, item.image));
         });
     }
+    jobsfindbynameSearch(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const job = yield JobsModal_1.JobModel.find({
+                name: { $regex: name, $options: "i" }, // Case-insensitive search
+            });
+            if (!job)
+                return null;
+            return job.map((item) => new JobsEntities_1.JobsEntities(item.id, item.name, item.description, item.minimum_wage, item.isBlock, item.image));
+        });
+    }
 }
 exports.Mongo_Job_admin_Repositories = Mongo_Job_admin_Repositories;

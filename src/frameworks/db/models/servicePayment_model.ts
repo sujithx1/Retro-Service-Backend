@@ -8,8 +8,6 @@ interface ServicePayment extends Document {
   employeeId: mongoose.Types.ObjectId |IEmployee_types;
   serviceId:mongoose.Types.ObjectId | IReq_Mechanics_service_types;
   amount: number;
-  currency: string;
-  receipt: string;
   paymentId?: string;
   status: "PENDING" | "COMPLETED" | "FAILED";
   createdAt: Date;
@@ -44,15 +42,8 @@ const ServicePaymentSchema: Schema = new Schema(
       type: Number,
       required: true,
     },
-    currency: {
-      type: String,
-      default: 'INR',
-      required: true,
-    },
-    receipt: {
-      type: String,
-      required: true,
-    },
+   
+  
     paymentId: {
       type: String,
     },

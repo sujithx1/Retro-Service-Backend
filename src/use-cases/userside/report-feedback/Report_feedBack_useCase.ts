@@ -7,20 +7,22 @@ export class Report_feedBack_user_useCase{
     }
 
     async execute(userId:string,
-        name:string,
         employeeId:string,
-        feedback:string):Promise<Report_feedBack_User_Entities>{
+        feedback:string,
+        rating:number
+    ):Promise<Report_feedBack_User_Entities>{
 
         
         const feedBack=new Report_feedBack_User_Entities(
             "",
             userId,
-            name,
+            "",
             "",
             employeeId,
             "",
             feedback,
             "",
+            rating
 
         )
 

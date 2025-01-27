@@ -127,14 +127,14 @@ const Authentication = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         if (role === "user") {
             const user = yield UserModel_1.UserModel.findById(id).select("-password");
             if (!user || !user.isActive) {
-                res.status(401).json({ error: "User not found or inactive" });
+                res.status(403).json({ error: "User not found or inactive" });
                 return;
             }
         }
         else if (role === "employee") {
             const employee = yield EmployeeModel_1.EmployeeModel.findById(id).select("-password");
             if (!employee || !employee.isActive) {
-                res.status(401).json({ error: "Employee not found or inactive" });
+                res.status(403).json({ error: "Employee not found or inactive" });
                 return;
             }
         }

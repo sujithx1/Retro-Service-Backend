@@ -19,6 +19,15 @@ import { EmpgetReqservice_useCase } from "../../use-cases/userside/service/getre
 import { EmpServiceController } from "../../interfaces/controllers/employee/EmpServiceController";
 import { MongoReqServiceMechnics } from "../../interfaces/repositories/reqservicemechanics/mongoreqservicemechrep";
 import { Accept_reqServiceEmployee } from "../../use-cases/employeeside/service_booking/put_acceptreqacceptEmployee";
+import { ServicePaymentMongoRepositories } from "../../interfaces/repositories/payments/mongoservicePaymentRepositories";
+import { Emp_getPaymentDetails } from "../../use-cases/employeeside/payment/getPaymentDetails";
+import { EmployeeChatcontroller } from "../../interfaces/controllers/employee/employeechatcontroller";
+import { Message_mongoRepositories } from "../../interfaces/repositories/chats/MongoChatsReposotories";
+import { Get_chatbyEmployeeId } from "../../use-cases/chat/getchatbyEmployeeid";
+import { User_getdetails } from "../../use-cases/userside/auth/getUserdetails.usCase";
+import { UserMongodbRepositories } from "../../interfaces/repositories/userSide/UserMongoRepositories";
+import { Emp_Forgot_PasswordotpUseCase } from "../../use-cases/employeeside/forgotpassword";
+import { Emp_NewPassword } from "../../use-cases/employeeside/postnewpassword";
 
 
 // repositories
@@ -26,7 +35,9 @@ const empRepositories = new EmployeeMongoRepositories();
 const service_bookingRep = new Mongo_Service_Booking_Repositories();
 const adminjobRepositoies=new Mongo_Job_admin_Repositories()
 const reqServiceMechanicsRepositories=new MongoReqServiceMechnics()
-
+const servce_paymentRepositories=new ServicePaymentMongoRepositories()
+const chatrepositories=new Message_mongoRepositories()
+const userRepositories=new UserMongodbRepositories()
 
 
 // usecases
@@ -34,6 +45,10 @@ const createEmployee = new EmployeeSignup(empRepositories);
 const sendmailOtp = new EmployeeSendOtp(empRepositories);
 const checkOtp = new CheckOtp();
 const login = new Emp_Login_useCase(empRepositories);
+
+const forgotUserCase = new Emp_Forgot_PasswordotpUseCase(empRepositories);
+const newPassword = new Emp_NewPassword(empRepositories);
+
 const putProfieEMployee = new Employee_put_Profile_useCase(empRepositories);
 const putEmp_job = new Employee_put_job_useCase(empRepositories);
 const getEmpl_Booking = new Employee_Service_Booking_useCase(
@@ -50,6 +65,14 @@ const getreqservice=new EmpgetReqservice_useCase(reqServiceMechanicsRepositories
 const putreqservice=new Accept_reqServiceEmployee(reqServiceMechanicsRepositories)
 
 
+const getServicePayment=new Emp_getPaymentDetails(servce_paymentRepositories)
+
+
+// chats
+const getchatbyEmployeeside=new Get_chatbyEmployeeId(chatrepositories)
+const getuserDetails=new User_getdetails(userRepositories)
+
+
 const employeeController = new EmployeeController(
   createEmployee,
   sendmailOtp,
@@ -60,11 +83,17 @@ const employeeController = new EmployeeController(
   getEmpl_Booking,
   putEmpl_Service_booking_status,
   getEmployee,
-  getJobs
+  getJobs,
+  getuserDetails,
+  forgotUserCase,
+  newPassword
 );
 
 
-const servicecontroller=new EmpServiceController(getreqservice,putreqservice)
+const servicecontroller=new EmpServiceController(getreqservice,putreqservice,getServicePayment)
+
+const chatcontroller=new EmployeeChatcontroller(getchatbyEmployeeside)
+
 
 const router = express.Router();
 
@@ -85,6 +114,19 @@ router.post("/login", (req, res) =>
 router.get("/logout", (req, res, next) =>
   employeeController.Employee_get_Logout_controll(req, res, next)
 );
+
+
+
+router.post("/forgot-password/otp", (req, res, next) => {
+  employeeController.Employee_Post_forgot_password_controll(req, res, next);
+});
+router.post("/forgot-password/check", (req, res, next) => {
+  employeeController.Employee_post_forgot_password_otpcheckcontroll(req, res, next);
+});
+router.post("/forgot-password", (req, res, next) => {
+  employeeController.Employee_post_newpassword(req, res, next);
+});
+
 
 
 router.get('/jobs',Authentication,(req,res,next)=>{
@@ -122,6 +164,16 @@ router.get("/req-services/:id", Authentication, (req, res, next) => {
 
 router.put("/req-serivce/acceptemployee/:id", Authentication, (req, res, next) => {
   servicecontroller.employee_putreqServceacceptcntroll(req, res, next);
+});
+
+router.get("/service-payment/:id", Authentication, (req, res, next) => {
+  servicecontroller.employee_getPaymentDetails(req, res, next);
+});
+router.get("/chats-employeeid/:id", Authentication, (req, res, next) => {
+  chatcontroller.getemployeeChat_employeeid(req, res, next);
+});
+router.get("/user/:id", Authentication, (req, res, next) => {
+  employeeController.Employee_get_userdetailsControl(req,res,next)
 });
 
 

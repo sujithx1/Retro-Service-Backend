@@ -1,8 +1,8 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response } from "express";
 
-const AccessToken_secretKey = process.env.access_token || "";
-const RefreshToken_secretKey = process.env.refresh_token || "";
+const AccessToken_secretKey = process.env.ACCESS_TOKEN || "";
+const RefreshToken_secretKey = process.env.REFRESH_TOKEN || "";
 
 
 export const GenerateAccessToken = (id: string, role: string): string => {
@@ -32,17 +32,15 @@ export const GenerateRefreshToken = (id: string, role: string): string => {
 export const createAccessToken = (req: Request, res: Response,role:string):void => {
     console.log(role);
     
+    const roleToken=`${role}_refreshToken`
 
     
-    const refreshtoken:string = req.cookies[role]
+    const refreshtoken:string = req.cookies[roleToken]
     
     console.log("tokennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",refreshtoken);
     
     
-    if (!refreshtoken) {
-        res.status(403).json({ error: 'Refresh token is missing' });
-        return 
-    }
+ 
     console.log(refreshtoken,"refffffffffffffffffffffffff");
     
 
@@ -91,58 +89,3 @@ export const createAccessToken = (req: Request, res: Response,role:string):void 
 };
 
 
-
-
-// import jwt, { JwtPayload } from "jsonwebtoken";
-// import { Request, Response } from 'express';
-// const AccessToken_SecretKey = process.env.AccessToken_SECRETKEY || "access123";
-// const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "refresh123";
-
-// const refreshTokens: string[] = [];
-
-// // Function to generate an access token with id and role
-// export const GenerateAccessToken = (id: string, role: string): string => {
-//   return jwt.sign({ id, role }, AccessToken_SecretKey, {
-//     expiresIn: "15m",
-//     algorithm: 'HS256'
-//   });
-// };
-
-// // Function to generate a refresh token with id and role
-// export const GenerateRefreshToken = (id: string, role: string): string => {
-//   const refreshToken = jwt.sign({ id, role }, REFRESH_TOKEN_SECRET, {
-//     expiresIn: '7d'
-//   });
-//   refreshTokens.push(refreshToken);
-//   return refreshToken;
-// };
-
-// // Function to create a new access token using a refresh token
-// export const createAccessToken = (req: Request, res: Response) => {
-//   const refreshtoken = req.cookies.user_refreshToken;
-//   console.log(refreshtoken);
-  
-
-//   if (!refreshtoken || !refreshTokens.includes(refreshtoken)) {
-//     return res.status(403).json({ message: "Refresh token is invalid or missing." });
-//   }
-
-//   jwt.verify(refreshtoken, REFRESH_TOKEN_SECRET, (err: Error | null, decoded: string | JwtPayload | undefined) => {
-//     if (err) {
-//       return res.status(403).json({ message: "Token verification failed." });
-//     }
-
-//     let id: string;
-//     let role: string;
-
-//     if (typeof decoded === 'object' && decoded !== null && 'id' in decoded && 'role' in decoded) {
-//       id = (decoded as JwtPayload).id as string;
-//       role = (decoded as JwtPayload).role as string;
-//     } else {
-//       return res.status(403).json({ message: "Invalid token structure." });
-//     }
-
-//     const newAccessToken = GenerateAccessToken(id, role);
-//     res.json({ accessToken: newAccessToken });
-//   });
-// };

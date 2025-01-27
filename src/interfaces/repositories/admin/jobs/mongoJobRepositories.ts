@@ -69,6 +69,14 @@ export class Mongo_Job_admin_Repositories implements IJobs_adminRepositories{
           
           return jobs.map((item)=>new JobsEntities(item.id,item.name,item.description,item.minimum_wage,item.isBlock,item.image))
       }
+
+      async jobsfindbynameSearch(name: string): Promise<JobsEntities[] | null> {
+        const job = await JobModel.find({
+          name: { $regex: name, $options: "i" }, // Case-insensitive search
+        });
+        if(!job)return null
+       return job.map((item)=>new JobsEntities(item.id,item.name,item.description,item.minimum_wage,item.isBlock,item.image))
+      }
       
       
     

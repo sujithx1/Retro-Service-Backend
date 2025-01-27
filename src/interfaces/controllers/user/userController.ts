@@ -360,20 +360,20 @@ export class Usercontroller {
     next: NextFunction
   ) {
     try {
-      const { userid, userEmail, name, feedBack, employeeId } = req.body;
+      const { userId, feedback, employeeId,rating } = req.body;
       console.log(req.body);
 
-      if (!userid || !userEmail || !name || !feedBack || !employeeId)
-        return next(new Error(" missing Feild"));
+      if (!userId || !rating || !feedback || !employeeId)
+        return next(new CustomError(" missing Feild",401,AppError.ValidationError));
 
-      const feedback = await this.postUser_report_feedback.execute(
-        userid,
-        name,
+      const feedBack = await this.postUser_report_feedback.execute(
+        userId,
         employeeId,
-        feedBack
+        feedback,
+       Number(rating)
       );
 
-      return res.status(200).json({ message: "success", feedback });
+      return res.status(200).json({ message: "success", feedBack });
     } catch (error) {
       console.log("err->User_get_service_Booking_controll", error);
       return next(error);

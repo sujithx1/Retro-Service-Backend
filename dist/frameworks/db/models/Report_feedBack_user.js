@@ -40,8 +40,8 @@ const Report_FeedBack_user_Schema = new mongoose_1.Schema({
         type: mongoose_1.default.Schema.ObjectId,
         ref: "User"
     },
-    name: {
-        type: String,
+    rating: {
+        type: Number,
         required: true
     },
     feedBack: {

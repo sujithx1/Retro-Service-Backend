@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { RequestserviceMechEntities } from "../../../entities/reqserviceEntities";
 import { Request_Service_Mech_model } from "../../../frameworks/db/models/reqserviceMechanics";
 import { IreqservicemechanicsRepositories } from "./Ireqservicesmechrepositories";
@@ -33,7 +34,7 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
              empllist,
             req.status,
             req.bookingDate,
-          
+        
 
 
 
@@ -45,7 +46,7 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
         mechanics: empid
       });
       
-        console.log("reqservices",reqserviceEmpl);
+       
         
       
         if (!reqserviceEmpl || reqserviceEmpl.length === 0) return [];
@@ -90,7 +91,9 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
             empllist,
             service.status,
             service.bookingDate,
-            acceptEmployee
+            acceptEmployee,
+
+            service.paymentId?service.paymentId:"",
           );
         });
       }
@@ -132,27 +135,36 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
          empllist,
         reqservice.status,
         reqservice.bookingDate,
-        acceptEmployee
+        acceptEmployee,
+        reqservice.paymentId?reqservice.paymentId:"",
+
         )
        
       }
 
       async findByIdAndUpdate(reqService: RequestserviceMechEntities,empId:string): Promise<RequestserviceMechEntities|null> {
-          const service=await Request_Service_Mech_model.findByIdAndUpdate(reqService.id,{
-            status:reqService.status,
-            $set: {
-              "acceptEmployee": {
-                employeeId: empId,
-                acceptTime: new Date() // Set acceptTime to current date and time
-              }
-            }
-      
-          },{
-            new:true,upsert:true
+        const updateData: any = {
+          status: reqService.status,
+          acceptEmployee: {
+            employeeId: empId,
+            acceptTime: new Date() 
           }
-        )
-        if(!service)return null
+        };
+      
+        if (reqService.paymentId && reqService.paymentId!=="") {
+          updateData.paymentId = reqService.paymentId;
+        }
+        const service = await Request_Service_Mech_model.findByIdAndUpdate(
+          reqService.id,
+          updateData,
+          {
+            new: true,
+            upsert: true
+          }
+        );
 
+        if(!service) return null
+        
         await service
         .populate([
           { path: 'userId', select: 'username email id' },
@@ -174,6 +186,8 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
               acceptTime: service.acceptEmployee.acceptTime
             }
           : null;
+
+
         return new RequestserviceMechEntities(
          service.id,
          service.userId._id.toString(),
@@ -187,9 +201,120 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
           empllist,
          service.status,
          service.bookingDate,
-         acceptEmployee
+         acceptEmployee,
+         service.paymentId?service.paymentId:"",
          )
+
         
       }
-      
+      async findByIdAndUpdateCancellBooking(reqService: RequestserviceMechEntities): Promise<RequestserviceMechEntities | null> {
+
+        const service = await Request_Service_Mech_model.findByIdAndUpdate(
+reqService.id,
+{
+  status:reqService.status
+}
+,{new:true}
+        )
+
+        if(!service) return null
+        await service
+        .populate([
+          { path: 'userId', select: 'username email id' },
+          { path: 'mechanics', select: 'name id' },
+          { path: 'jobId', select: 'name description' }
+        ]);
+        const empllist = service.mechanics.map(emp => {
+            if ('id' in emp) {
+              return emp.id; 
+            }
+            return emp.toString(); 
+          });
+ 
+          const acceptEmployee = service.acceptEmployee
+          ? {
+              employeeId: service.acceptEmployee.employeeId
+                ? service.acceptEmployee.employeeId.toString()
+                : null,
+              acceptTime: service.acceptEmployee.acceptTime
+            }
+          : null;
+
+
+        return new RequestserviceMechEntities(
+         service.id,
+         service.userId._id.toString(),
+         service.userName,
+         service.userEmail,
+         service.userLocation,
+         service.jobId._id.toString(),
+         service.jobName,
+         service.minWage,
+         service.problem,
+          empllist,
+         service.status,
+         service.bookingDate,
+         acceptEmployee,
+         service.paymentId?service.paymentId:"",
+         )}
+
+
+       async findbyUserId(userId: string): Promise<RequestserviceMechEntities[] | []> {
+
+          const reqservice = await Request_Service_Mech_model.find({
+            userId: userId
+          });
+          
+            
+          
+            if (!reqservice || reqservice.length === 0) return [];
+          
+            // Populate each document individually
+            for (let service of reqservice) {
+              await service.populate([
+                { path: 'userId', select: 'username email _id' },
+                { path: 'mechanics', select: 'name _id' },
+                { path: 'jobId', select: 'name description _id' },
+                { path: 'acceptEmployee.employeeId', select: 'name _id' }
+              ]);
+            }
+          
+            return reqservice.map((service) => {
+              const empllist = service.mechanics.map(emp => {
+                if ('_id' in emp) {
+                  return emp._id.toString();
+                }
+                return emp.toString();
+              });
+          
+              const acceptEmployee = service.acceptEmployee
+                ? {
+                    employeeId: service.acceptEmployee.employeeId
+                      ? service.acceptEmployee.employeeId.toString()
+                      : null,
+                    acceptTime: service.acceptEmployee.acceptTime
+                  }
+                : null;
+          
+              return new RequestserviceMechEntities(
+                service._id.toString(),
+                service.userId._id.toString(),
+                service.userId.username,
+                service.userId.email,
+                service.userLocation,
+                service.jobId._id.toString(),
+                service.jobId.name,
+                service.minWage,
+                service.problem,
+                empllist,
+                service.status,
+                service.bookingDate,
+                acceptEmployee,
+    
+                service.paymentId?service.paymentId:"",
+              );
+            });
+            
+        }
+
 }

@@ -21,7 +21,7 @@ class UserServiceRazorpayPayment {
     }
     execute(name, vehicleNumber, problem, phone, amount, employeeId, userId, jobName, serviceId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newPayment = new servicePaymentEntities_1.ServicePaymentEntity("", userId, employeeId, serviceId, amount, "INR", "receipt#1", { name,
+            const newPayment = new servicePaymentEntities_1.ServicePaymentEntity("", userId, employeeId, serviceId, amount, { name,
                 phone,
                 problem,
                 vehicleNumber
@@ -34,6 +34,7 @@ class UserServiceRazorpayPayment {
             if (!service)
                 throw new custom_errors_1.CustomError("Service Not Found", 401, error_enum_1.AppError.ResourceNotFound);
             service.status = "COMPLETED";
+            service.paymentId = Servicepayment.id;
             yield this.serviceRepositories.findByIdAndUpdate(service, employeeId);
             yield this.employeeRepositories.findIdAndUpdateRevenue(employee.id, Servicepayment.amount);
             return Servicepayment;

@@ -20,7 +20,7 @@ class Report_FeedBack_user_MongoRepositories {
                 .populate({ path: 'employee' });
             if (!feedback)
                 return null;
-            return new Report_FeedBack_user_1.Report_feedBack_User_Entities(feedback.id, feedback.user.id, feedback.user.username, feedback.user.email, feedback.employee.id, feedback.employee.username, feedback.feedBack, feedback.employee.email, feedback.createdAt, feedback.updatedAt);
+            return new Report_FeedBack_user_1.Report_feedBack_User_Entities(feedback.id, feedback.user.id, feedback.user.username, feedback.user.email, feedback.employee.id, feedback.employee.username, feedback.feedBack, feedback.employee.email, feedback.rating, feedback.createdAt, feedback.updatedAt);
         });
     }
     create(feedBack) {
@@ -28,7 +28,7 @@ class Report_FeedBack_user_MongoRepositories {
             const feedback = yield Report_feedBack_user_1.Report_FeedBack_user_Model.create(feedBack);
             yield feedback.populate({ path: 'user' });
             yield feedback.populate({ path: 'employee' });
-            return new Report_FeedBack_user_1.Report_feedBack_User_Entities(feedback.id, feedback.user.id, feedback.user.username, feedback.user.email, feedback.employee.id, feedback.employee.username, feedback.feedBack, "", feedback.createdAt, feedback.updatedAt);
+            return new Report_FeedBack_user_1.Report_feedBack_User_Entities(feedback.id, feedback.user.id, feedback.user.username, feedback.user.email, feedback.employee.id, feedback.employee.username, feedback.feedBack, "", feedBack.rating, feedback.createdAt, feedback.updatedAt);
         });
     }
     findAll() {
@@ -36,7 +36,7 @@ class Report_FeedBack_user_MongoRepositories {
             const feedbacks = yield Report_feedBack_user_1.Report_FeedBack_user_Model.find()
                 .populate({ path: 'user' })
                 .populate({ path: 'employee' });
-            return feedbacks.map((report) => new Report_FeedBack_user_1.Report_feedBack_User_Entities(report.id, report.user.id, report.user.username, report.user.email, report.employee.id, report.employee.username, report.feedBack, report.employee.email, report.createdAt, report.updatedAt));
+            return feedbacks.map((report) => new Report_FeedBack_user_1.Report_feedBack_User_Entities(report.id, report.user.id, report.user.username, report.user.email, report.employee.id, report.employee.username, report.feedBack, report.employee.email, report.rating, report.createdAt, report.updatedAt));
         });
     }
 }

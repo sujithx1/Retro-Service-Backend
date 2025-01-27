@@ -34,7 +34,12 @@ const req_employeeservice_1 = require("../../use-cases/userside/service/req.empl
 const get_req_service_1 = require("../../use-cases/userside/service/get_req_service");
 const serviceRazorpayuseCase_1 = require("../../use-cases/userside/payments/serviceRazorpayuseCase");
 const mongoservicePaymentRepositories_1 = require("../../interfaces/repositories/payments/mongoservicePaymentRepositories");
-const getSevicePaymentCompleted_1 = require("../../use-cases/userside/payments/getSevicePaymentCompleted");
+const putReqserviceuseCase_1 = require("../../use-cases/userside/service/putReqserviceuseCase");
+const getservicebookingHistory_1 = require("../../use-cases/userside/payments/getservicebookingHistory");
+const getPaymentDetails_1 = require("../../use-cases/employeeside/payment/getPaymentDetails");
+const MongoChatsReposotories_1 = require("../../interfaces/repositories/chats/MongoChatsReposotories");
+const searchservices_1 = require("../../use-cases/userside/service/searchservices");
+// import { Get_MessagesByuseId } from "../../use-cases/chat/getChatsbyuserId";
 const userRepositories = new UserMongoRepositories_1.UserMongodbRepositories();
 const jobRepositories = new mongoJobRepositories_1.Mongo_Job_admin_Repositories();
 const Admin_employeeRepositories = new Mongo_Empl_repositories_1.Mongo_Admin_Employees_Repositories();
@@ -43,6 +48,7 @@ const serviceRepositories = new mongoServiceRepositories_1.Mongo_Service_Booking
 const Report_FeedBackRepositoires = new FeedBack_mongo_Repositories_1.Report_FeedBack_user_MongoRepositories();
 const reqServiceMechanicsRepositories = new mongoreqservicemechrep_1.MongoReqServiceMechnics();
 const servicepaymentRepositoires = new mongoservicePaymentRepositories_1.ServicePaymentMongoRepositories();
+const messageRepositories = new MongoChatsReposotories_1.Message_mongoRepositories();
 const createUser = new createUser_1.CreateUser(userRepositories);
 const sendmailOtp = new SendOtp_1.SendOtp(userRepositories);
 const checkotpMail = new otpchecking_1.CheckOtp();
@@ -60,12 +66,18 @@ const newPassword = new newPassword_1.NewPassword(userRepositories);
 const createreqservicemechanics = new req_employeeservice_1.ReqEmployeeServices_useCase(userRepositories, employeeRepositories, reqServiceMechanicsRepositories);
 const getreqservice = new get_req_service_1.User_getReqServiceuseCase(reqServiceMechanicsRepositories);
 const createServicepayment = new serviceRazorpayuseCase_1.UserServiceRazorpayPayment(servicepaymentRepositoires, employeeRepositories, reqServiceMechanicsRepositories);
-const getbookingHistory = new getSevicePaymentCompleted_1.UserServiceBookingHistoryusecase(servicepaymentRepositoires);
+const getbookingHistory = new getservicebookingHistory_1.User_getServiceBookingHistoryByUserId(reqServiceMechanicsRepositories);
+const cancellBookingService = new putReqserviceuseCase_1.User_putReqserviceUsecase(reqServiceMechanicsRepositories);
+const getServicePayment = new getPaymentDetails_1.Emp_getPaymentDetails(servicepaymentRepositoires);
+const serachjobsuser = new searchservices_1.User_serchjobsuseCase(jobRepositories);
+// messages
+// const getMessagesByUser=new Get_MessagesByuseId(messageRepositories)
 const userController = new userController_1.Usercontroller(createUser, sendmailOtp, checkotpMail, Loginuser, googleSignin, userEdit, userProfileimage, getallJobs, getAllEmployees, PostServiceBooking, get_service_booking, post_Report_user, forgotUserCase, newPassword);
-const serviceController = new UserserviceController_1.UserServiceController(createreqservicemechanics, getreqservice, createServicepayment, getbookingHistory);
+const serviceController = new UserserviceController_1.UserServiceController(createreqservicemechanics, getreqservice, createServicepayment, getbookingHistory, cancellBookingService, getServicePayment, serachjobsuser);
+// const userChatController=new UserChatcontroller(getMessagesByUser)
 const userRouter = express_1.default.Router();
 userRouter.post("/refresh-token", (req, res) => {
-    (0, jwt_auth_token_1.createAccessToken)(req, res, "user_refreshToken");
+    (0, jwt_auth_token_1.createAccessToken)(req, res, "user");
 });
 userRouter.post("/signup", (req, res) => userController.signUp(req, res));
 userRouter.post("/signup/otp", (req, res) => userController.OtpChecking(req, res));
@@ -112,6 +124,10 @@ userRouter.get("/req-service/:id", userAuthentication_1.Authentication, (req, re
     console.log("get requset");
     serviceController.get_reqServicecontrolle(req, res, next);
 });
+userRouter.put("/req-service/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    console.log("get requset");
+    serviceController.userService_PutReqservecontroll(req, res, next);
+});
 userRouter.post("/service/payment/razorpay", 
 // Authentication,
 (req, res, next) => {
@@ -123,5 +139,14 @@ userRouter.post("/service/payment/razorpay/confirm", userAuthentication_1.Authen
 });
 userRouter.get("/booking-history/:id", userAuthentication_1.Authentication, (req, res, next) => {
     serviceController.userService_Bookin_history_Controll(req, res, next);
+});
+userRouter.get('/service-payment/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    serviceController.userService_GETservicePayment(req, res, next);
+});
+// userRouter.get('/chats-userId/:id',Authentication,(req,res,next)=>{
+//   userChatController.user_getChats(req,res,next)
+// })
+userRouter.get('/service/search', userAuthentication_1.Authentication, (req, res, next) => {
+    serviceController.userService_GETsearch(req, res, next);
 });
 exports.default = userRouter;

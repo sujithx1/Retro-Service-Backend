@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export const connectdb=() => {
-  const dbUrl=process.env.dbUrl
+  const dbUrl=process.env.DB_URL
  
   
   

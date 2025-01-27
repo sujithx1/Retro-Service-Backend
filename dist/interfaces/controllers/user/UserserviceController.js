@@ -17,11 +17,14 @@ const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 const razorpay_1 = __importDefault(require("razorpay"));
 class UserServiceController {
-    constructor(createrewservicesmech, getreqServiceUsecase, createServicepayment, getbookingHistory) {
+    constructor(createrewservicesmech, getreqServiceUsecase, createServicepayment, getbookingHistory, putReqserviceuseCase, getServicePayment, getsrachjobsUser) {
         this.createrewservicesmech = createrewservicesmech;
         this.getreqServiceUsecase = getreqServiceUsecase;
         this.createServicepayment = createServicepayment;
         this.getbookingHistory = getbookingHistory;
+        this.putReqserviceuseCase = putReqserviceuseCase;
+        this.getServicePayment = getServicePayment;
+        this.getsrachjobsUser = getsrachjobsUser;
     }
     reqserviceEmployee(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -74,8 +77,8 @@ class UserServiceController {
                 if (!amount || !currency || !receipt)
                     return next(new custom_errors_1.CustomError("Missing fields", 401, error_enum_1.AppError.ValidationError));
                 const razorpay = new razorpay_1.default({
-                    key_id: process.env.RazorPayId || "",
-                    key_secret: process.env.RazorPaySecret,
+                    key_id: process.env.RAZORPAYID || "",
+                    key_secret: process.env.RAZORPAYSECRECT,
                 });
                 const order = yield razorpay.orders.create({
                     amount: amount * 100, // Amount in paise
@@ -123,10 +126,64 @@ class UserServiceController {
                 if (!id)
                     return next(new custom_errors_1.CustomError("Missing field", 401, error_enum_1.AppError.ValidationError));
                 const history = yield this.getbookingHistory.execute(id);
-                console.log(history);
                 return res
                     .status(200)
                     .json({ message: "success", success: true, history });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    userService_PutReqservecontroll(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const { status } = req.body;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("Missing field", 401, error_enum_1.AppError.ValidationError));
+                if (!status)
+                    return next(new custom_errors_1.CustomError("Missing status", 401, error_enum_1.AppError.ValidationError));
+                const service = yield this.putReqserviceuseCase.execute(id, status);
+                return res
+                    .status(200)
+                    .json({ message: "success", success: true, service });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    userService_GETservicePayment(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                console.log("service booking-hsitory", id);
+                if (!id)
+                    return next(new custom_errors_1.CustomError("Missing field", 401, error_enum_1.AppError.ValidationError));
+                const service = yield this.getServicePayment.execute(id);
+                console.log("service payment", service);
+                return res
+                    .status(200)
+                    .json({ message: "success", success: true, service });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    userService_GETsearch(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const query = req.query.query;
+                console.log("service search", query);
+                if (!query)
+                    return next(new custom_errors_1.CustomError("Missing quary", 401, error_enum_1.AppError.ValidationError));
+                const jobs = yield this.getsrachjobsUser.execute(query);
+                // console.log("service payment",service);
+                return res
+                    .status(200)
+                    .json({ message: "success", success: true, services: jobs });
             }
             catch (error) {
                 return next(error);

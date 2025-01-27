@@ -79,5 +79,9 @@ const requestSchema = new mongoose_1.default.Schema({
             default: null,
         },
     },
+    paymentId: {
+        type: String,
+        default: ""
+    }
 });
 exports.Request_Service_Mech_model = mongoose_1.default.model('RequestMechanics', requestSchema);

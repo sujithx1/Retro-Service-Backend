@@ -6,4 +6,6 @@ export interface IJobs_adminRepositories {
   jobsFindbyName(name: string): Promise<JobsEntities | null>;
   jobsFindbyId(id: string): Promise<JobsEntities | null>;
   jobsFindbyIdAndUpdate(jobs: JobsEntities): Promise<JobsEntities | null>;
+  jobsfindbynameSearch(name:string):Promise<JobsEntities[]|null>
+  
 }

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Report_feedBack_User_Entities = void 0;
 class Report_feedBack_User_Entities {
-    constructor(id, user, name, userEmail, employee, EmployeeName, feedBack, employeeEmail, createdAt, updatedAt) {
+    constructor(id, user, name, userEmail, employee, EmployeeName, feedBack, employeeEmail, rating, createdAt, updatedAt) {
         this.id = id;
         this.user = user;
         this.name = name;
@@ -11,6 +11,7 @@ class Report_feedBack_User_Entities {
         this.EmployeeName = EmployeeName;
         this.feedBack = feedBack;
         this.employeeEmail = employeeEmail;
+        this.rating = rating;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RequestserviceMechEntities = void 0;
 class RequestserviceMechEntities {
-    constructor(id, userId, userName, userEmail, userLocation, jobId, jobName, minWage, problem, mechanics, status = "PENDING", bookingDate, acceptEmployee = null) {
+    constructor(id, userId, userName, userEmail, userLocation, jobId, jobName, minWage, problem, mechanics, status = "PENDING", bookingDate, acceptEmployee = null, paymentId) {
         this.id = id;
         this.userId = userId;
         this.userName = userName;
@@ -16,6 +16,7 @@ class RequestserviceMechEntities {
         this.status = status;
         this.bookingDate = bookingDate;
         this.acceptEmployee = acceptEmployee;
+        this.paymentId = paymentId;
     }
 }
 exports.RequestserviceMechEntities = RequestserviceMechEntities;

@@ -66,5 +66,12 @@ class EmployeeMongoRepositories {
             return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.createdAt, employee.updatedAt);
         });
     }
+    findByIdAndUpdatePassword(id, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const employee = yield EmployeeModel_1.EmployeeModel.findByIdAndUpdate(id, { password: password }, { new: true });
+            if (!employee)
+                return null;
+        });
+    }
 }
 exports.EmployeeMongoRepositories = EmployeeMongoRepositories;

@@ -30,6 +30,13 @@ import { User_getReqServiceuseCase } from "../../use-cases/userside/service/get_
 import { UserServiceRazorpayPayment } from "../../use-cases/userside/payments/serviceRazorpayuseCase";
 import { ServicePaymentMongoRepositories } from "../../interfaces/repositories/payments/mongoservicePaymentRepositories";
 import { UserServiceBookingHistoryusecase } from "../../use-cases/userside/payments/getSevicePaymentCompleted";
+import { User_putReqserviceUsecase } from "../../use-cases/userside/service/putReqserviceuseCase";
+import { User_getServiceBookingHistoryByUserId } from "../../use-cases/userside/payments/getservicebookingHistory";
+import { Emp_getPaymentDetails } from "../../use-cases/employeeside/payment/getPaymentDetails";
+import { UserChatcontroller } from "../../interfaces/controllers/user/userChatcontroller";
+import { Message_mongoRepositories } from "../../interfaces/repositories/chats/MongoChatsReposotories";
+import { User_serchjobsuseCase } from "../../use-cases/userside/service/searchservices";
+// import { Get_MessagesByuseId } from "../../use-cases/chat/getChatsbyuserId";
 const userRepositories = new UserMongodbRepositories();
 const jobRepositories = new Mongo_Job_admin_Repositories();
 const Admin_employeeRepositories = new Mongo_Admin_Employees_Repositories();
@@ -39,6 +46,12 @@ const Report_FeedBackRepositoires =
   new Report_FeedBack_user_MongoRepositories();
 const reqServiceMechanicsRepositories = new MongoReqServiceMechnics();
 const servicepaymentRepositoires = new ServicePaymentMongoRepositories();
+const messageRepositories=new Message_mongoRepositories()
+
+
+
+
+
 
 const createUser = new CreateUser(userRepositories);
 const sendmailOtp = new SendOtp(userRepositories);
@@ -80,11 +93,19 @@ const createServicepayment = new UserServiceRazorpayPayment(
   servicepaymentRepositoires,
   employeeRepositories,
   reqServiceMechanicsRepositories
+  );
   
+const getbookingHistory = new User_getServiceBookingHistoryByUserId(
+  reqServiceMechanicsRepositories
 );
-const getbookingHistory = new UserServiceBookingHistoryusecase(
-  servicepaymentRepositoires
-);
+const cancellBookingService=new User_putReqserviceUsecase(reqServiceMechanicsRepositories)
+const getServicePayment=new Emp_getPaymentDetails(servicepaymentRepositoires)
+
+const serachjobsuser=new User_serchjobsuseCase(jobRepositories)
+// messages
+// const getMessagesByUser=new Get_MessagesByuseId(messageRepositories)
+
+
 
 const userController = new Usercontroller(
   createUser,
@@ -107,13 +128,22 @@ const serviceController = new UserServiceController(
   createreqservicemechanics,
   getreqservice,
   createServicepayment,
-  getbookingHistory
+  getbookingHistory,
+  cancellBookingService,
+  getServicePayment,
+  serachjobsuser,
 );
+
+
+
+
+// const userChatController=new UserChatcontroller(getMessagesByUser)
+
 
 const userRouter = express.Router();
 
 userRouter.post("/refresh-token", (req, res) => {
-  createAccessToken(req, res, "user_refreshToken");
+  createAccessToken(req, res, "user");
 });
 userRouter.post("/signup", (req, res) => userController.signUp(req, res));
 userRouter.post("/signup/otp", (req, res) =>
@@ -194,6 +224,16 @@ userRouter.get(
     serviceController.get_reqServicecontrolle(req, res, next);
   }
 );
+userRouter.put(
+  "/req-service/:id",
+
+  Authentication,
+  (req, res, next) => {
+    console.log("get requset");
+
+    serviceController.userService_PutReqservecontroll(req, res, next);
+  }
+);
 userRouter.post(
   "/service/payment/razorpay",
 
@@ -220,4 +260,15 @@ Authentication,
 );
 
 
+userRouter.get('/service-payment/:id',Authentication,(req,res,next)=>{
+  serviceController.userService_GETservicePayment(req,res,next)
+})
+// userRouter.get('/chats-userId/:id',Authentication,(req,res,next)=>{
+//   userChatController.user_getChats(req,res,next)
+// })
+
+
+userRouter.get('/service/search',Authentication,(req,res,next)=>{
+  serviceController.userService_GETsearch(req,res,next)
+})
 export default userRouter;
