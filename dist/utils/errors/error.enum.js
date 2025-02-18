@@ -12,4 +12,5 @@ var AppError;
     AppError["ServerError"] = "ServerError";
     AppError["UnauthorizedAccess"] = "UnauthorizedAccess";
     AppError["ResourceNotFound"] = "ResourceNotFound";
+    AppError["DuplicateError"] = "Duplicate Entry";
 })(AppError || (exports.AppError = AppError = {}));

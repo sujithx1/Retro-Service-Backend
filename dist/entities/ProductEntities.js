@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Product_Entities = void 0;
 class Product_Entities {
-    constructor(id, name, description, stock, categoryId, price, images, isBlock = false, createdAt, updatedAt) {
+    constructor(id, storeId, name, description, stock, categoryId, price, images, isBlock = false, createdAt, updatedAt) {
         this.id = id;
+        this.storeId = storeId;
         this.name = name;
         this.description = description;
         this.stock = stock;

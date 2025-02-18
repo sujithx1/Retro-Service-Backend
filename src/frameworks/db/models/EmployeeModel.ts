@@ -1,6 +1,26 @@
 import mongoose, { Document, Schema } from "mongoose";
+import { Address_Types, FinduserLocation, Locationuser_types } from "../../../types/user";
 
 
+
+const AddressSchema = new Schema<Address_Types>({
+  country: { type: String, required: true },
+  county: { type: String, required: false },
+  neighbourhood: { type: String, required: false },
+  postcode: { type: String, required: false },
+  road: { type: String, required: false },
+  state: { type: String, required: true },
+  state_district: { type: String, required: false },
+  suburb: { type: String, required: false },
+  town: { type: String, required: false },
+});
+
+// Location Schema
+const LocationSchema = new Schema<Locationuser_types>({
+  lat: { type: Number, required: true },
+  lng: { type: Number, required: true },
+  address: { type: AddressSchema, required: true },
+});
 
 export interface IEmployee_types extends Document{
   _id:Schema.Types.ObjectId,
@@ -8,11 +28,12 @@ export interface IEmployee_types extends Document{
   email:string,
   phone:string,
   isActive:boolean,
+  onDuty:boolean,
   password:string,              
   profilePic?:string,
   experience:number,
   skills:string[],
-  location?:string
+  location?:Locationuser_types
   authSource:"self"|"google",
   role:string,
   revenue:number,
@@ -58,9 +79,9 @@ const EmployeSchema=new Schema<IEmployee_types>({
 
     },
     location:{
-        type:String,
-        default:""
-    },
+      type:LocationSchema,
+       required:false
+        },
     authSource:{
         type:String,
         enum:["self","google"],
@@ -73,7 +94,13 @@ const EmployeSchema=new Schema<IEmployee_types>({
     revenue:{
         type:Number,
         default:0
-    }
+    },
+    onDuty:{
+        type:Boolean,
+        default:false
+ },
+
+
 },
 
 {

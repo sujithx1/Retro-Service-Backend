@@ -40,6 +40,11 @@ const Report_FeedBack_user_Schema = new mongoose_1.Schema({
         type: mongoose_1.default.Schema.ObjectId,
         ref: "User"
     },
+    type: {
+        type: String,
+        enum: ['report', 'feedback'],
+        required: true
+    },
     rating: {
         type: Number,
         required: true
@@ -51,6 +56,18 @@ const Report_FeedBack_user_Schema = new mongoose_1.Schema({
     employee: {
         type: mongoose_1.default.Schema.ObjectId,
         ref: "employee"
+    },
+    refundProcessed: {
+        type: Boolean, // ✅ New field to track refunds
+        default: false,
+    },
+    amount: {
+        type: Number, // ✅ New field to track refunds
+        default: null,
+    },
+    bookingId: {
+        type: String, // ✅ New field to track refunds
+        required: true,
     },
 }, {
     timestamps: true

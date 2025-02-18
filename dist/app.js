@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.io = void 0;
 const express_1 = __importDefault(require("express"));
 const connection_1 = require("./frameworks/db/connection");
 const cors_1 = __importDefault(require("cors"));
@@ -25,6 +26,7 @@ const socket_io_1 = require("socket.io");
 const morgan_1 = __importDefault(require("morgan"));
 const ActivateModel_1 = require("./frameworks/db/models/ActivateModel");
 const messageModel_1 = require("./frameworks/db/models/messageModel");
+require("./utils/helper/db_helper/cronjobReject");
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const corsOptions = {
@@ -36,6 +38,7 @@ const corsOptions = {
 const io = new socket_io_1.Server(server, {
     cors: corsOptions,
 });
+exports.io = io;
 app.use((0, cors_1.default)(corsOptions)); // Ensure CORS is enabled for API routes
 app.use(express_1.default.json({ limit: "20mb" }));
 app.use((0, cookie_parser_1.default)());
@@ -98,16 +101,10 @@ io.on("connection", (socket) => {
             console.error("Error sending message:", error);
         }
     }));
-    // Handle disconnection
-    // socket.on("disconnect", () => {
-    //   // Remove disconnected socket from activeConnections
-    //   for (const [key, socketId] of Object.entries(activeConnections)) {
-    //     if (socketId === socket.id) {
-    //       delete activeConnections[key];
-    //       console.log(`Connection with ${key} disconnected`);
-    //     }
-    //   }
-    // });
+    socket.on("newBooking", (booking) => {
+        console.log("New Booking Request:", booking);
+        io.emit("bookingNotification", booking); // Notify all clients
+    });
     socket.on("disconnect", () => __awaiter(void 0, void 0, void 0, function* () {
         try {
             // Remove disconnected socket from active connections in the database
@@ -119,5 +116,4 @@ io.on("connection", (socket) => {
         }
     }));
 });
-// Start the server
 exports.default = server;

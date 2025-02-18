@@ -30,6 +30,7 @@ export class Admin_del_employee_useCase{
             update.authSource,
             update.role,
             update.revenue,
+            update.onDuty,
             update.createdAt,
             update.updatedAt
             

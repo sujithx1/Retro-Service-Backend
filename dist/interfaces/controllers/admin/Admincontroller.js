@@ -23,8 +23,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminController = void 0;
 const Validation_1 = require("../../../utils/helper/Validation");
 const jwt_auth_token_1 = require("../../jwt/jwt_auth_token");
+const custom_errors_1 = require("../../../utils/errors/custom.errors");
+const error_enum_1 = require("../../../utils/errors/error.enum");
 class AdminController {
-    constructor(admiside, getcategory, newCategory, editCategory, blockCategory, getJobs, newJobs, editJobs, delJobs, getEmployees, editEmployee, delEmployee, getUserss, putUser, delUser, getfeedbacks
+    constructor(admiside, getcategory, newCategory, editCategory, blockCategory, getJobs, newJobs, editJobs, delJobs, getEmployees, editEmployee, delEmployee, getUserss, putUser, delUser, getfeedbacks, putfeedbackrefund
     // private newProduct: Admin_add_product_Usecase,
     ) {
         this.admiside = admiside;
@@ -43,6 +45,7 @@ class AdminController {
         this.putUser = putUser;
         this.delUser = delUser;
         this.getfeedbacks = getfeedbacks;
+        this.putfeedbackrefund = putfeedbackrefund;
     }
     login(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -52,8 +55,9 @@ class AdminController {
                     return next(new Error("all field required "));
                 }
                 const adminData = yield this.admiside.execute(email, password);
-                const refresh_token = (0, jwt_auth_token_1.GenerateRefreshToken)(adminData.id, adminData.role);
-                const access_token = (0, jwt_auth_token_1.GenerateAccessToken)(adminData.id, adminData.role);
+                console.log("admindadata" + adminData.role);
+                const refresh_token = (0, jwt_auth_token_1.GenerateRefreshToken)(adminData.id, "admin");
+                const access_token = (0, jwt_auth_token_1.GenerateAccessToken)(adminData.id, "admin");
                 const getusers = yield this.admiside.getAlluser();
                 const getEmployees = yield this.admiside.getAllEmployees();
                 const getJobs = yield this.admiside.getAllJobs();
@@ -67,9 +71,10 @@ class AdminController {
                     var { password } = _a, rest = __rest(_a, ["password"]);
                     return rest;
                 });
-                return res
-                    .cookie("admin_refresTtoken", refresh_token, {
-                    httpOnly: true,
+                res
+                    .cookie("admin_refreshToken", refresh_token, {
+                    httpOnly: true, // ✅ Prevents JavaScript access for security
+                    path: "/", // ✅ Ensure the cookie is accessible everywhere
                 })
                     .status(200)
                     .json({
@@ -224,7 +229,9 @@ class AdminController {
     Admin_get_Employees_controll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log("All Cookies:", req.cookies);
                 const employees = yield this.getEmployees.execute();
+                console.log(req.cookies.admin_refreshToken);
                 const withoutPassword = employees.map((_a) => {
                     var { password } = _a, rest = __rest(_a, ["password"]);
                     return rest;
@@ -239,12 +246,12 @@ class AdminController {
     }
     admin_put_employee_controll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { id, username, phone, location, skills, experience } = req.body;
-            if (!id || !username || !phone || !location || !skills || !experience) {
+            const { id, username, phone, skills, experience } = req.body;
+            if (!id || !username || !phone || !skills || !experience) {
                 next(new Error("field missing "));
             }
             try {
-                const employee = yield this.editEmployee.execute(id, username, phone, location, skills, Number(experience));
+                const employee = yield this.editEmployee.execute(id, username, phone, skills, Number(experience));
                 const { password: _ } = employee, withoutpassword = __rest(employee, ["password"]);
                 res.status(200).json({ message: "success ", employee: withoutpassword });
             }
@@ -263,7 +270,7 @@ class AdminController {
                 res.status(200).json({ message: "success", employee: withoutPassword });
             }
             catch (error) {
-                console.log("error -> admin employee del controller", error.message);
+                console.log("error -> admin employee del controller", error);
                 next(error);
             }
         });
@@ -332,6 +339,22 @@ class AdminController {
             try {
                 console.log("feedback");
                 const feedback = yield this.getfeedbacks.execute();
+                res.status(200).json({ message: "success", feedback });
+            }
+            catch (error) {
+                console.log("error - > admin Controller getfeedbacks", error.message);
+                next(error);
+            }
+        });
+    }
+    Admin_put_FeedbacksRefund_controll(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("feedback");
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError));
+                const feedback = yield this.putfeedbackrefund.execute(id);
                 res.status(200).json({ message: "success", feedback });
             }
             catch (error) {

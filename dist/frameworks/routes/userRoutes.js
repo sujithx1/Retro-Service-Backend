@@ -37,9 +37,20 @@ const mongoservicePaymentRepositories_1 = require("../../interfaces/repositories
 const putReqserviceuseCase_1 = require("../../use-cases/userside/service/putReqserviceuseCase");
 const getservicebookingHistory_1 = require("../../use-cases/userside/payments/getservicebookingHistory");
 const getPaymentDetails_1 = require("../../use-cases/employeeside/payment/getPaymentDetails");
+const userChatcontroller_1 = require("../../interfaces/controllers/user/userChatcontroller");
 const MongoChatsReposotories_1 = require("../../interfaces/repositories/chats/MongoChatsReposotories");
 const searchservices_1 = require("../../use-cases/userside/service/searchservices");
-// import { Get_MessagesByuseId } from "../../use-cases/chat/getChatsbyuserId";
+const addlocation_1 = require("../../use-cases/userside/auth/addlocation");
+const getnearestEmployees10km_1 = require("../../use-cases/userside/service/getnearestEmployees10km");
+const putservicesendsecficemp_1 = require("../../use-cases/userside/service/putservicesendsecficemp");
+const putservicepaymentComplete_1 = require("../../use-cases/userside/payments/putservicepaymentComplete");
+const getChatsbyuserId_1 = require("../../use-cases/chat/getChatsbyuserId");
+const getEmployee_1 = require("../../use-cases/employeeside/getEmployee");
+const walletMongoepositories_1 = require("../../interfaces/repositories/wallet/walletMongoepositories");
+const userWalletcontroller_1 = require("../../interfaces/controllers/user/userWalletcontroller");
+const getbyuserId_1 = require("../../use-cases/wallet/getbyuserId");
+const transactionMongoRepositories_1 = require("../../interfaces/repositories/transaction/transactionMongoRepositories");
+const getuaserid_1 = require("../../use-cases/transactions/getuaserid");
 const userRepositories = new UserMongoRepositories_1.UserMongodbRepositories();
 const jobRepositories = new mongoJobRepositories_1.Mongo_Job_admin_Repositories();
 const Admin_employeeRepositories = new Mongo_Empl_repositories_1.Mongo_Admin_Employees_Repositories();
@@ -49,7 +60,9 @@ const Report_FeedBackRepositoires = new FeedBack_mongo_Repositories_1.Report_Fee
 const reqServiceMechanicsRepositories = new mongoreqservicemechrep_1.MongoReqServiceMechnics();
 const servicepaymentRepositoires = new mongoservicePaymentRepositories_1.ServicePaymentMongoRepositories();
 const messageRepositories = new MongoChatsReposotories_1.Message_mongoRepositories();
-const createUser = new createUser_1.CreateUser(userRepositories);
+const walletRepositories = new walletMongoepositories_1.WalletMongoRepositories();
+const transactionrepositories = new transactionMongoRepositories_1.TransactionMongoRepositories();
+const createUser = new createUser_1.CreateUser(userRepositories, walletRepositories);
 const sendmailOtp = new SendOtp_1.SendOtp(userRepositories);
 const checkotpMail = new otpchecking_1.CheckOtp();
 const Loginuser = new userLogin_1.UserLogin(userRepositories);
@@ -63,18 +76,26 @@ const get_service_booking = new get_service_booking_1.User_get_Service_Booking_u
 const post_Report_user = new Report_feedBack_useCase_1.Report_feedBack_user_useCase(Report_FeedBackRepositoires);
 const forgotUserCase = new forgototpuseCase_1.Forgot_PasswordotpUseCase(userRepositories);
 const newPassword = new newPassword_1.NewPassword(userRepositories);
+const userlocation = new addlocation_1.UserLocation_useCase(userRepositories);
 const createreqservicemechanics = new req_employeeservice_1.ReqEmployeeServices_useCase(userRepositories, employeeRepositories, reqServiceMechanicsRepositories);
 const getreqservice = new get_req_service_1.User_getReqServiceuseCase(reqServiceMechanicsRepositories);
-const createServicepayment = new serviceRazorpayuseCase_1.UserServiceRazorpayPayment(servicepaymentRepositoires, employeeRepositories, reqServiceMechanicsRepositories);
+const createServicepayment = new serviceRazorpayuseCase_1.UserServiceRazorpayPayment(servicepaymentRepositoires, employeeRepositories, reqServiceMechanicsRepositories, walletRepositories, transactionrepositories);
+const ConfirmServicePayment = new putservicepaymentComplete_1.User_CompleteServiceBooking_payment(servicepaymentRepositoires, employeeRepositories, reqServiceMechanicsRepositories, transactionrepositories);
 const getbookingHistory = new getservicebookingHistory_1.User_getServiceBookingHistoryByUserId(reqServiceMechanicsRepositories);
 const cancellBookingService = new putReqserviceuseCase_1.User_putReqserviceUsecase(reqServiceMechanicsRepositories);
 const getServicePayment = new getPaymentDetails_1.Emp_getPaymentDetails(servicepaymentRepositoires);
 const serachjobsuser = new searchservices_1.User_serchjobsuseCase(jobRepositories);
+const putserviceSendSpecificEmployee = new putservicesendsecficemp_1.User_putserviceSpecificEmp(reqServiceMechanicsRepositories, employeeRepositories);
+const getnearestEmployees10km = new getnearestEmployees10km_1.User_getNearestEmployees(employeeRepositories);
 // messages
-// const getMessagesByUser=new Get_MessagesByuseId(messageRepositories)
-const userController = new userController_1.Usercontroller(createUser, sendmailOtp, checkotpMail, Loginuser, googleSignin, userEdit, userProfileimage, getallJobs, getAllEmployees, PostServiceBooking, get_service_booking, post_Report_user, forgotUserCase, newPassword);
-const serviceController = new UserserviceController_1.UserServiceController(createreqservicemechanics, getreqservice, createServicepayment, getbookingHistory, cancellBookingService, getServicePayment, serachjobsuser);
-// const userChatController=new UserChatcontroller(getMessagesByUser)
+const getMessagesByUser = new getChatsbyuserId_1.Get_MessagesByuseId(messageRepositories);
+const userGetemployeedetails = new getEmployee_1.Employee_get_details_useCase(employeeRepositories);
+const usergetwallet = new getbyuserId_1.Wallet_getuserIduseCase(walletRepositories);
+const gettranasactionByuser = new getuaserid_1.Transaction_getbyuserId(transactionrepositories);
+const userController = new userController_1.Usercontroller(createUser, sendmailOtp, checkotpMail, Loginuser, googleSignin, userEdit, userProfileimage, getallJobs, getAllEmployees, PostServiceBooking, get_service_booking, post_Report_user, forgotUserCase, newPassword, userlocation, userGetemployeedetails);
+const serviceController = new UserserviceController_1.UserServiceController(createreqservicemechanics, getreqservice, ConfirmServicePayment, getbookingHistory, cancellBookingService, getServicePayment, serachjobsuser, getnearestEmployees10km, putserviceSendSpecificEmployee, createServicepayment, gettranasactionByuser);
+const userChatController = new userChatcontroller_1.UserChatcontroller(getMessagesByUser);
+const userWalletController = new userWalletcontroller_1.UserwalletController(usergetwallet);
 const userRouter = express_1.default.Router();
 userRouter.post("/refresh-token", (req, res) => {
     (0, jwt_auth_token_1.createAccessToken)(req, res, "user");
@@ -134,7 +155,7 @@ userRouter.post("/service/payment/razorpay",
     console.log("payment razorpay");
     serviceController.userServiceRazorpaypayment_Controll(req, res, next);
 });
-userRouter.post("/service/payment/razorpay/confirm", userAuthentication_1.Authentication, (req, res, next) => {
+userRouter.post("/service/payment/razorpay/confirm/:id", userAuthentication_1.Authentication, (req, res, next) => {
     serviceController.userServiceRazorpaypayment_Confirm_Controll(req, res, next);
 });
 userRouter.get("/booking-history/:id", userAuthentication_1.Authentication, (req, res, next) => {
@@ -146,7 +167,32 @@ userRouter.get('/service-payment/:id', userAuthentication_1.Authentication, (req
 // userRouter.get('/chats-userId/:id',Authentication,(req,res,next)=>{
 //   userChatController.user_getChats(req,res,next)
 // })
-userRouter.get('/service/search', userAuthentication_1.Authentication, (req, res, next) => {
+userRouter.get('/home', userAuthentication_1.Authentication, (req, res, next) => {
     serviceController.userService_GETsearch(req, res, next);
+});
+userRouter.put('/location/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    userController.user_putaddlocation(req, res, next);
+});
+userRouter.get("/nearest-employees", userAuthentication_1.Authentication, (req, res, next) => {
+    serviceController.userService_GETNearestEmployees(req, res, next);
+});
+userRouter.put("/req-service/employee/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    serviceController.userService_putreqserviceSpesificEmployee(req, res, next);
+});
+userRouter.post("/advance-payment/confirm", userAuthentication_1.Authentication, (req, res, next) => {
+    serviceController.userService_postAdvancePayment(req, res, next);
+});
+userRouter.get('/chats-userId/:id', userAuthentication_1.Authentication, (req, res, next) => { userChatController.user_getChats(req, res, next); });
+userRouter.get("/employee/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    userController.User_get_employeedetailsControl(req, res, next);
+});
+userRouter.get("/wallet/userId/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    userWalletController.user_getwalletbyuserId_controller(req, res, next);
+});
+userRouter.post("/report", userAuthentication_1.Authentication, (req, res, next) => {
+    userController.User_post_report_feedBack_employee_controll(req, res, next);
+});
+userRouter.get("/transactions/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    serviceController.userService_getTransacationhistory(req, res, next);
 });
 exports.default = userRouter;

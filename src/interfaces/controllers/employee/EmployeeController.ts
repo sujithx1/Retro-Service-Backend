@@ -22,6 +22,8 @@ import { AppError } from "../../../utils/errors/error.enum";
 import { User_getdetails } from "../../../use-cases/userside/auth/getUserdetails.usCase";
 import { Emp_NewPassword } from "../../../use-cases/employeeside/postnewpassword";
 import { Emp_Forgot_PasswordotpUseCase } from "../../../use-cases/employeeside/forgotpassword";
+import { Emp_putonDutyuseCase } from "../../../use-cases/employeeside/putonDutyuseCase";
+import { Emp_putaddLocationuseCase } from "../../../use-cases/employeeside/putaddlocation";
 
 export class EmployeeController {
   constructor(
@@ -37,7 +39,9 @@ export class EmployeeController {
     private getJobs: Admin_get_jobs_useCase,
     private getuserDetails:User_getdetails,
         private postforgot_passwordservice:Emp_Forgot_PasswordotpUseCase,
-        private newPassworduseCase:Emp_NewPassword
+        private newPassworduseCase:Emp_NewPassword,
+        private putDuty:Emp_putonDutyuseCase,
+        private empladdlocation:Emp_putaddLocationuseCase
   ) {}
 
   async Signup(req: Request, res: Response) {
@@ -53,6 +57,8 @@ export class EmployeeController {
       };
       EmployeeSignupValidate(employeData);
       const otp = generate_otp();
+      console.log("otp",otp);
+      
       await this.sendOtp.execute(email, username, otp);
       await redisClient.setEx("empotp", 60, JSON.stringify(otp));
       await redisClient.setEx("empData", 60, JSON.stringify(employeData));
@@ -109,7 +115,7 @@ export class EmployeeController {
       const access_token = GenerateAccessToken(employee.id, employee.role);
       const { password: _, ...withoutpassword } = employee;
       res
-        .cookie("employee_refrehToken", refresh_token, {
+        .cookie("employee_refreshToken", refresh_token, {
           httpOnly: true,
         })
         .status(200)
@@ -132,12 +138,12 @@ export class EmployeeController {
   ) {
     try {
       console.log(req.body);
-      const { username, phone, profilePic, location, experience } = req.body;
+      const { username, phone, profilePic, experience } = req.body;
 
       const { id } = req.params;
 
       // Validate inputs
-      if (!username || !phone || !location || !experience) {
+      if (!username || !phone  || !experience) {
         return next(new Error("Required fields are missing"));
       }
       if (!id) {
@@ -163,7 +169,7 @@ export class EmployeeController {
         cloudinaryUpload.secure_url,
 
         Number(experience),
-        location
+        
       );
       console.log("Updated user:", user);
 
@@ -300,6 +306,7 @@ export class EmployeeController {
       return next(error);
     }
   }
+  
   async Employee_get_userdetailsControl(
     req: Request,
     res: Response,
@@ -371,6 +378,57 @@ export class EmployeeController {
 
     }
   }
+
+  async Employee_put_onDuty(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      console.log("duty controller ");
+      
+      const {id} = req.params
+      const {duty } = req.body;
+      console.log(id,duty);  
+      if(!id)  throw new CustomError("missig id",401,AppError.ValidationError)
+      // if(duty=="")  throw new CustomError("missig duty",401,AppError.ValidationError)
+        
+      const dutyemployee=await this.putDuty.execute(id,duty)
+
+      res.status(200).json({message:"success",success:true,duty:dutyemployee})
+    } catch (error) {
+      return next(error)
+
+    }
+  }
+
+  
+
+  async Employee_putaddlocation(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const {id}=req.params
+      console.log("body",req.body);
+      
+      console.log(id);
+      
+      const {lat,lng,address}=req.body
+      if(!id) return new CustomError("missing id",401,AppError.ValidationError)
+      if(!lat||!lng||!address) return new CustomError("missing field",401,AppError.ValidationError)
+        const location=await this.empladdlocation.execute(id,lat,lng,address)
+      res.status(200).json({message:"success",success:true,location})
+
+
+    } catch (error) {
+      console.log("err->User_get_service_Booking_controll", error);
+      return next(error);
+    }
+  }
+
+
 
   
 }

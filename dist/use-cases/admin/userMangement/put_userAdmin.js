@@ -25,7 +25,7 @@ class Admin_put_user_useCase {
             const update = yield this.userRepositories.findByIdAndUpdate(user);
             if (!update)
                 throw new Error("Not updateded");
-            return new Userentities_1.UserIntities(update.id, update.username, update.email, update.phone, update.password, update.isActive, update.profilePic, update.isAdmin, update.authSource, update.role, update.createdAt, update.updatedAt);
+            return new Userentities_1.UserIntities(update.id, update.username, update.email, update.phone, update.password, update.isActive, update.profilePic, update.isAdmin, update.authSource, update.role, update.location, update.createdAt, update.updatedAt);
         });
     }
 }

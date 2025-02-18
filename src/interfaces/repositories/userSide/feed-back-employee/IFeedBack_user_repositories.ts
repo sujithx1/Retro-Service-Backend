@@ -4,5 +4,6 @@ export interface IReport_FeedBack_user_Repositories{
     findbyId(id:string):Promise<Report_feedBack_User_Entities|null>
     create(feedBack:Report_feedBack_User_Entities):Promise<Report_feedBack_User_Entities>
     findAll():Promise<Report_feedBack_User_Entities[]>
+    findByIdAndupdate(feedback:Report_feedBack_User_Entities):Promise<Report_feedBack_User_Entities |null>
 
 }

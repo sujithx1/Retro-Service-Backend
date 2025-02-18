@@ -9,7 +9,7 @@ interface ServicePayment extends Document {
   serviceId:mongoose.Types.ObjectId | IReq_Mechanics_service_types;
   amount: number;
   paymentId?: string;
-  status: "PENDING" | "COMPLETED" | "FAILED";
+  status: "PENDING" | "COMPLETED" | "FAILED"|"CONFIRMED";
   createdAt: Date;
   updatedAt: Date;
   serviceDetails: {
@@ -49,7 +49,7 @@ const ServicePaymentSchema: Schema = new Schema(
     },
     status: {
       type: String,
-      enum: ["PENDING" , "COMPLETED" , "FAILED"],
+      enum: ["PENDING" , "COMPLETED" , "FAILED","CONFIRMED"],
       default: "PENDING",
       required: true,
     },

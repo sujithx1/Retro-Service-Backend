@@ -60,7 +60,7 @@ const ServicePaymentSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: ["PENDING", "COMPLETED", "FAILED"],
+        enum: ["PENDING", "COMPLETED", "FAILED", "CONFIRMED"],
         default: "PENDING",
         required: true,
     },

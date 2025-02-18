@@ -8,7 +8,7 @@ import {
   GenerateAccessToken,
   GenerateRefreshToken,
 } from "../../jwt/jwt_auth_token";
-import { Admin_add_product_Usecase } from "../../../use-cases/admin/product/Admin_add_product_usecase";
+// import { Admin_add_product_Usecase } from "../../../use-cases/admin/product/Admin_add_product_usecase";
 import { Admin_add_Category_useCase } from "../../../use-cases/admin/category/Admin_add_category";
 import { Admin_edit_Category_useCase } from "../../../use-cases/admin/category/Admin_edit_categoty";
 import { Admin_Del_Category_useCase } from "../../../use-cases/admin/category/admin_del_useCase";
@@ -24,6 +24,9 @@ import { admin_Block_UnBlock_User_useCase } from "../../../use-cases/admin/userM
 import { Admin_get_categories_useCase } from "../../../use-cases/admin/category/get_categories_admin";
 import { Admin_get_jobs_useCase } from "../../../use-cases/admin/jobs/getJobs";
 import { Admin_get_feedbacks_useCase } from "../../../use-cases/admin/feedbacks/get_feedbacks";
+import { CustomError } from "../../../utils/errors/custom.errors";
+import { AppError } from "../../../utils/errors/error.enum";
+import { Admin_putfeedBackrefunduseCase } from "../../../use-cases/admin/feedbacks/put_feedbackrefund";
 
 export class AdminController {
   constructor(
@@ -42,7 +45,8 @@ export class AdminController {
     private getUserss:Admin_get_allUsers_useCase,
     private putUser:Admin_put_user_useCase,
     private delUser:admin_Block_UnBlock_User_useCase,
-    private getfeedbacks:Admin_get_feedbacks_useCase
+    private getfeedbacks:Admin_get_feedbacks_useCase,
+    private putfeedbackrefund:Admin_putfeedBackrefunduseCase
 
      // private newProduct: Admin_add_product_Usecase,
   ) {}
@@ -55,8 +59,10 @@ export class AdminController {
       }
 
       const adminData = await this.admiside.execute(email, password);
-      const refresh_token = GenerateRefreshToken(adminData.id,adminData.role);
-      const access_token = GenerateAccessToken(adminData.id,adminData.role);
+      console.log("admindadata"+adminData.role);
+      
+      const refresh_token = GenerateRefreshToken(adminData.id,"admin");
+      const access_token = GenerateAccessToken(adminData.id,"admin");
       const getusers = await this.admiside.getAlluser();
       const getEmployees = await this.admiside.getAllEmployees();
       const getJobs = await this.admiside.getAllJobs();
@@ -69,12 +75,13 @@ export class AdminController {
         ({ password, ...rest }) => rest
       );
 
-     return res
-        .cookie("admin_refresTtoken", refresh_token, {
-          httpOnly: true,
-        })
-        .status(200)
-        .json({
+      res
+      .cookie("admin_refreshToken", refresh_token, {
+        httpOnly: true, // ✅ Prevents JavaScript access for security
+        path: "/", // ✅ Ensure the cookie is accessible everywhere
+      })
+                .status(200)
+        .json({ 
           message: "admin logined",
           admin: withoutPassword,
           admintoken: access_token,
@@ -267,8 +274,13 @@ export class AdminController {
     next: NextFunction 
   ) {
     try {
+      console.log("All Cookies:", req.cookies);
+
       const employees = await this.getEmployees.execute();
+      console.log(req.cookies.admin_refreshToken);
+
       const withoutPassword = employees.map(({ password, ...rest }) => rest);
+
       res.status(200).json({ message: "success", employees: withoutPassword });
     } catch (error: any) {
       console.log("error->adminget_Employees controll", error.message);
@@ -281,8 +293,8 @@ export class AdminController {
     res: Response,
     next: NextFunction
   ) {
-    const { id, username, phone, location, skills, experience } = req.body;
-    if (!id || !username || !phone || !location || !skills || !experience) {
+    const { id, username, phone, skills, experience } = req.body;
+    if (!id || !username || !phone  || !skills || !experience) {
       next(new Error("field missing "));
     }
     try {
@@ -290,10 +302,10 @@ export class AdminController {
         id,
         username,
         phone,
-        location,
         skills,
         Number(experience)
       );
+      
       const { password: _, ...withoutpassword } = employee;
       res.status(200).json({ message: "success ", employee: withoutpassword });
     } catch (error: any) {
@@ -312,8 +324,8 @@ export class AdminController {
       const employee = await this.delEmployee.execute(id);
       const { password: _, ...withoutPassword } = employee;
       res.status(200).json({ message: "success", employee: withoutPassword });
-    } catch (error: any) {
-      console.log("error -> admin employee del controller", error.message);
+    } catch (error) {
+      console.log("error -> admin employee del controller", error);
       next(error);
     }
   }
@@ -390,6 +402,20 @@ export class AdminController {
       console.log("feedback");
       
       const feedback=await this.getfeedbacks.execute()
+      res.status(200).json({message:"success",feedback})
+    } catch (error:any) {
+      console.log("error - > admin Controller getfeedbacks",error.message);
+      next(error)
+      
+      
+    }
+  }
+  async Admin_put_FeedbacksRefund_controll(req:Request,res:Response,next:NextFunction){
+    try { 
+      console.log("feedback");
+      const{id}=req.params 
+      if(!id) return next(new CustomError("missing id",401,AppError.ValidationError))
+      const feedback=await this.putfeedbackrefund.execute(id)
       res.status(200).json({message:"success",feedback})
     } catch (error:any) {
       console.log("error - > admin Controller getfeedbacks",error.message);

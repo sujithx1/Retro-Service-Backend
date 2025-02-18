@@ -5,6 +5,7 @@ import { ObjectId } from "mongoose";
 export class Product_Entities{
     constructor(
         public id:string,
+        public storeId:string,
         public name:string,
         public description:string,
         public stock:number,

@@ -2,6 +2,7 @@ import { EmployeeEntities } from "../../../entities/EmployeeEntities";
 import { UserIntities } from "../../../entities/Userentities";
 import { EmployeeModel } from "../../../frameworks/db/models/EmployeeModel";
 import { UserModel } from "../../../frameworks/db/models/UserModel";
+import { FinduserLocation, Location, Locationuser_types } from "../../../types/user";
 import { IUserRepositories } from "./IUserrRepositories";
 
 export class UserMongodbRepositories implements IUserRepositories {
@@ -23,6 +24,7 @@ export class UserMongodbRepositories implements IUserRepositories {
       user.isAdmin,
       user.authSource,
       user.role,
+      user.location,
       user.createdAt,
       user.updatedAt
     );
@@ -40,6 +42,7 @@ export class UserMongodbRepositories implements IUserRepositories {
       newuser.isAdmin,
       newuser.authSource,
       newuser.role,
+      newuser.location,
       newuser.createdAt,
       newuser.updatedAt
   )
@@ -58,6 +61,7 @@ export class UserMongodbRepositories implements IUserRepositories {
     user.isAdmin,
     user.authSource,
     user.role,
+    user.location,
     user.createdAt,
     user.updatedAt
   )
@@ -89,6 +93,7 @@ export class UserMongodbRepositories implements IUserRepositories {
     userData.isAdmin,
     userData.authSource,
     userData.role,
+    userData.location,
     userData.createdAt,
     userData.updatedAt
   )
@@ -120,9 +125,39 @@ export class UserMongodbRepositories implements IUserRepositories {
             item.authSource,
             item.role,
             item.revenue,
+            item.onDuty,
             item.createdAt,
             item.updatedAt
           )
       )
+  }
+  async findByIdAndUpdatelocation(id: string, location: Locationuser_types): Promise<UserIntities | null> {
+      const userData=await UserModel.findByIdAndUpdate(id,{
+        location:location
+      },{new:true, upsert: true})
+
+
+      if(!userData)return null
+
+      
+
+  return new UserIntities(
+    userData.id,
+    userData.username,
+    userData.email,
+    userData.phone,
+    userData.password,
+    userData.isActive,
+    userData.profilePic,
+    userData.isAdmin,
+    userData.authSource,
+    userData.role,
+    userData.location,
+    userData.createdAt,
+    userData.updatedAt
+  )
+
+   
+      
   }
 }

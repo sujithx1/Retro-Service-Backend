@@ -1,4 +1,5 @@
-import { RequestserviceMechEntities } from "../../../entities/reqserviceEntities";
+import { io } from "../../../app";
+import { ReqService_MechanicTypes, RequestserviceMechEntities } from "../../../entities/reqserviceEntities";
 import { IEmployeeRepositories } from "../../../interfaces/repositories/employeeside/IEmployeRepositories";
 import { IreqservicemechanicsRepositories } from "../../../interfaces/repositories/reqservicemechanics/Ireqservicesmechrepositories";
 import { IUserRepositories } from "../../../interfaces/repositories/userSide/IUserrRepositories";
@@ -27,9 +28,14 @@ export class ReqEmployeeServices_useCase{
             if(!user) throw new CustomError("User not found",401,AppError.UserNotFound)
             
 
-            const employees=await this.employeeRepositoires.findAll()
-            const emplist=employees.map(emp=> emp.id)
+            const employees=await this.employeeRepositoires.findempnearestWithOnduty(userLocation)
+            const mechanics:ReqService_MechanicTypes[] = employees.map(emp => ({
+                employeeId: emp.id,       
+                bookingDate: new Date(),
+                
             
+                   
+            }));
             
             const newReqs=new RequestserviceMechEntities(
                 "",
@@ -41,12 +47,14 @@ export class ReqEmployeeServices_useCase{
                 jobName,
                 Min_wage,
                 problem,
-                emplist,
+                mechanics,
                 "PENDING",
                 new Date()
 
 
             )
+            // const userFcmToken = await getUserFcmToken(userId); // Fetch user's FCM token from DB
+
 
             return await this.reqServicesRepositories.create(newReqs)
         

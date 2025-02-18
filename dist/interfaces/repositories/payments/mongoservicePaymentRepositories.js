@@ -41,5 +41,20 @@ class ServicePaymentMongoRepositories {
             return new servicePaymentEntities_1.ServicePaymentEntity(service.id, ((_a = service.userId) === null || _a === void 0 ? void 0 : _a.toString()) || '', ((_b = service.employeeId) === null || _b === void 0 ? void 0 : _b.toString()) || '', ((_c = service.serviceId) === null || _c === void 0 ? void 0 : _c.toString()) || '', service.amount, service.serviceDetails, service.status, service.paymentId, service.jobName, service.createdAt, service.updatedAt);
         });
     }
+    findByIdAndUpdate(payment) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b, _c;
+            const service = yield servicePayment_model_1.ServicePaymentModel.findByIdAndUpdate(payment.id, {
+                status: payment.status,
+                paymentId: payment.paymentId,
+                amount: payment.amount,
+                'serviceDetails.phone': payment.serviceDetails.phone,
+                'serviceDetails.vehicleNumber': payment.serviceDetails.vehicleNumber
+            }, { new: true, upsert: true });
+            if (!service)
+                return null;
+            return new servicePaymentEntities_1.ServicePaymentEntity(service.id, ((_a = service.userId) === null || _a === void 0 ? void 0 : _a.toString()) || '', ((_b = service.employeeId) === null || _b === void 0 ? void 0 : _b.toString()) || '', ((_c = service.serviceId) === null || _c === void 0 ? void 0 : _c.toString()) || '', service.amount, service.serviceDetails, service.status, service.paymentId, service.jobName, service.createdAt, service.updatedAt);
+        });
+    }
 }
 exports.ServicePaymentMongoRepositories = ServicePaymentMongoRepositories;

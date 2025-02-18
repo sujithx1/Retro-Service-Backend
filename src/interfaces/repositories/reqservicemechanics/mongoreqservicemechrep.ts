@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import { RequestserviceMechEntities } from "../../../entities/reqserviceEntities";
+import { ReqService_MechanicTypes, RequestserviceMechEntities } from "../../../entities/reqserviceEntities";
 import { Request_Service_Mech_model } from "../../../frameworks/db/models/reqserviceMechanics";
 import { IreqservicemechanicsRepositories } from "./Ireqservicesmechrepositories";
 
@@ -12,15 +11,13 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
         await req
         .populate([
           { path: 'userId', select: 'username email id' },
-          { path: 'mechanics', select: 'name id' },
+          { path: 'mechanics', select: 'username id' },
           { path: 'jobId', select: 'name description' }
         ]);
-        const empllist = req.mechanics.map(emp => {
-            if ('id' in emp) {
-              return emp.id; 
-            }
-            return emp.toString(); 
-          });
+
+       
+        
+      
         return new RequestserviceMechEntities(
             req.id,
             req.userId._id.toString(),
@@ -31,7 +28,7 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
             req.jobName,
             req.minWage,
             req.problem,
-             empllist,
+            req.mechanics,
             req.status,
             req.bookingDate,
         
@@ -43,7 +40,7 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
      }
      async findbyempId(empid: string): Promise<RequestserviceMechEntities[] | []> {
       const reqserviceEmpl = await Request_Service_Mech_model.find({
-        mechanics: empid
+        'mechanics.employeeId': empid
       });
       
        
@@ -63,21 +60,30 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
       
         return reqserviceEmpl.map((service) => {
           const empllist = service.mechanics.map(emp => {
-            if ('_id' in emp) {
-              return emp._id.toString();
-            }
-            return emp.toString();
-          });
-      
-          const acceptEmployee = service.acceptEmployee
-            ? {
-                employeeId: service.acceptEmployee.employeeId
-                  ? service.acceptEmployee.employeeId.toString()
-                  : null,
-                acceptTime: service.acceptEmployee.acceptTime
+          
+              // If employeeId is populated (object), return its id
+              if (typeof emp.employeeId === "object" && "_id" in emp.employeeId) {
+                return {
+                  employeeId: emp.employeeId._id.toString(),
+                  bookingDate: emp.bookingDate
+                };
               }
-            : null;
+              // If employeeId is a string (ObjectId), return as it is
+              return {
+                employeeId: emp.employeeId,
+                bookingDate: emp.bookingDate
+              };
+                      });
+          
+         
       
+                      const acceptEmployee = service.acceptEmployee && service.acceptEmployee.employeeId?._id
+                      ? {
+                          employeeId: service.acceptEmployee.employeeId._id.toString(), // ✅ Extract only _id as string
+                          acceptTime: service.acceptEmployee.acceptTime
+                        }
+                      : null;
+                    
           return new RequestserviceMechEntities(
             service._id.toString(),
             service.userId._id.toString(),
@@ -107,21 +113,14 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
          { path: 'mechanics', select: 'name id' },
          { path: 'jobId', select: 'name description' }
        ]);
-       const empllist = reqservice.mechanics.map(emp => {
-           if ('id' in emp) {
-             return emp.id; 
-           }
-           return emp.toString(); 
-         });
-
-         const acceptEmployee = reqservice.acceptEmployee
-         ? {
-             employeeId: reqservice.acceptEmployee.employeeId
-               ? reqservice.acceptEmployee.employeeId.toString()
-               : null,
-             acceptTime: reqservice.acceptEmployee.acceptTime
-           }
-         : null;
+     
+       const acceptEmployee = reqservice.acceptEmployee && reqservice.acceptEmployee.employeeId?._id
+       ? {
+           employeeId: reqservice.acceptEmployee.employeeId._id.toString(), // ✅ Extract only _id as string
+           acceptTime: reqservice.acceptEmployee.acceptTime
+         }
+       : null;
+     
        return new RequestserviceMechEntities(
         reqservice.id,
         reqservice.userId._id.toString(),
@@ -132,7 +131,7 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
         reqservice.jobName,
         reqservice.minWage,
         reqservice.problem,
-         empllist,
+         reqservice.mechanics,
         reqservice.status,
         reqservice.bookingDate,
         acceptEmployee,
@@ -145,6 +144,7 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
       async findByIdAndUpdate(reqService: RequestserviceMechEntities,empId:string): Promise<RequestserviceMechEntities|null> {
         const updateData: any = {
           status: reqService.status,
+        
           acceptEmployee: {
             employeeId: empId,
             acceptTime: new Date() 
@@ -171,22 +171,16 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
           { path: 'mechanics', select: 'name id' },
           { path: 'jobId', select: 'name description' }
         ]);
-        const empllist = service.mechanics.map(emp => {
-            if ('id' in emp) {
-              return emp.id; 
-            }
-            return emp.toString(); 
-          });
+       
  
-          const acceptEmployee = service.acceptEmployee
-          ? {
-              employeeId: service.acceptEmployee.employeeId
-                ? service.acceptEmployee.employeeId.toString()
-                : null,
-              acceptTime: service.acceptEmployee.acceptTime
-            }
-          : null;
+        const acceptEmployee = service.acceptEmployee && service.acceptEmployee.employeeId?._id
+  ? {
+      employeeId: service.acceptEmployee.employeeId._id.toString(), // ✅ Extract only _id as string
+      acceptTime: service.acceptEmployee.acceptTime
+    }
+  : null;
 
+                 
 
         return new RequestserviceMechEntities(
          service.id,
@@ -198,7 +192,7 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
          service.jobName,
          service.minWage,
          service.problem,
-          empllist,
+          service.mechanics,
          service.status,
          service.bookingDate,
          acceptEmployee,
@@ -224,21 +218,14 @@ reqService.id,
           { path: 'mechanics', select: 'name id' },
           { path: 'jobId', select: 'name description' }
         ]);
-        const empllist = service.mechanics.map(emp => {
-            if ('id' in emp) {
-              return emp.id; 
-            }
-            return emp.toString(); 
-          });
- 
-          const acceptEmployee = service.acceptEmployee
-          ? {
-              employeeId: service.acceptEmployee.employeeId
-                ? service.acceptEmployee.employeeId.toString()
-                : null,
-              acceptTime: service.acceptEmployee.acceptTime
-            }
-          : null;
+        
+        const acceptEmployee = service.acceptEmployee && service.acceptEmployee.employeeId?._id
+        ? {
+            employeeId: service.acceptEmployee.employeeId._id.toString(), // ✅ Extract only _id as string
+            acceptTime: service.acceptEmployee.acceptTime
+          }
+        : null;
+      
 
 
         return new RequestserviceMechEntities(
@@ -251,7 +238,7 @@ reqService.id,
          service.jobName,
          service.minWage,
          service.problem,
-          empllist,
+          service.mechanics,
          service.status,
          service.bookingDate,
          acceptEmployee,
@@ -280,21 +267,29 @@ reqService.id,
             }
           
             return reqservice.map((service) => {
-              const empllist = service.mechanics.map(emp => {
-                if ('_id' in emp) {
-                  return emp._id.toString();
+              const empllist = service.mechanics.map((emp) => {
+                // Type guard to check if employeeId is of type IEmployee_types (object)
+                if (emp.employeeId && typeof emp.employeeId !== "string") {
+                  return {
+                    employeeId: emp.employeeId._id.toString(),  // Access _id when it's an object
+                    bookingDate: emp.bookingDate,  // The bookingDate field
+                  };
                 }
-                return emp.toString();
+              
+                // If it's a string, handle accordingly (it could be an ObjectId)
+                return {
+                  employeeId: emp.employeeId,  // Convert ObjectId to string
+                  bookingDate: emp.bookingDate,
+                };
               });
-          
-              const acceptEmployee = service.acceptEmployee
-                ? {
-                    employeeId: service.acceptEmployee.employeeId
-                      ? service.acceptEmployee.employeeId.toString()
-                      : null,
-                    acceptTime: service.acceptEmployee.acceptTime
-                  }
-                : null;
+              
+              const acceptEmployee = service.acceptEmployee && service.acceptEmployee.employeeId?._id
+              ? {
+                  employeeId: service.acceptEmployee.employeeId._id.toString(), // ✅ Extract only _id as string
+                  acceptTime: service.acceptEmployee.acceptTime
+                }
+              : null;
+            
           
               return new RequestserviceMechEntities(
                 service._id.toString(),
@@ -316,5 +311,59 @@ reqService.id,
             });
             
         }
+
+
+        async findByIdAndUpdateService(service: RequestserviceMechEntities): Promise<RequestserviceMechEntities | null> {
+          try {
+            const updatedService = await Request_Service_Mech_model.findByIdAndUpdate(
+              service.id, 
+              {
+                $set: { status: service.status, mechanics: service.mechanics,bookingDate:service.bookingDate }, // Updating fields
+              },
+              { new: true } 
+           
+
+            )
+        if(!updatedService) return null
+        await updatedService
+        .populate([
+          { path: 'userId', select: 'username email id' },
+          { path: 'mechanics', select: 'name id' },
+          { path: 'jobId', select: 'name description' }
+        ]);
+        
+ 
+          const acceptEmployee = updatedService.acceptEmployee
+          ? {
+              employeeId: updatedService.acceptEmployee.employeeId
+                ? updatedService.acceptEmployee.employeeId.toString()
+                : null,
+              acceptTime: updatedService.acceptEmployee.acceptTime
+            }
+          : null;
+
+
+        return new RequestserviceMechEntities(
+         updatedService.id,
+         updatedService.userId._id.toString(),
+         updatedService.userName,
+         updatedService.userEmail,
+         updatedService.userLocation,
+         updatedService.jobId._id.toString(),
+         updatedService.jobName,
+         updatedService.minWage,
+         updatedService.problem,
+          updatedService.mechanics,
+         updatedService.status,
+         updatedService.bookingDate,
+         acceptEmployee,
+         updatedService.paymentId?service.paymentId:"",
+         )
+          } catch (error) {
+            console.error("Error updating service:", error);
+            throw new Error("Failed to update service");
+          }
+        }
+        
 
 }

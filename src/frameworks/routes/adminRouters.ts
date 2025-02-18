@@ -7,7 +7,7 @@ import express from "express";
 import { Admin_Del_Category_useCase } from "../../use-cases/admin/category/admin_del_useCase";
 import { Mongo_catgoriesRepositories } from "../../interfaces/repositories/admin/categories/mongo_categoriesRepositories";
 import { Mongo_Job_admin_Repositories } from "../../interfaces/repositories/admin/jobs/mongoJobRepositories";
-import { Mongo_Product_adminrepositories } from "../../interfaces/repositories/admin/product/mongo_productRepositories";
+// import { Mongo_Product_adminrepositories } from "../../interfaces/repositories/admin/product/mongo_productRepositories";
 import { Admin_add_jobs_useCase } from "../../use-cases/admin/jobs/admin_addjobs";
 import { Admin_edit_jobs_useCase } from "../../use-cases/admin/jobs/adminEditJobs";
 import { Admin_del_job_useCase } from "../../use-cases/admin/jobs/del_admin_jobs";
@@ -25,17 +25,28 @@ import { Authentication } from "../../interfaces/middleware/userside/userAuthent
 import { Admin_get_feedbacks_useCase } from "../../use-cases/admin/feedbacks/get_feedbacks";
 import { Report_FeedBack_user_MongoRepositories } from "../../interfaces/repositories/userSide/feed-back-employee/FeedBack_mongo_Repositories";
 import { createAccessToken } from "../../interfaces/jwt/jwt_auth_token";
+import { WalletMongoRepositories } from "../../interfaces/repositories/wallet/walletMongoepositories";
+import { Admin_putfeedBackrefunduseCase } from "../../use-cases/admin/feedbacks/put_feedbackrefund";
+import { UserMongodbRepositories } from "../../interfaces/repositories/userSide/UserMongoRepositories";
+import { EmployeeMongoRepositories } from "../../interfaces/repositories/employeeside/EmployeMongoRepositories";
+import { MongoReqServiceMechnics } from "../../interfaces/repositories/reqservicemechanics/mongoreqservicemechrep";
+import { TransactionMongoRepositories } from "../../interfaces/repositories/transaction/transactionMongoRepositories";
 
 const adminrepositories = new MongoAdminRepositories();
 const categoriesRepositories = new Mongo_catgoriesRepositories();
 const jobRepositories = new Mongo_Job_admin_Repositories();
-const productRepositories = new Mongo_Product_adminrepositories();
+// const productRepositories = new Mongo_Product_adminrepositories();
 const adminEmplrepositories = new Mongo_Admin_Employees_Repositories();
 const admin_userRepositories = new Mongo_admin_user_Repositories();
 const feedBack_repositories=new Report_FeedBack_user_MongoRepositories()
+const walletrepositories=new WalletMongoRepositories()
+const userepositories=new UserMongodbRepositories()
+const employeeRepositoires=new EmployeeMongoRepositories()
+const serviceRepositories=new MongoReqServiceMechnics()
+const transactionrepositories=new TransactionMongoRepositories()
 
 
-const adminlogin = new AdminLogin(adminrepositories);
+const adminlogin = new AdminLogin(adminrepositories,);
 const adminaddCategory = new Admin_add_Category_useCase(categoriesRepositories);
 // const adminAddproduct=new Admin_add_product_Usecase(productRepositories)
 
@@ -65,6 +76,7 @@ const deluser = new admin_Block_UnBlock_User_useCase(admin_userRepositories);
 
 
 const getFeedbacks=new Admin_get_feedbacks_useCase(feedBack_repositories)
+const putrefundFeedback=new Admin_putfeedBackrefunduseCase(userepositories,employeeRepositoires,walletrepositories,feedBack_repositories,serviceRepositories,transactionrepositories )
 
 const admincontroller = new AdminController(
   adminlogin,
@@ -82,14 +94,15 @@ const admincontroller = new AdminController(
   getAllUsers,
   putuser,
   deluser,
-  getFeedbacks
+  getFeedbacks,
+  putrefundFeedback
 );
 
 const router = express.Router();
 
 
 router.post("/refresh-token", (req, res) => {
-  createAccessToken(req, res,"employee_resfrehToken");
+  createAccessToken(req, res,"admin");
 });
 
 router.post("/login", (req, res, next) =>{ 
@@ -187,6 +200,14 @@ router.get('/report-feedback',
     console.log("calling feedback");
     
   admincontroller.Admin_get_Feedbacks_controll(req,res,next)
+})
+
+router.put('/report-feedback/:id',
+  Authentication,
+  (req,res,next)=>{
+    console.log("calling feedback");
+    
+  admincontroller.Admin_put_FeedbacksRefund_controll(req,res,next)
 })
 
 export default router;

@@ -8,4 +8,5 @@ export enum AppError {
     ServerError = "ServerError",
     UnauthorizedAccess = "UnauthorizedAccess",
     ResourceNotFound = "ResourceNotFound",
+    DuplicateError="Duplicate Entry"
 }

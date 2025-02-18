@@ -1,3 +1,4 @@
+import {  Locationuser_types } from "../types/user";
 
 
 export class UserIntities{
@@ -12,6 +13,7 @@ export class UserIntities{
         public isAdmin: boolean = false,
         public authSource?: 'self' | 'google',
         public role:'user'|'admin'='user',
+        public location?:Locationuser_types,
         public createdAt?: Date,
         public updatedAt?: Date
 

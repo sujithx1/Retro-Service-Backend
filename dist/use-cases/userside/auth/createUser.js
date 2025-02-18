@@ -11,10 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUser = void 0;
 const Userentities_1 = require("../../../entities/Userentities");
+const walletEntities_1 = require("../../../entities/walletEntities");
 const hashPassword_1 = require("../../../utils/hashPassword");
 class CreateUser {
-    constructor(userRepositores) {
+    constructor(userRepositores, walletrepositories) {
         this.userRepositores = userRepositores;
+        this.walletrepositories = walletrepositories;
     }
     exicute(data) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -22,6 +24,8 @@ class CreateUser {
             const hashPassword = yield (0, hashPassword_1.hashpass)(password);
             const user = new Userentities_1.UserIntities("", username, email, phone, hashPassword);
             const newUser = yield this.userRepositores.save(user);
+            const wallet = new walletEntities_1.WalletEntities("", newUser.id, "user", 0);
+            this.walletrepositories.create(wallet);
             return newUser;
         });
     }

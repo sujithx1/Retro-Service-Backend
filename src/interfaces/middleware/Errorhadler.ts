@@ -33,7 +33,6 @@ export const errorHandler = (
   if (err instanceof CustomError) {
     return res.status(err.statusCode).json({
       success: false,
-    
         error: err.message,
         code: err.errorCode,
      

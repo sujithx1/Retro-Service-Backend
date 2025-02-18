@@ -18,7 +18,7 @@ class Mongo_admin_user_Repositories {
             const users = yield UserModel_1.UserModel.find();
             return users.length ? users
                 .filter((item) => !item.isAdmin)
-                .map((item) => new Userentities_1.UserIntities(item.id, item.username, item.email, item.phone, item.password, item.isActive, item.profilePic, item.isAdmin, item.authSource, item.role, item.createdAt, item.updatedAt)) : [];
+                .map((item) => new Userentities_1.UserIntities(item.id, item.username, item.email, item.phone, item.password, item.isActive, item.profilePic, item.isAdmin, item.authSource, item.role, item.location, item.createdAt, item.updatedAt)) : [];
         });
     }
     findById(id) {
@@ -26,7 +26,7 @@ class Mongo_admin_user_Repositories {
             const user = yield UserModel_1.UserModel.findById(id);
             if (!user)
                 return null;
-            return new Userentities_1.UserIntities(user.id, user.username, user.email, user.phone, user.password, user.isActive, user.profilePic, user.isAdmin, user.authSource, user.role, user.createdAt, user.updatedAt);
+            return new Userentities_1.UserIntities(user.id, user.username, user.email, user.phone, user.password, user.isActive, user.profilePic, user.isAdmin, user.authSource, user.role, user.location, user.createdAt, user.updatedAt);
         });
     }
     findByIdAndUpdate(user) {
@@ -39,7 +39,7 @@ class Mongo_admin_user_Repositories {
             }, { new: true });
             if (!userData)
                 return null;
-            return new Userentities_1.UserIntities(userData.id, userData.username, userData.email, userData.phone, userData.password, userData.isActive, userData.profilePic, userData.isAdmin, userData.authSource, userData.role, userData.createdAt, userData.updatedAt);
+            return new Userentities_1.UserIntities(userData.id, userData.username, userData.email, userData.phone, userData.password, userData.isActive, userData.profilePic, userData.isAdmin, userData.authSource, userData.role, userData.location, userData.createdAt, userData.updatedAt);
         });
     }
 }

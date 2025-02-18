@@ -26,6 +26,7 @@ class Mongo_Service_Booking_Repositories {
     }
     create(service) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const services = yield ServiceBooking_1.Service_BookingModel.create({
                 user: service.userId,
                 employee: service.employeeId,
@@ -38,7 +39,7 @@ class Mongo_Service_Booking_Repositories {
             yield services.populate({ path: 'user', select: 'username email' });
             yield services.populate({ path: 'employee', select: 'name role' });
             yield services.populate({ path: 'job', select: 'name description' });
-            return new ServiceEntities_1.ServiceEntities(services.id, services.user.id.toString(), services.employee.id.toString(), services.job.id.toString(), services.userLocation, services.status, services.bookingDate, services.service_minWage, services.problem, services.user.username, services.employee.username, services.job.name, services.user.profilePic, services.employee.location, services.user.phone);
+            return new ServiceEntities_1.ServiceEntities(services.id, services.user.id.toString(), services.employee.id.toString(), services.job.id.toString(), services.userLocation, services.status, services.bookingDate, services.service_minWage, services.problem, services.user.username, services.employee.username, services.job.name, services.user.profilePic, (_a = services.employee.location) === null || _a === void 0 ? void 0 : _a.address.suburb, services.user.phone);
         });
     }
     findByEmployee(empid) {
@@ -47,18 +48,22 @@ class Mongo_Service_Booking_Repositories {
                 .populate({ path: 'user' })
                 .populate({ path: 'employee' })
                 .populate({ path: 'job' });
-            return services.map((service) => new ServiceEntities_1.ServiceEntities(service.id, service.user.id, service.employee.id, service.job.id, service.userLocation, service.status, service.bookingDate, service.service_minWage, service.problem, service.user.username, service.employee.username, service.job.name, service.user.profilePic, service.employee.location, service.user.phone));
+            return services.map((service) => {
+                var _a;
+                return new ServiceEntities_1.ServiceEntities(service.id, service.user.id, service.employee.id, service.job.id, service.userLocation, service.status, service.bookingDate, service.service_minWage, service.problem, service.user.username, service.employee.username, service.job.name, service.user.profilePic, (_a = service.employee.location) === null || _a === void 0 ? void 0 : _a.address.suburb, service.user.phone);
+            });
         });
     }
     findbyIdAndUpdate(service) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const update = yield ServiceBooking_1.Service_BookingModel.findByIdAndUpdate(service.id, Object.assign({}, service), { new: true })
                 .populate({ path: 'user' })
                 .populate({ path: 'employee' })
                 .populate({ path: 'job' });
             if (!update)
                 return null;
-            return new ServiceEntities_1.ServiceEntities(update.id, update.user.id, update.employee.id, update.job.id, update.userLocation, update.status, update.bookingDate, update.service_minWage, update.problem, update.user.username, update.employee.username, update.job.name, update.user.profilePic, update.employee.location, update.user.phone);
+            return new ServiceEntities_1.ServiceEntities(update.id, update.user.id, update.employee.id, update.job.id, update.userLocation, update.status, update.bookingDate, update.service_minWage, update.problem, update.user.username, update.employee.username, update.job.name, (_a = update.employee.location) === null || _a === void 0 ? void 0 : _a.address.suburb, update.user.phone);
         });
     }
 }

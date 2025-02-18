@@ -25,7 +25,7 @@ class admin_Block_UnBlock_User_useCase {
             if (!update)
                 throw new Error("not updated");
             console.log(update);
-            return new Userentities_1.UserIntities(update.id, update.username, update.email, update.phone, update.password, update.isActive, update.profilePic, update.isAdmin, update.authSource, update.role, update.createdAt, update.updatedAt);
+            return new Userentities_1.UserIntities(update.id, update.username, update.email, update.phone, update.password, update.isActive, update.profilePic, update.isAdmin, update.authSource, update.role, update.location, update.createdAt, update.updatedAt);
         });
     }
 }

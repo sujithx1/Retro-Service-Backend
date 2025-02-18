@@ -60,7 +60,7 @@ export class Mongo_Service_Booking_Repositories implements Iservice_bookingRepos
             services.employee.username,
             services.job.name,
             services.user.profilePic,
-            services.employee.location,
+            services.employee.location?.address.suburb,
             services.user.phone,
 
 
@@ -92,7 +92,8 @@ export class Mongo_Service_Booking_Repositories implements Iservice_bookingRepos
             service.employee.username,
             service.job.name,
             service.user.profilePic,
-            service.employee.location,   
+            service.employee.location?.address.suburb,
+             
             service.user.phone,
 
 
@@ -121,8 +122,8 @@ export class Mongo_Service_Booking_Repositories implements Iservice_bookingRepos
             update.user.username,
             update.employee.username,
             update.job.name,
-            update.user.profilePic,
-            update.employee.location,   
+            update.employee.location?.address.suburb,
+
             update.user.phone,
 
 

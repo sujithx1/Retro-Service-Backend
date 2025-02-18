@@ -33,7 +33,7 @@ const cloudinary_1 = __importDefault(require("../../../utils/helper/cloudinary")
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 class Usercontroller {
-    constructor(createUser, sendMails, checkOtp, loginUser, AuthService, putUser, putProfileImage, getAlljobs, getAllEmployees, postServiceBooking, getEmployee_serviceBooking, postUser_report_feedback, postforgot_passwordservice, newPassworduseCase) {
+    constructor(createUser, sendMails, checkOtp, loginUser, AuthService, putUser, putProfileImage, getAlljobs, getAllEmployees, postServiceBooking, getEmployee_serviceBooking, postUser_report_feedback, postforgot_passwordservice, newPassworduseCase, userlocationUsecase, user_getemployeeDetails) {
         this.createUser = createUser;
         this.sendMails = sendMails;
         this.checkOtp = checkOtp;
@@ -48,6 +48,8 @@ class Usercontroller {
         this.postUser_report_feedback = postUser_report_feedback;
         this.postforgot_passwordservice = postforgot_passwordservice;
         this.newPassworduseCase = newPassworduseCase;
+        this.userlocationUsecase = userlocationUsecase;
+        this.user_getemployeeDetails = user_getemployeeDetails;
     }
     signUp(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -308,12 +310,12 @@ class Usercontroller {
     User_post_report_feedBack_employee_controll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { userId, feedback, employeeId, rating } = req.body;
+                const { userId, feedback, employeeId, type, paymentId, amount, rating, bookingId } = req.body;
                 console.log(req.body);
-                if (!userId || !rating || !feedback || !employeeId)
+                if (!userId || !feedback || !employeeId || !type || !rating || !bookingId)
                     return next(new custom_errors_1.CustomError(" missing Feild", 401, error_enum_1.AppError.ValidationError));
-                const feedBack = yield this.postUser_report_feedback.execute(userId, employeeId, feedback, Number(rating));
-                return res.status(200).json({ message: "success", feedBack });
+                const feedBack = yield this.postUser_report_feedback.execute(userId, employeeId, feedback, Number(rating), type, Number(amount), bookingId);
+                return res.status(201).json({ message: "success", feedBack });
             }
             catch (error) {
                 console.log("err->User_get_service_Booking_controll", error);
@@ -366,6 +368,40 @@ class Usercontroller {
             }
             catch (error) {
                 console.log("err->User_get_service_Booking_controll", error);
+                return next(error);
+            }
+        });
+    }
+    user_putaddlocation(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                console.log("body", req.body);
+                const { lat, lng, address } = req.body;
+                if (!id)
+                    return new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError);
+                if (!lat || !lng || !address)
+                    return new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError);
+                const location = yield this.userlocationUsecase.execute(id, lat, lng, address);
+                res.status(200).json({ message: "success", success: true, location });
+            }
+            catch (error) {
+                console.log("err->User_get_service_Booking_controll", error);
+                return next(error);
+            }
+        });
+    }
+    User_get_employeedetailsControl(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("id missing", 401, error_enum_1.AppError.ValidationError));
+                const user = yield this.user_getemployeeDetails.execute(id);
+                const { password: _ } = user, without = __rest(user, ["password"]);
+                return res.status(200).json({ message: "success", user: without });
+            }
+            catch (error) {
                 return next(error);
             }
         });

@@ -1,6 +1,8 @@
 import mongoose, { Document, Types } from "mongoose";
 import { ICategory } from "./Category_Model";
+import { IStore_types } from "./Storemodel";
 export interface IProduct extends Document {
+    storeId:IStore_types|mongoose.Types.ObjectId;
     name: string;
     description: string;
     stock: number;
@@ -14,6 +16,12 @@ export interface IProduct extends Document {
 
 
 const Product_schema=new mongoose.Schema<IProduct>({
+    storeId:{
+        type:mongoose.Types.ObjectId,
+        ref:'Store',
+        required:true
+
+    },
 
     name:{
         type:String,

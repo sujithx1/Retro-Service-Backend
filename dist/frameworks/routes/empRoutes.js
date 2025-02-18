@@ -33,6 +33,13 @@ const getUserdetails_usCase_1 = require("../../use-cases/userside/auth/getUserde
 const UserMongoRepositories_1 = require("../../interfaces/repositories/userSide/UserMongoRepositories");
 const forgotpassword_1 = require("../../use-cases/employeeside/forgotpassword");
 const postnewpassword_1 = require("../../use-cases/employeeside/postnewpassword");
+const putonDutyuseCase_1 = require("../../use-cases/employeeside/putonDutyuseCase");
+const putaddlocation_1 = require("../../use-cases/employeeside/putaddlocation");
+const walletMongoepositories_1 = require("../../interfaces/repositories/wallet/walletMongoepositories");
+const getuaserid_1 = require("../../use-cases/transactions/getuaserid");
+const transactionMongoRepositories_1 = require("../../interfaces/repositories/transaction/transactionMongoRepositories");
+const putwithdrawamount_1 = require("../../use-cases/employeeside/payment/putwithdrawamount");
+const getbyemployeeId_1 = require("../../use-cases/wallet/getbyemployeeId");
 // repositories
 const empRepositories = new EmployeMongoRepositories_1.EmployeeMongoRepositories();
 const service_bookingRep = new mongoServiceRepositories_1.Mongo_Service_Booking_Repositories();
@@ -41,8 +48,10 @@ const reqServiceMechanicsRepositories = new mongoreqservicemechrep_1.MongoReqSer
 const servce_paymentRepositories = new mongoservicePaymentRepositories_1.ServicePaymentMongoRepositories();
 const chatrepositories = new MongoChatsReposotories_1.Message_mongoRepositories();
 const userRepositories = new UserMongoRepositories_1.UserMongodbRepositories();
+const walletRepositories = new walletMongoepositories_1.WalletMongoRepositories();
+const transactionrepositories = new transactionMongoRepositories_1.TransactionMongoRepositories();
 // usecases
-const createEmployee = new createEmploye_1.EmployeeSignup(empRepositories);
+const createEmployee = new createEmploye_1.EmployeeSignup(empRepositories, walletRepositories);
 const sendmailOtp = new sendotp_1.EmployeeSendOtp(empRepositories);
 const checkOtp = new otpchecking_1.CheckOtp();
 const login = new Emp_login_1.Emp_Login_useCase(empRepositories);
@@ -54,18 +63,24 @@ const getEmpl_Booking = new Empl_service_booking_1.Employee_Service_Booking_useC
 const putEmpl_Service_booking_status = new put_employee_service_booking_1.Employee_put_Service_booking_useCase(service_bookingRep);
 const getEmployee = new getEmployee_1.Employee_get_details_useCase(empRepositories);
 const getJobs = new getJobs_1.Admin_get_jobs_useCase(adminjobRepositoies);
+const putonDuty = new putonDutyuseCase_1.Emp_putonDutyuseCase(empRepositories);
+const addlocation = new putaddlocation_1.Emp_putaddLocationuseCase(empRepositories);
 const getreqservice = new getreqservicewithemployeeid_usecase_1.EmpgetReqservice_useCase(reqServiceMechanicsRepositories);
 const putreqservice = new put_acceptreqacceptEmployee_1.Accept_reqServiceEmployee(reqServiceMechanicsRepositories);
 const getServicePayment = new getPaymentDetails_1.Emp_getPaymentDetails(servce_paymentRepositories);
 // chats
 const getchatbyEmployeeside = new getchatbyEmployeeid_1.Get_chatbyEmployeeId(chatrepositories);
 const getuserDetails = new getUserdetails_usCase_1.User_getdetails(userRepositories);
-const employeeController = new EmployeeController_1.EmployeeController(createEmployee, sendmailOtp, checkOtp, login, putProfieEMployee, putEmp_job, getEmpl_Booking, putEmpl_Service_booking_status, getEmployee, getJobs, getuserDetails, forgotUserCase, newPassword);
-const servicecontroller = new EmpServiceController_1.EmpServiceController(getreqservice, putreqservice, getServicePayment);
+// trasactions
+const gettranasactionByemployee = new getuaserid_1.Transaction_getbyuserId(transactionrepositories);
+const putwithrdrawamount = new putwithdrawamount_1.Employee_putwithrdawamountuseCase(walletRepositories, empRepositories, transactionrepositories);
+const getwalletEmployee = new getbyemployeeId_1.Employee_getWalletDetails(walletRepositories);
+const employeeController = new EmployeeController_1.EmployeeController(createEmployee, sendmailOtp, checkOtp, login, putProfieEMployee, putEmp_job, getEmpl_Booking, putEmpl_Service_booking_status, getEmployee, getJobs, getuserDetails, forgotUserCase, newPassword, putonDuty, addlocation);
+const servicecontroller = new EmpServiceController_1.EmpServiceController(getreqservice, putreqservice, getServicePayment, gettranasactionByemployee, putwithrdrawamount, getwalletEmployee);
 const chatcontroller = new employeechatcontroller_1.EmployeeChatcontroller(getchatbyEmployeeside);
 const router = express_1.default.Router();
 router.post("/refresh-token", (req, res) => {
-    (0, jwt_auth_token_1.createAccessToken)(req, res, "employee_resfrehToken");
+    (0, jwt_auth_token_1.createAccessToken)(req, res, "employee");
 });
 router.post("/signup", (req, res) => employeeController.Signup(req, res));
 router.post("/signup/otp", (req, res) => employeeController.OtpChecking_Employee(req, res));
@@ -81,7 +96,7 @@ router.post("/forgot-password/check", (req, res, next) => {
 router.post("/forgot-password", (req, res, next) => {
     employeeController.Employee_post_newpassword(req, res, next);
 });
-router.get('/jobs', userAuthentication_1.Authentication, (req, res, next) => {
+router.get("/jobs", userAuthentication_1.Authentication, (req, res, next) => {
     employeeController.admin_get_Jobs_controll(req, res, next);
 });
 router.put("/profile/:id", userAuthentication_1.Authentication, (req, res, next) => {
@@ -111,5 +126,21 @@ router.get("/chats-employeeid/:id", userAuthentication_1.Authentication, (req, r
 });
 router.get("/user/:id", userAuthentication_1.Authentication, (req, res, next) => {
     employeeController.Employee_get_userdetailsControl(req, res, next);
+});
+router.put("/onduty/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    console.log(req.params);
+    employeeController.Employee_put_onDuty(req, res, next);
+});
+router.put("/location/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    employeeController.Employee_putaddlocation(req, res, next);
+});
+router.get("/transactions/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    servicecontroller.employeeService_getTransacationhistory(req, res, next);
+});
+router.put("/withdraw/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    servicecontroller.employeeService_putWithdrawamountitoWallet(req, res, next);
+});
+router.get("/wallet/:id", userAuthentication_1.Authentication, (req, res, next) => {
+    servicecontroller.employeeService_getWalletdetails(req, res, next);
 });
 exports.default = router;

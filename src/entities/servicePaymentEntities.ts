@@ -9,7 +9,7 @@ export class ServicePaymentEntity {
     public serviceId:string,
     public amount: number,
     public serviceDetails: ServiceDetails,
-    public status:  "PENDING" | "COMPLETED" | "FAILED"="PENDING",
+    public status:  "PENDING" | "COMPLETED" | "FAILED" |"CONFIRMED"="PENDING",
     public paymentId?:string,
     public jobName?:string,
     public createdAt: Date = new Date(),

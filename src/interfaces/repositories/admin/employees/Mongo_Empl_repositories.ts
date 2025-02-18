@@ -18,10 +18,12 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
                   item.experience,
                   item.isActive,
                   item.profilePic,
-                  item.location,
+                  item.location
+                 ,
                   item.authSource,
                   item.role,
                   item.revenue,
+                  item.onDuty,
                   item.createdAt,
                   item.updatedAt
                 )
@@ -45,6 +47,7 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
             employee.authSource,
             employee.role,
             employee.revenue,
+            employee.onDuty,
             employee.createdAt,
             employee.updatedAt
         )
@@ -73,10 +76,12 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
         employedata.experience,
         employedata.isActive,
         employedata.profilePic,
-        employedata.location,
+        employedata.location 
+       ,
         employedata.authSource,
         employedata.role,
         employedata.revenue,
+        employedata.onDuty,
         employedata.createdAt,
         employedata.updatedAt
         

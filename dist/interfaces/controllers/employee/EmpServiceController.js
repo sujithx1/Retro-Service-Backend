@@ -12,11 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmpServiceController = void 0;
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
+const app_1 = require("../../../app");
 class EmpServiceController {
-    constructor(getemployeeReqservice, putEmployeeReqservice, getServicePayment) {
+    constructor(getemployeeReqservice, putEmployeeReqservice, getServicePayment, gettranasactionByuser, putwithrdrawamount, getwalletemployee) {
         this.getemployeeReqservice = getemployeeReqservice;
         this.putEmployeeReqservice = putEmployeeReqservice;
         this.getServicePayment = getServicePayment;
+        this.gettranasactionByuser = gettranasactionByuser;
+        this.putwithrdrawamount = putwithrdrawamount;
+        this.getwalletemployee = getwalletemployee;
     }
     employee_getReqServiceCntroll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -50,6 +54,7 @@ class EmpServiceController {
                 }
                 console.log("emp id", id);
                 const reqService = yield this.putEmployeeReqservice.execute(id, employeeId, status);
+                app_1.io.emit('confirmBooking', { id });
                 return res.status(200).json({ message: "success", reqService, succes: true });
             }
             catch (error) {
@@ -69,6 +74,59 @@ class EmpServiceController {
                 console.log("emp id", id);
                 const service = yield this.getServicePayment.execute(id);
                 return res.status(200).json({ message: "success", succes: true, service });
+            }
+            catch (error) {
+                console.log("error userlogout", error);
+                return next(error);
+            }
+        });
+    }
+    employeeService_getTransacationhistory(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("  transaction controller");
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError));
+                const transactions = yield this.gettranasactionByuser.execute(id);
+                console.log('transactions ', transactions);
+                return res.status(200).json({ message: "success", succes: true, transactions });
+            }
+            catch (error) {
+                console.log("error userlogout", error);
+                return next(error);
+            }
+        });
+    }
+    employeeService_putWithdrawamountitoWallet(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("  transaction controller");
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError));
+                const { amount } = req.body;
+                if (!amount)
+                    return next(new custom_errors_1.CustomError("missing amount", 401, error_enum_1.AppError.ValidationError));
+                const wallet = yield this.putwithrdrawamount.execute(id, amount);
+                console.log('transactions ');
+                return res.status(200).json({ message: "success", succes: true, wallet });
+            }
+            catch (error) {
+                console.log("error userlogout", error);
+                return next(error);
+            }
+        });
+    }
+    employeeService_getWalletdetails(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("  transaction controller");
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError));
+                const wallet = yield this.getwalletemployee.execute(id);
+                return res.status(200).json({ message: "success", succes: true, wallet });
             }
             catch (error) {
                 console.log("error userlogout", error);

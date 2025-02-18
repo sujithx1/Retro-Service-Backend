@@ -24,6 +24,8 @@ import { Forgot_PasswordotpUseCase } from "../../../use-cases/userside/auth/forg
 import { CustomError } from "../../../utils/errors/custom.errors";
 import { AppError } from "../../../utils/errors/error.enum";
 import { NewPassword } from "../../../use-cases/userside/auth/newPassword";
+import { UserLocation_useCase } from "../../../use-cases/userside/auth/addlocation";
+import { Employee_get_details_useCase } from "../../../use-cases/employeeside/getEmployee";
 export class Usercontroller {
   constructor(
     private createUser: CreateUser,
@@ -41,7 +43,9 @@ export class Usercontroller {
     private getEmployee_serviceBooking: User_get_Service_Booking_useCase,
     private postUser_report_feedback: Report_feedBack_user_useCase,
     private postforgot_passwordservice:Forgot_PasswordotpUseCase,
-    private newPassworduseCase:NewPassword
+    private newPassworduseCase:NewPassword,
+    private userlocationUsecase:UserLocation_useCase,
+    private user_getemployeeDetails:Employee_get_details_useCase
   ) {}
 
   async signUp(req: Request, res: Response) {
@@ -93,6 +97,7 @@ export class Usercontroller {
       const userDetails = JSON.parse(userData);
       const user = await this.createUser.exicute(userDetails);
       const { password: _, ...withoutPassword } = user;
+
       res
         .status(201)
         .json({ mesage: "user registerd ", user: withoutPassword });
@@ -360,20 +365,25 @@ export class Usercontroller {
     next: NextFunction
   ) {
     try {
-      const { userId, feedback, employeeId,rating } = req.body;
+      const { userId, feedback, employeeId ,type,paymentId,amount,rating,bookingId} = req.body;
       console.log(req.body);
 
-      if (!userId || !rating || !feedback || !employeeId)
+      if (!userId    || !feedback || !employeeId ||!type ||!rating||!bookingId)
         return next(new CustomError(" missing Feild",401,AppError.ValidationError));
 
       const feedBack = await this.postUser_report_feedback.execute(
         userId,
+        
         employeeId,
         feedback,
-       Number(rating)
+        Number(rating),
+        
+        type,
+        Number(amount),
+      bookingId
       );
 
-      return res.status(200).json({ message: "success", feedBack });
+      return res.status(201).json({ message: "success", feedBack });
     } catch (error) {
       console.log("err->User_get_service_Booking_controll", error);
       return next(error);
@@ -439,6 +449,50 @@ export class Usercontroller {
     } catch (error) {
       console.log("err->User_get_service_Booking_controll", error);
       return next(error);
+    }
+  }
+
+
+
+  async user_putaddlocation(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const {id}=req.params
+      console.log("body",req.body);
+      
+      const {lat,lng,address}=req.body
+      if(!id) return new CustomError("missing id",401,AppError.ValidationError)
+      if(!lat||!lng||!address) return new CustomError("missing field",401,AppError.ValidationError)
+        const location=await this.userlocationUsecase.execute(id,lat,lng,address)
+      res.status(200).json({message:"success",success:true,location})
+
+
+    } catch (error) {
+      console.log("err->User_get_service_Booking_controll", error);
+      return next(error);
+    }
+  }
+
+
+
+    
+  async User_get_employeedetailsControl(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.params;
+      if (!id) return next(new CustomError("id missing",401,AppError.ValidationError));
+      const user = await this.user_getemployeeDetails.execute(id)
+      const { password: _, ...without } = user;
+      return res.status(200).json({ message: "success", user: without });
+    } catch (error) {
+      return next(error)
+
     }
   }
 

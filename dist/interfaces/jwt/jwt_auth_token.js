@@ -28,9 +28,10 @@ exports.GenerateRefreshToken = GenerateRefreshToken;
 const createAccessToken = (req, res, role) => {
     console.log(role);
     const roleToken = `${role}_refreshToken`;
+    console.log(roleToken);
     const refreshtoken = req.cookies[roleToken];
     console.log("tokennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", refreshtoken);
-    console.log(refreshtoken, "refffffffffffffffffffffffff");
+    // console.log(refreshtoken,"refffffffffffffffffffffffff");
     // Check if the refresh token exists and is valid
     if (!refreshtoken) {
         res.status(403).json({ error: "Refresh token is invalid or missing" });

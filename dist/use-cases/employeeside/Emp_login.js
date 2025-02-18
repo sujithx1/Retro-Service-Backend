@@ -26,7 +26,7 @@ class Emp_Login_useCase {
             const compare = yield (0, hashPassword_1.comparePassword)(password, employee.password);
             if (!compare)
                 throw new Error("Password not matched");
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
         });
     }
 }

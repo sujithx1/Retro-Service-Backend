@@ -33,15 +33,18 @@ export const createAccessToken = (req: Request, res: Response,role:string):void 
     console.log(role);
     
     const roleToken=`${role}_refreshToken`
+    console.log(roleToken);
+    
 
     
     const refreshtoken:string = req.cookies[roleToken]
+    
     
     console.log("tokennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",refreshtoken);
     
     
  
-    console.log(refreshtoken,"refffffffffffffffffffffffff");
+    // console.log(refreshtoken,"refffffffffffffffffffffffff");
     
 
 

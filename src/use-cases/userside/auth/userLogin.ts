@@ -1,10 +1,13 @@
 import { UserIntities } from "../../../entities/Userentities";
+import { WalletEntities } from "../../../entities/walletEntities";
 import { IUserRepositories } from "../../../interfaces/repositories/userSide/IUserrRepositories";
+import { IwalletRepositories } from "../../../interfaces/repositories/wallet/Iwalletrepositories";
 import { comparePassword } from "../../../utils/hashPassword";
 
 
 export class UserLogin{
-    constructor(private userRepositories:IUserRepositories) {}
+    constructor(private userRepositories:IUserRepositories,
+    ) {}
 
     async execute(email:string,password:string):Promise<UserIntities>{
         const user=await this.userRepositories.findByemail(email)
@@ -15,7 +18,8 @@ export class UserLogin{
         const compare=await comparePassword(password,user.password)
         if(!compare) throw new Error("password not matched")
          console.log("login success");
-            
+
+     
         return new UserIntities(user.id,user.username,user.email,user.phone,user.password,user.isActive,user.profilePic,
             user.isAdmin,user.authSource,user.role
         )

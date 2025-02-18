@@ -15,20 +15,19 @@ class Admin_put_employee_useCase {
     constructor(employeeRepositories) {
         this.employeeRepositories = employeeRepositories;
     }
-    execute(id, username, phone, location, skills, experience) {
+    execute(id, username, phone, skills, experience) {
         return __awaiter(this, void 0, void 0, function* () {
             const employe = yield this.employeeRepositories.findById(id);
             if (!employe)
                 throw new Error("id not matching ");
             employe.username = username,
                 employe.phone = phone,
-                employe.location = location,
                 employe.skills = skills,
                 employe.experience = experience;
             const update = yield this.employeeRepositories.findByIdAndUpdate(employe);
             if (!update)
                 throw new Error("Not updateded");
-            return new EmployeeEntities_1.EmployeeEntities(update.id, update.username, update.email, update.phone, update.password, update.skills, update.experience, update.isActive, update.profilePic, update.location, update.authSource, update.role, update.revenue, update.createdAt, update.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(update.id, update.username, update.email, update.phone, update.password, update.skills, update.experience, update.isActive, update.profilePic, update.location, update.authSource, update.role, update.revenue, update.onDuty, update.createdAt, update.updatedAt);
         });
     }
 }

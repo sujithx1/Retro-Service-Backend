@@ -36,7 +36,17 @@ import { Emp_getPaymentDetails } from "../../use-cases/employeeside/payment/getP
 import { UserChatcontroller } from "../../interfaces/controllers/user/userChatcontroller";
 import { Message_mongoRepositories } from "../../interfaces/repositories/chats/MongoChatsReposotories";
 import { User_serchjobsuseCase } from "../../use-cases/userside/service/searchservices";
-// import { Get_MessagesByuseId } from "../../use-cases/chat/getChatsbyuserId";
+import { UserLocation_useCase } from "../../use-cases/userside/auth/addlocation";
+import { User_getNearestEmployees } from "../../use-cases/userside/service/getnearestEmployees10km";
+import { User_putserviceSpecificEmp } from "../../use-cases/userside/service/putservicesendsecficemp";
+import { User_CompleteServiceBooking_payment } from "../../use-cases/userside/payments/putservicepaymentComplete";
+import { Get_MessagesByuseId } from "../../use-cases/chat/getChatsbyuserId";
+import { Employee_get_details_useCase } from "../../use-cases/employeeside/getEmployee";
+import { WalletMongoRepositories } from "../../interfaces/repositories/wallet/walletMongoepositories";
+import { UserwalletController } from "../../interfaces/controllers/user/userWalletcontroller";
+import { Wallet_getuserIduseCase } from "../../use-cases/wallet/getbyuserId";
+import { TransactionMongoRepositories } from "../../interfaces/repositories/transaction/transactionMongoRepositories";
+import { Transaction_getbyuserId } from "../../use-cases/transactions/getuaserid";
 const userRepositories = new UserMongodbRepositories();
 const jobRepositories = new Mongo_Job_admin_Repositories();
 const Admin_employeeRepositories = new Mongo_Admin_Employees_Repositories();
@@ -47,13 +57,14 @@ const Report_FeedBackRepositoires =
 const reqServiceMechanicsRepositories = new MongoReqServiceMechnics();
 const servicepaymentRepositoires = new ServicePaymentMongoRepositories();
 const messageRepositories=new Message_mongoRepositories()
+const walletRepositories=new WalletMongoRepositories()
+const transactionrepositories=new TransactionMongoRepositories()
 
 
 
 
 
-
-const createUser = new CreateUser(userRepositories);
+const createUser = new CreateUser(userRepositories,walletRepositories);
 const sendmailOtp = new SendOtp(userRepositories);
 const checkotpMail = new CheckOtp();
 const Loginuser = new UserLogin(userRepositories);
@@ -78,6 +89,9 @@ const post_Report_user = new Report_feedBack_user_useCase(
 );
 const forgotUserCase = new Forgot_PasswordotpUseCase(userRepositories);
 const newPassword = new NewPassword(userRepositories);
+const userlocation=new UserLocation_useCase(userRepositories)
+
+
 
 const createreqservicemechanics = new ReqEmployeeServices_useCase(
   userRepositories,
@@ -92,20 +106,39 @@ const getreqservice = new User_getReqServiceuseCase(
 const createServicepayment = new UserServiceRazorpayPayment(
   servicepaymentRepositoires,
   employeeRepositories,
-  reqServiceMechanicsRepositories
+  reqServiceMechanicsRepositories,
+  walletRepositories,
+  transactionrepositories
   );
-  
+  const ConfirmServicePayment=new User_CompleteServiceBooking_payment(
+    servicepaymentRepositoires,
+    employeeRepositories,
+    reqServiceMechanicsRepositories,
+    transactionrepositories
+  )
+
+
 const getbookingHistory = new User_getServiceBookingHistoryByUserId(
   reqServiceMechanicsRepositories
 );
 const cancellBookingService=new User_putReqserviceUsecase(reqServiceMechanicsRepositories)
 const getServicePayment=new Emp_getPaymentDetails(servicepaymentRepositoires)
-
 const serachjobsuser=new User_serchjobsuseCase(jobRepositories)
+const putserviceSendSpecificEmployee=new User_putserviceSpecificEmp(reqServiceMechanicsRepositories,employeeRepositories)
+
+
+const getnearestEmployees10km=new User_getNearestEmployees(employeeRepositories)
 // messages
-// const getMessagesByUser=new Get_MessagesByuseId(messageRepositories)
+const getMessagesByUser=new Get_MessagesByuseId(messageRepositories)
+const userGetemployeedetails=new Employee_get_details_useCase(employeeRepositories)
 
 
+
+
+const usergetwallet=new Wallet_getuserIduseCase(walletRepositories)
+
+
+const gettranasactionByuser=new Transaction_getbyuserId(transactionrepositories)
 
 const userController = new Usercontroller(
   createUser,
@@ -121,23 +154,30 @@ const userController = new Usercontroller(
   get_service_booking,
   post_Report_user,
   forgotUserCase,
-  newPassword
+  newPassword,
+  userlocation,
+  userGetemployeedetails
 );
 
 const serviceController = new UserServiceController(
   createreqservicemechanics,
   getreqservice,
-  createServicepayment,
+  ConfirmServicePayment,
   getbookingHistory,
   cancellBookingService,
   getServicePayment,
   serachjobsuser,
+  getnearestEmployees10km,
+  putserviceSendSpecificEmployee,
+  createServicepayment,
+  gettranasactionByuser
 );
 
 
 
 
-// const userChatController=new UserChatcontroller(getMessagesByUser)
+const userChatController=new UserChatcontroller(getMessagesByUser)
+const userWalletController=new UserwalletController(usergetwallet)
 
 
 const userRouter = express.Router();
@@ -234,6 +274,7 @@ userRouter.put(
     serviceController.userService_PutReqservecontroll(req, res, next);
   }
 );
+
 userRouter.post(
   "/service/payment/razorpay",
 
@@ -245,7 +286,7 @@ userRouter.post(
   }
 );
 userRouter.post(
-"/service/payment/razorpay/confirm",
+"/service/payment/razorpay/confirm/:id",
 Authentication,
   (req, res, next) => {
  serviceController.userServiceRazorpaypayment_Confirm_Controll(req,res,next);
@@ -268,7 +309,51 @@ userRouter.get('/service-payment/:id',Authentication,(req,res,next)=>{
 // })
 
 
-userRouter.get('/service/search',Authentication,(req,res,next)=>{
+userRouter.get('/home',Authentication,(req,res,next)=>{
   serviceController.userService_GETsearch(req,res,next)
 })
+userRouter.put('/location/:id',Authentication,(req,res,next)=>{
+  userController.user_putaddlocation(req,res,next)
+})
+userRouter.get( "/nearest-employees",
+  Authentication,
+  (req,res,next)=>{
+  serviceController.userService_GETNearestEmployees(req,res,next)
+})
+
+userRouter.put(
+  "/req-service/employee/:id",
+
+  Authentication,
+  (req, res, next) => {
+
+    serviceController.userService_putreqserviceSpesificEmployee(req, res, next);
+  }
+);
+userRouter.post(
+  "/advance-payment/confirm",
+
+  Authentication,
+  (req, res, next) => {
+
+    serviceController.userService_postAdvancePayment(req, res, next);
+  }
+);
+
+userRouter.get('/chats-userId/:id',Authentication,
+  (req,res,next)=>{userChatController.user_getChats(req,res,next)}
+)
+userRouter.get("/employee/:id", Authentication, (req, res, next) => {
+  userController.User_get_employeedetailsControl(req,res,next)
+});
+userRouter.get("/wallet/userId/:id", Authentication, (req, res, next) => {
+  userWalletController.user_getwalletbyuserId_controller(req,res,next)
+});
+userRouter.post("/report", Authentication, (req, res, next) => {
+  userController.User_post_report_feedBack_employee_controll(req,res,next)
+});
+userRouter.get("/transactions/:id", Authentication, (req, res, next) => {
+  serviceController.userService_getTransacationhistory(req,res,next)
+});
+
 export default userRouter;

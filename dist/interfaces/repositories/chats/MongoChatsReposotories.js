@@ -32,18 +32,17 @@ class Message_mongoRepositories {
             yield messageModel_1.MessageModel.updateMany({ sender, receiver, isRead: false }, { isRead: true });
         });
     }
-    // async getMessagesByUser(userId: string): Promise<MessageEntites[]> {
-    //     const messages=await MessageModel.find({ sender:userId});
-    //     return  messages.map((item)=>new MessageEntites(
-    //         item.id,
-    //         item.sender,
-    //         item.receiver,
-    //         item.message,
-    //         item.userType,
-    //         item.timestamp,
-    //         item.isRead
-    //     ))
-    // }
+    getMessagesByUser(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const messages = yield messageModel_1.MessageModel.find({
+                $or: [
+                    { sender: userId },
+                    { receiver: userId }
+                ]
+            });
+            return messages.map((item) => new chatEntities_1.MessageEntites(item.id, item.sender.toString(), item.receiver.toString(), item.message, item.userType, item.timestamp, item.isRead));
+        });
+    }
     getMessagesByEmployee(employeeId) {
         return __awaiter(this, void 0, void 0, function* () {
             const messages = yield messageModel_1.MessageModel.find({

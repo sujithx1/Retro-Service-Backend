@@ -11,6 +11,12 @@ export class Report_feedBack_User_Entities{
         public feedBack:string,
         public employeeEmail:string,
         public rating:number,
+        
+        public type:string,
+        public refaund:boolean=false,
+        public amount:number|null=null,
+        public bookingId:string,
+
         public createdAt?:Date,
         public updatedAt?:Date,
         

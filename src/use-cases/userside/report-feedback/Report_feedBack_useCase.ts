@@ -9,7 +9,11 @@ export class Report_feedBack_user_useCase{
     async execute(userId:string,
         employeeId:string,
         feedback:string,
-        rating:number
+        rating:number,
+        type:"report"|"feedback",
+        amount:number,
+        bookingId:string
+    
     ):Promise<Report_feedBack_User_Entities>{
 
         
@@ -22,7 +26,12 @@ export class Report_feedBack_user_useCase{
             "",
             feedback,
             "",
-            rating
+            rating,
+            type,
+            false,
+            amount?amount:null,
+            bookingId
+
 
         )
 

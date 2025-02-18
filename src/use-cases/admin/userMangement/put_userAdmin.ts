@@ -31,6 +31,7 @@ export class Admin_put_user_useCase{
                     update.isAdmin,
                     update.authSource,
                     update.role,
+                    update.location,
                     update.createdAt,
                     update.updatedAt
                     

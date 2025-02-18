@@ -1,4 +1,25 @@
 import mongoose, { Document, Schema } from "mongoose";
+import { Address_Types, Locationuser_types } from "../../../types/user";
+
+const AddressSchema = new Schema<Address_Types>({
+  country: { type: String, required: true },
+  county: { type: String, required: false },
+  neighbourhood: { type: String, required: false },
+  postcode: { type: String, required: false },
+  road: { type: String, required: false },
+  state: { type: String, required: true },
+  state_district: { type: String, required: false },
+  suburb: { type: String, required: false },
+  town: { type: String, required: false },
+});
+
+// Location Schema
+export const LocationSchema = new Schema<Locationuser_types>({
+  lat: { type: Number, required: true },
+  lng: { type: Number, required: true },
+  address: { type: AddressSchema, required: true },
+});
+
 
 
 export interface IuserTypes extends Document{
@@ -9,9 +30,10 @@ export interface IuserTypes extends Document{
   isActive:boolean,
   password:string,
   profilePic:string,
-  isAdmin:boolean
+  isAdmin:boolean,
   authSource:"self"|"google",
   role:"user"|"admin",
+  location:Locationuser_types,
   createdAt:Date,
   updatedAt:Date,
 
@@ -57,6 +79,11 @@ const userSchema = new Schema<IuserTypes>(
     type:String,
     enum:['user','admin'],
     default:"user"  
+  },
+  location:{
+    type:LocationSchema ,
+    required:false
+  
   }
 },
   {

@@ -58,14 +58,15 @@ const requestSchema = new mongoose_1.default.Schema({
     problem: { type: String, required: true },
     status: {
         type: String,
-        enum: ["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED"],
+        enum: ["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED", "REJECT", "ACCEPTED"],
         default: "PENDING",
     },
     mechanics: [
         {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: "employee",
-        },
+            employeeId: { type: mongoose_1.Schema.Types.ObjectId, ref: "employee" }, // Just an ID reference
+            bookingDate: { type: Date, required: true },
+            // status: { type: String, enum: ["PENDING", "ACCEPTED", "CANCELLED", "REJECT"], default: "PENDING" },
+        }
     ],
     bookingDate: { type: Date, required: true },
     acceptEmployee: {
@@ -83,5 +84,9 @@ const requestSchema = new mongoose_1.default.Schema({
         type: String,
         default: ""
     }
+}, {
+    timestamps: true
 });
+requestSchema.set("toObject", { virtuals: true, versionKey: false, transform: (_, ret) => { delete ret._id; return ret; } });
+requestSchema.set("toJSON", { virtuals: true, versionKey: false, transform: (_, ret) => { delete ret._id; return ret; } });
 exports.Request_Service_Mech_model = mongoose_1.default.model('RequestMechanics', requestSchema);

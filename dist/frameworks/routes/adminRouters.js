@@ -12,7 +12,7 @@ const express_1 = __importDefault(require("express"));
 const admin_del_useCase_1 = require("../../use-cases/admin/category/admin_del_useCase");
 const mongo_categoriesRepositories_1 = require("../../interfaces/repositories/admin/categories/mongo_categoriesRepositories");
 const mongoJobRepositories_1 = require("../../interfaces/repositories/admin/jobs/mongoJobRepositories");
-const mongo_productRepositories_1 = require("../../interfaces/repositories/admin/product/mongo_productRepositories");
+// import { Mongo_Product_adminrepositories } from "../../interfaces/repositories/admin/product/mongo_productRepositories";
 const admin_addjobs_1 = require("../../use-cases/admin/jobs/admin_addjobs");
 const adminEditJobs_1 = require("../../use-cases/admin/jobs/adminEditJobs");
 const del_admin_jobs_1 = require("../../use-cases/admin/jobs/del_admin_jobs");
@@ -30,13 +30,24 @@ const userAuthentication_1 = require("../../interfaces/middleware/userside/userA
 const get_feedbacks_1 = require("../../use-cases/admin/feedbacks/get_feedbacks");
 const FeedBack_mongo_Repositories_1 = require("../../interfaces/repositories/userSide/feed-back-employee/FeedBack_mongo_Repositories");
 const jwt_auth_token_1 = require("../../interfaces/jwt/jwt_auth_token");
+const walletMongoepositories_1 = require("../../interfaces/repositories/wallet/walletMongoepositories");
+const put_feedbackrefund_1 = require("../../use-cases/admin/feedbacks/put_feedbackrefund");
+const UserMongoRepositories_1 = require("../../interfaces/repositories/userSide/UserMongoRepositories");
+const EmployeMongoRepositories_1 = require("../../interfaces/repositories/employeeside/EmployeMongoRepositories");
+const mongoreqservicemechrep_1 = require("../../interfaces/repositories/reqservicemechanics/mongoreqservicemechrep");
+const transactionMongoRepositories_1 = require("../../interfaces/repositories/transaction/transactionMongoRepositories");
 const adminrepositories = new Mongo_adminRepositories_1.MongoAdminRepositories();
 const categoriesRepositories = new mongo_categoriesRepositories_1.Mongo_catgoriesRepositories();
 const jobRepositories = new mongoJobRepositories_1.Mongo_Job_admin_Repositories();
-const productRepositories = new mongo_productRepositories_1.Mongo_Product_adminrepositories();
+// const productRepositories = new Mongo_Product_adminrepositories();
 const adminEmplrepositories = new Mongo_Empl_repositories_1.Mongo_Admin_Employees_Repositories();
 const admin_userRepositories = new mongo_userRepositories_1.Mongo_admin_user_Repositories();
 const feedBack_repositories = new FeedBack_mongo_Repositories_1.Report_FeedBack_user_MongoRepositories();
+const walletrepositories = new walletMongoepositories_1.WalletMongoRepositories();
+const userepositories = new UserMongoRepositories_1.UserMongodbRepositories();
+const employeeRepositoires = new EmployeMongoRepositories_1.EmployeeMongoRepositories();
+const serviceRepositories = new mongoreqservicemechrep_1.MongoReqServiceMechnics();
+const transactionrepositories = new transactionMongoRepositories_1.TransactionMongoRepositories();
 const adminlogin = new adminLogin_1.AdminLogin(adminrepositories);
 const adminaddCategory = new Admin_add_category_1.Admin_add_Category_useCase(categoriesRepositories);
 // const adminAddproduct=new Admin_add_product_Usecase(productRepositories)
@@ -54,10 +65,11 @@ const getAllUsers = new getUsersAdmin_1.Admin_get_allUsers_useCase(admin_userRep
 const putuser = new put_userAdmin_1.Admin_put_user_useCase(admin_userRepositories);
 const deluser = new del_User_admin_1.admin_Block_UnBlock_User_useCase(admin_userRepositories);
 const getFeedbacks = new get_feedbacks_1.Admin_get_feedbacks_useCase(feedBack_repositories);
-const admincontroller = new Admincontroller_1.AdminController(adminlogin, admingetCategories, adminaddCategory, adminEditCategory, adminDeleteCategory, getjobs, addJob, editjob, deljob, getallEmpl, editEmploye, delEmployee, getAllUsers, putuser, deluser, getFeedbacks);
+const putrefundFeedback = new put_feedbackrefund_1.Admin_putfeedBackrefunduseCase(userepositories, employeeRepositoires, walletrepositories, feedBack_repositories, serviceRepositories, transactionrepositories);
+const admincontroller = new Admincontroller_1.AdminController(adminlogin, admingetCategories, adminaddCategory, adminEditCategory, adminDeleteCategory, getjobs, addJob, editjob, deljob, getallEmpl, editEmploye, delEmployee, getAllUsers, putuser, deluser, getFeedbacks, putrefundFeedback);
 const router = express_1.default.Router();
 router.post("/refresh-token", (req, res) => {
-    (0, jwt_auth_token_1.createAccessToken)(req, res, "employee_resfrehToken");
+    (0, jwt_auth_token_1.createAccessToken)(req, res, "admin");
 });
 router.post("/login", (req, res, next) => {
     admincontroller.login(req, res, next);
@@ -109,5 +121,9 @@ router.delete("/job/:id", userAuthentication_1.Authentication, (req, res, next) 
 router.get('/report-feedback', userAuthentication_1.Authentication, (req, res, next) => {
     console.log("calling feedback");
     admincontroller.Admin_get_Feedbacks_controll(req, res, next);
+});
+router.put('/report-feedback/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    console.log("calling feedback");
+    admincontroller.Admin_put_FeedbacksRefund_controll(req, res, next);
 });
 exports.default = router;

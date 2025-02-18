@@ -24,9 +24,13 @@ class ReqEmployeeServices_useCase {
             const user = yield this.userRepositories.findById(userId);
             if (!user)
                 throw new custom_errors_1.CustomError("User not found", 401, error_enum_1.AppError.UserNotFound);
-            const employees = yield this.employeeRepositoires.findAll();
-            const emplist = employees.map(emp => emp.id);
-            const newReqs = new reqserviceEntities_1.RequestserviceMechEntities("", userId, userName, userEmail, userLocation, jobId, jobName, Min_wage, problem, emplist, "PENDING", new Date());
+            const employees = yield this.employeeRepositoires.findempnearestWithOnduty(userLocation);
+            const mechanics = employees.map(emp => ({
+                employeeId: emp.id,
+                bookingDate: new Date(),
+            }));
+            const newReqs = new reqserviceEntities_1.RequestserviceMechEntities("", userId, userName, userEmail, userLocation, jobId, jobName, Min_wage, problem, mechanics, "PENDING", new Date());
+            // const userFcmToken = await getUserFcmToken(userId); // Fetch user's FCM token from DB
             return yield this.reqServicesRepositories.create(newReqs);
         });
     }

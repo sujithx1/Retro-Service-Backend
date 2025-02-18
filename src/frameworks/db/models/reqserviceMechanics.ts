@@ -15,11 +15,15 @@ export interface IReq_Mechanics_service_types extends Document{
     jobName: string,
     minWage: number,
     problem: string,
-    mechanics: Array<IEmployee_types | Schema.Types.ObjectId>;
-    status: "PENDING" | "CONFIRMED" | "CANCELLED"|"COMPLETED",
+    mechanics: Array<{
+      employeeId:  string |IEmployee_types;
+      bookingDate: Date; // New field for booking date
+      // status:"PENDING"|"ACCEPTED"|"REJECTED"|"CANCELLED"
+    }>;
+    status: "PENDING" | "CONFIRMED" | "CANCELLED"|"COMPLETED" | "REJECT"|"ACCEPTED",
     bookingDate:Date,
     acceptEmployee: {
-        employeeId: Schema.Types.ObjectId | IEmployee_types | null;
+        employeeId: IEmployee_types | null;
         acceptTime: Date | null;
       } | null;
 
@@ -50,15 +54,17 @@ const requestSchema = new mongoose.Schema<IReq_Mechanics_service_types>({
       problem: { type: String, required: true },
       status: {
         type: String,
-        enum: ["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED"],
+        enum: ["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED","REJECT","ACCEPTED"],
         default: "PENDING",
       },
       mechanics: [
         {
-          type: Schema.Types.ObjectId,
-          ref: "employee",
-        },
+          employeeId: { type: Schema.Types.ObjectId, ref: "employee" }, // Just an ID reference
+          bookingDate: { type: Date, required: true }, 
+          // status: { type: String, enum: ["PENDING", "ACCEPTED", "CANCELLED", "REJECT"], default: "PENDING" },
+        }
       ],
+      
       bookingDate: { type: Date, required: true },
 
       acceptEmployee: {
@@ -78,8 +84,13 @@ const requestSchema = new mongoose.Schema<IReq_Mechanics_service_types>({
 
       }
 
-  });
+  },{
+    timestamps:true
+  }
+);
   
+requestSchema.set("toObject", { virtuals: true, versionKey: false, transform: (_, ret) => { delete ret._id; return ret; }});
+requestSchema.set("toJSON", { virtuals: true, versionKey: false, transform: (_, ret) => { delete ret._id; return ret; }});
 
 
   export const Request_Service_Mech_model=mongoose.model('RequestMechanics',requestSchema)

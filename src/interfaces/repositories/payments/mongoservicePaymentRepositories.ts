@@ -59,4 +59,40 @@ export class ServicePaymentMongoRepositories implements IPaymentRepositories {
         )
         
     }
+
+
+
+  async  findByIdAndUpdate(payment: ServicePaymentEntity): Promise<ServicePaymentEntity | null> {
+    
+    
+    const service=await ServicePaymentModel.findByIdAndUpdate(payment.id,{
+    
+        status:payment.status,
+        paymentId:payment.paymentId,
+        amount:payment.amount,
+        'serviceDetails.phone':payment.serviceDetails.phone,
+        'serviceDetails.vehicleNumber':payment.serviceDetails.vehicleNumber
+
+        
+        
+            
+    },{new:true,upsert:true})
+    if(!service)return null
+    return new ServicePaymentEntity(
+        service.id,
+        service.userId?.toString() || '',
+        service.employeeId?.toString() || '',
+        service.serviceId?.toString() || '',
+        service.amount,
+        service.serviceDetails,
+        service.status,
+        service.paymentId,
+        service.jobName,
+        service.createdAt,
+        service.updatedAt
+    )
+    
+
+        
+    }
 }

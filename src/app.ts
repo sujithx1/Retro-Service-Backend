@@ -11,8 +11,7 @@ import { Server } from "socket.io";
 import morgan from "morgan";
 import { ActiveConnection } from "./frameworks/db/models/ActivateModel";
 import {  MessageModel } from "./frameworks/db/models/messageModel";
-import { UserModel } from "./frameworks/db/models/UserModel";
-
+import "./utils/helper/db_helper/cronjobReject"
 const app = express();
 const server = http.createServer(app);
 
@@ -34,6 +33,7 @@ app.use(express.urlencoded({ extended: false }));
 
 connectdb(); // Ensure database connection
 app.use(morgan("dev"));
+
 
 app.use("/api/user", userRouter);
 app.use("/api/employee", employeeRouter);
@@ -129,16 +129,14 @@ io.on("connection", (socket) => {
     }
   );
 
-  // Handle disconnection
-  // socket.on("disconnect", () => {
-  //   // Remove disconnected socket from activeConnections
-  //   for (const [key, socketId] of Object.entries(activeConnections)) {
-  //     if (socketId === socket.id) {
-  //       delete activeConnections[key];
-  //       console.log(`Connection with ${key} disconnected`);
-  //     }
-  //   }
-  // });
+  
+  socket.on("newBooking", (booking) => {
+    console.log("New Booking Request:", booking);
+    io.emit("bookingNotification", booking); // Notify all clients
+  });
+
+ 
+
 
   socket.on("disconnect", async () => {
     try {
@@ -152,5 +150,6 @@ io.on("connection", (socket) => {
   });
 
 // Start the server
+export {io}
 
 export default server;

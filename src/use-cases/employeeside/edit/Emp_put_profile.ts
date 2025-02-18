@@ -7,7 +7,7 @@ export class Employee_put_Profile_useCase{
         
     }
 
-    async execute(id:string,username:string,phone:string,profilePic:string,experience:number,location:string):Promise<EmployeeEntities>{
+    async execute(id:string,username:string,phone:string,profilePic:string,experience:number):Promise<EmployeeEntities>{
 
         const employe=await this.employeeRep.findById(id)
         if(!employe)throw new Error("no employee found");
@@ -23,7 +23,6 @@ export class Employee_put_Profile_useCase{
         //   });
           
         employe.experience=experience
-        employe.location=location
 
         const update=await this.employeeRep.findByIdAndUpdate(employe)
         if(!update) throw new Error("employee not updated");

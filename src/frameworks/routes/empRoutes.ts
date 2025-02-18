@@ -28,20 +28,27 @@ import { User_getdetails } from "../../use-cases/userside/auth/getUserdetails.us
 import { UserMongodbRepositories } from "../../interfaces/repositories/userSide/UserMongoRepositories";
 import { Emp_Forgot_PasswordotpUseCase } from "../../use-cases/employeeside/forgotpassword";
 import { Emp_NewPassword } from "../../use-cases/employeeside/postnewpassword";
-
+import { Emp_putonDutyuseCase } from "../../use-cases/employeeside/putonDutyuseCase";
+import { Emp_putaddLocationuseCase } from "../../use-cases/employeeside/putaddlocation";
+import { WalletMongoRepositories } from "../../interfaces/repositories/wallet/walletMongoepositories";
+import { Transaction_getbyuserId } from "../../use-cases/transactions/getuaserid";
+import { TransactionMongoRepositories } from "../../interfaces/repositories/transaction/transactionMongoRepositories";
+import { Employee_putwithrdawamountuseCase } from "../../use-cases/employeeside/payment/putwithdrawamount";
+import { Employee_getWalletDetails } from "../../use-cases/wallet/getbyemployeeId";
 
 // repositories
 const empRepositories = new EmployeeMongoRepositories();
 const service_bookingRep = new Mongo_Service_Booking_Repositories();
-const adminjobRepositoies=new Mongo_Job_admin_Repositories()
-const reqServiceMechanicsRepositories=new MongoReqServiceMechnics()
-const servce_paymentRepositories=new ServicePaymentMongoRepositories()
-const chatrepositories=new Message_mongoRepositories()
-const userRepositories=new UserMongodbRepositories()
-
+const adminjobRepositoies = new Mongo_Job_admin_Repositories();
+const reqServiceMechanicsRepositories = new MongoReqServiceMechnics();
+const servce_paymentRepositories = new ServicePaymentMongoRepositories();
+const chatrepositories = new Message_mongoRepositories();
+const userRepositories = new UserMongodbRepositories();
+const walletRepositories = new WalletMongoRepositories();
+const transactionrepositories = new TransactionMongoRepositories();
 
 // usecases
-const createEmployee = new EmployeeSignup(empRepositories);
+const createEmployee = new EmployeeSignup(empRepositories, walletRepositories);
 const sendmailOtp = new EmployeeSendOtp(empRepositories);
 const checkOtp = new CheckOtp();
 const login = new Emp_Login_useCase(empRepositories);
@@ -57,22 +64,36 @@ const getEmpl_Booking = new Employee_Service_Booking_useCase(
 const putEmpl_Service_booking_status = new Employee_put_Service_booking_useCase(
   service_bookingRep
 );
-const getEmployee=new Employee_get_details_useCase(empRepositories)
-const getJobs=new Admin_get_jobs_useCase(adminjobRepositoies)
+const getEmployee = new Employee_get_details_useCase(empRepositories);
+const getJobs = new Admin_get_jobs_useCase(adminjobRepositoies);
+const putonDuty = new Emp_putonDutyuseCase(empRepositories);
+const addlocation = new Emp_putaddLocationuseCase(empRepositories);
 
-
-const getreqservice=new EmpgetReqservice_useCase(reqServiceMechanicsRepositories)
-const putreqservice=new Accept_reqServiceEmployee(reqServiceMechanicsRepositories)
-
-
-const getServicePayment=new Emp_getPaymentDetails(servce_paymentRepositories)
-
+const getreqservice = new EmpgetReqservice_useCase(
+  reqServiceMechanicsRepositories
+);
+const putreqservice = new Accept_reqServiceEmployee(
+  reqServiceMechanicsRepositories
+);
+const getServicePayment = new Emp_getPaymentDetails(servce_paymentRepositories);
 
 // chats
-const getchatbyEmployeeside=new Get_chatbyEmployeeId(chatrepositories)
-const getuserDetails=new User_getdetails(userRepositories)
+const getchatbyEmployeeside = new Get_chatbyEmployeeId(chatrepositories);
+const getuserDetails = new User_getdetails(userRepositories);
 
+// trasactions
 
+const gettranasactionByemployee = new Transaction_getbyuserId(
+  transactionrepositories
+);
+
+const putwithrdrawamount = new Employee_putwithrdawamountuseCase(
+  walletRepositories,
+  empRepositories,
+  transactionrepositories
+);
+
+const getwalletEmployee = new Employee_getWalletDetails(walletRepositories);
 const employeeController = new EmployeeController(
   createEmployee,
   sendmailOtp,
@@ -86,20 +107,27 @@ const employeeController = new EmployeeController(
   getJobs,
   getuserDetails,
   forgotUserCase,
-  newPassword
+  newPassword,
+  putonDuty,
+  addlocation
 );
 
+const servicecontroller = new EmpServiceController(
+  getreqservice,
+  putreqservice,
+  getServicePayment,
+  gettranasactionByemployee,
+  putwithrdrawamount,
+  getwalletEmployee
+);
 
-const servicecontroller=new EmpServiceController(getreqservice,putreqservice,getServicePayment)
-
-const chatcontroller=new EmployeeChatcontroller(getchatbyEmployeeside)
-
+const chatcontroller = new EmployeeChatcontroller(getchatbyEmployeeside);
 
 const router = express.Router();
 
-  router.post("/refresh-token", (req, res) => {
-    createAccessToken(req, res,"employee_resfrehToken");
-  });
+router.post("/refresh-token", (req, res) => {
+  createAccessToken(req, res, "employee");
+});
 
 router.post("/signup", (req, res) => employeeController.Signup(req, res));
 router.post("/signup/otp", (req, res) =>
@@ -115,32 +143,28 @@ router.get("/logout", (req, res, next) =>
   employeeController.Employee_get_Logout_controll(req, res, next)
 );
 
-
-
 router.post("/forgot-password/otp", (req, res, next) => {
   employeeController.Employee_Post_forgot_password_controll(req, res, next);
 });
 router.post("/forgot-password/check", (req, res, next) => {
-  employeeController.Employee_post_forgot_password_otpcheckcontroll(req, res, next);
+  employeeController.Employee_post_forgot_password_otpcheckcontroll(
+    req,
+    res,
+    next
+  );
 });
 router.post("/forgot-password", (req, res, next) => {
   employeeController.Employee_post_newpassword(req, res, next);
 });
 
-
-
-router.get('/jobs',Authentication,(req,res,next)=>{
-  employeeController.admin_get_Jobs_controll(req,res,next)
-
-  
-})
+router.get("/jobs", Authentication, (req, res, next) => {
+  employeeController.admin_get_Jobs_controll(req, res, next);
+});
 
 router.put("/profile/:id", Authentication, (req, res, next) => {
   employeeController.Employee_Put_Profile_Controll(req, res, next);
 });
-router.put("/job/:id",
-  Authentication,
-   (req, res, next) => {
+router.put("/job/:id", Authentication, (req, res, next) => {
   employeeController.Employee_put_job_controll(req, res, next);
 });
 
@@ -152,8 +176,6 @@ router.put("/service-booking/status/:id", Authentication, (req, res, next) => {
   employeeController.Employee_put_serviceBooking_controll(req, res, next);
 });
 
-
-
 router.get("/employee/:id", Authentication, (req, res, next) => {
   employeeController.Employee_get_details_controll(req, res, next);
 });
@@ -162,9 +184,13 @@ router.get("/req-services/:id", Authentication, (req, res, next) => {
   servicecontroller.employee_getReqServiceCntroll(req, res, next);
 });
 
-router.put("/req-serivce/acceptemployee/:id", Authentication, (req, res, next) => {
-  servicecontroller.employee_putreqServceacceptcntroll(req, res, next);
-});
+router.put(
+  "/req-serivce/acceptemployee/:id",
+  Authentication,
+  (req, res, next) => {
+    servicecontroller.employee_putreqServceacceptcntroll(req, res, next);
+  }
+);
 
 router.get("/service-payment/:id", Authentication, (req, res, next) => {
   servicecontroller.employee_getPaymentDetails(req, res, next);
@@ -173,12 +199,25 @@ router.get("/chats-employeeid/:id", Authentication, (req, res, next) => {
   chatcontroller.getemployeeChat_employeeid(req, res, next);
 });
 router.get("/user/:id", Authentication, (req, res, next) => {
-  employeeController.Employee_get_userdetailsControl(req,res,next)
+  employeeController.Employee_get_userdetailsControl(req, res, next);
+});
+router.put("/onduty/:id", Authentication, (req, res, next) => {
+  console.log(req.params);
+
+  employeeController.Employee_put_onDuty(req, res, next);
+});
+router.put("/location/:id", Authentication, (req, res, next) => {
+  employeeController.Employee_putaddlocation(req, res, next);
 });
 
-
-
-
-
+router.get("/transactions/:id", Authentication, (req, res, next) => {
+  servicecontroller.employeeService_getTransacationhistory(req, res, next);
+});
+router.put("/withdraw/:id", Authentication, (req, res, next) => {
+  servicecontroller.employeeService_putWithdrawamountitoWallet(req, res, next);
+});
+router.get("/wallet/:id", Authentication, (req, res, next) => {
+  servicecontroller.employeeService_getWalletdetails(req, res, next);
+});
 
 export default router;

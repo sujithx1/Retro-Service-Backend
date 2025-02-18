@@ -32,7 +32,7 @@ const cloudinary_1 = __importDefault(require("../../../utils/helper/cloudinary")
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 class EmployeeController {
-    constructor(createEmploye, sendOtp, otpcheking, loginemp, putProfile, putEMp_job, getEmpl_Bopoking, putEmpl_serviceBooking_status, getEmployee, getJobs, getuserDetails, postforgot_passwordservice, newPassworduseCase) {
+    constructor(createEmploye, sendOtp, otpcheking, loginemp, putProfile, putEMp_job, getEmpl_Bopoking, putEmpl_serviceBooking_status, getEmployee, getJobs, getuserDetails, postforgot_passwordservice, newPassworduseCase, putDuty, empladdlocation) {
         this.createEmploye = createEmploye;
         this.sendOtp = sendOtp;
         this.otpcheking = otpcheking;
@@ -46,6 +46,8 @@ class EmployeeController {
         this.getuserDetails = getuserDetails;
         this.postforgot_passwordservice = postforgot_passwordservice;
         this.newPassworduseCase = newPassworduseCase;
+        this.putDuty = putDuty;
+        this.empladdlocation = empladdlocation;
     }
     Signup(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -61,6 +63,7 @@ class EmployeeController {
                 };
                 (0, Validation_1.EmployeeSignupValidate)(employeData);
                 const otp = (0, otp_1.generate_otp)();
+                console.log("otp", otp);
                 yield this.sendOtp.execute(email, username, otp);
                 yield redis_1.default.setEx("empotp", 60, JSON.stringify(otp));
                 yield redis_1.default.setEx("empData", 60, JSON.stringify(employeData));
@@ -117,7 +120,7 @@ class EmployeeController {
                 const access_token = (0, jwt_auth_token_1.GenerateAccessToken)(employee.id, employee.role);
                 const { password: _ } = employee, withoutpassword = __rest(employee, ["password"]);
                 res
-                    .cookie("employee_refrehToken", refresh_token, {
+                    .cookie("employee_refreshToken", refresh_token, {
                     httpOnly: true,
                 })
                     .status(200)
@@ -137,10 +140,10 @@ class EmployeeController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log(req.body);
-                const { username, phone, profilePic, location, experience } = req.body;
+                const { username, phone, profilePic, experience } = req.body;
                 const { id } = req.params;
                 // Validate inputs
-                if (!username || !phone || !location || !experience) {
+                if (!username || !phone || !experience) {
                     return next(new Error("Required fields are missing"));
                 }
                 if (!id) {
@@ -155,7 +158,7 @@ class EmployeeController {
                     folder: "/employee-profilePic",
                 });
                 console.log("Cloudinary upload successful:", cloudinaryUpload);
-                const user = yield this.putProfile.execute(id, username, phone, cloudinaryUpload.secure_url, Number(experience), location);
+                const user = yield this.putProfile.execute(id, username, phone, cloudinaryUpload.secure_url, Number(experience));
                 console.log("Updated user:", user);
                 const { password: _ } = user, withoutPassword = __rest(user, ["password"]);
                 console.log("heyyyy");
@@ -330,6 +333,44 @@ class EmployeeController {
                 res.status(200).json({ message: "success", success: true });
             }
             catch (error) {
+                return next(error);
+            }
+        });
+    }
+    Employee_put_onDuty(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("duty controller ");
+                const { id } = req.params;
+                const { duty } = req.body;
+                console.log(id, duty);
+                if (!id)
+                    throw new custom_errors_1.CustomError("missig id", 401, error_enum_1.AppError.ValidationError);
+                // if(duty=="")  throw new CustomError("missig duty",401,AppError.ValidationError)
+                const dutyemployee = yield this.putDuty.execute(id, duty);
+                res.status(200).json({ message: "success", success: true, duty: dutyemployee });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    Employee_putaddlocation(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                console.log("body", req.body);
+                console.log(id);
+                const { lat, lng, address } = req.body;
+                if (!id)
+                    return new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError);
+                if (!lat || !lng || !address)
+                    return new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError);
+                const location = yield this.empladdlocation.execute(id, lat, lng, address);
+                res.status(200).json({ message: "success", success: true, location });
+            }
+            catch (error) {
+                console.log("err->User_get_service_Booking_controll", error);
                 return next(error);
             }
         });

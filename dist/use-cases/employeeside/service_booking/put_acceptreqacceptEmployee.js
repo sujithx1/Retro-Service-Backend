@@ -21,6 +21,14 @@ class Accept_reqServiceEmployee {
             const reqservice = yield this.reqseriveRepositories.findbyId(id);
             if (!reqservice)
                 throw new custom_errors_1.CustomError("Service not found", 401, error_enum_1.AppError.ResourceNotFound);
+            console.log("Mechanics List:", reqservice.mechanics.map(mech => mech));
+            console.log("Searching for Employee ID:", empId);
+            const mechanic = reqservice.mechanics.find(mech => mech.employeeId == empId);
+            if (!mechanic) {
+                console.error(`❌ Mechanic with ID ${empId} not found in service mechanics list.`);
+                throw new custom_errors_1.CustomError("Mechanic not found in service", 404, error_enum_1.AppError.ResourceNotFound);
+            }
+            console.log("✅ Mechanic found:", mechanic);
             reqservice.status = status;
             const update = yield this.reqseriveRepositories.findByIdAndUpdate(reqservice, empId);
             if (!update)

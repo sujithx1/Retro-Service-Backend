@@ -27,6 +27,7 @@ export class MongoAdminRepositories implements IAdminRepositories {
       user.isAdmin,
       user.authSource,
       user.role,
+      user.location,
       user.createdAt,
       user.updatedAt
     );
@@ -63,10 +64,12 @@ export class MongoAdminRepositories implements IAdminRepositories {
           item.experience,
           item.isActive,
           item.profilePic,
-          item.location,
+          item.location
+         ,
           item.authSource,
           item.role,
           item.revenue,
+          item.onDuty,
           item.createdAt,
           item.updatedAt
         )

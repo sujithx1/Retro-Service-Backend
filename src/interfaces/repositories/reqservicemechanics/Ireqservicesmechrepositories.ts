@@ -6,6 +6,7 @@ export interface IreqservicemechanicsRepositories{
     findbyUserId(userId:string):Promise<RequestserviceMechEntities[]|[]>
     findbyId(id:string):Promise<RequestserviceMechEntities|null>
     findByIdAndUpdate(reqService:RequestserviceMechEntities,empId:string):Promise<RequestserviceMechEntities|null>
+    findByIdAndUpdateService(service:RequestserviceMechEntities):Promise<RequestserviceMechEntities|null>
     findByIdAndUpdateCancellBooking(reqService:RequestserviceMechEntities):Promise<RequestserviceMechEntities|null>
 
     

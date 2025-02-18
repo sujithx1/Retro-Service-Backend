@@ -3,6 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RequestserviceMechEntities = void 0;
 class RequestserviceMechEntities {
     constructor(id, userId, userName, userEmail, userLocation, jobId, jobName, minWage, problem, mechanics, status = "PENDING", bookingDate, acceptEmployee = null, paymentId) {
+        // this.mechanics = mechanics.map(mechanic => ({
+        //   ...mechanic,
+        //   status: mechanic.status || "PENDING", // ✅ Default value
+        // }));
         this.id = id;
         this.userId = userId;
         this.userName = userName;

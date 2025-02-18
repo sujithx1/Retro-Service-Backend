@@ -8,12 +8,12 @@ export class Admin_put_employee_useCase{
     }
 
 
-    async execute(id:string,username:string,phone:string,location:string,skills:string[],experience:number):Promise<EmployeeEntities>{
+    async execute(id:string,username:string,phone:string,skills:string[],experience:number):Promise<EmployeeEntities>{
         const employe=await this.employeeRepositories.findById(id)
         if(!employe) throw new Error("id not matching ")
             employe.username=username,
         employe.phone=phone,
-        employe.location=location,
+        
         employe.skills=skills,
         employe.experience=experience
         
@@ -33,6 +33,7 @@ export class Admin_put_employee_useCase{
                 update.authSource,
                 update.role,
                 update.revenue,
+                update.onDuty,
                 update.createdAt,
                 update.updatedAt
                 

@@ -22,13 +22,13 @@ class UserMongodbRepositories {
             if (!user) {
                 return null;
             }
-            return new Userentities_1.UserIntities(user.id, user.username, user.email, user.phone, user.password, user.isActive, user.profilePic, user.isAdmin, user.authSource, user.role, user.createdAt, user.updatedAt);
+            return new Userentities_1.UserIntities(user.id, user.username, user.email, user.phone, user.password, user.isActive, user.profilePic, user.isAdmin, user.authSource, user.role, user.location, user.createdAt, user.updatedAt);
         });
     }
     save(user) {
         return __awaiter(this, void 0, void 0, function* () {
             const newuser = yield UserModel_1.UserModel.create(user);
-            return new Userentities_1.UserIntities(newuser.id, newuser.username, newuser.email, newuser.phone, newuser.password, newuser.isActive, newuser.profilePic, newuser.isAdmin, newuser.authSource, newuser.role, newuser.createdAt, newuser.updatedAt);
+            return new Userentities_1.UserIntities(newuser.id, newuser.username, newuser.email, newuser.phone, newuser.password, newuser.isActive, newuser.profilePic, newuser.isAdmin, newuser.authSource, newuser.role, newuser.location, newuser.createdAt, newuser.updatedAt);
         });
     }
     findById(id) {
@@ -36,7 +36,7 @@ class UserMongodbRepositories {
             const user = yield UserModel_1.UserModel.findById(id);
             if (!user)
                 return null;
-            return new Userentities_1.UserIntities(user.id, user.username, user.email, user.phone, user.password, user.isActive, user.profilePic, user.isAdmin, user.authSource, user.role, user.createdAt, user.updatedAt);
+            return new Userentities_1.UserIntities(user.id, user.username, user.email, user.phone, user.password, user.isActive, user.profilePic, user.isAdmin, user.authSource, user.role, user.location, user.createdAt, user.updatedAt);
         });
     }
     findByIdAndUpdate(user) {
@@ -48,7 +48,7 @@ class UserMongodbRepositories {
             }, { new: true });
             if (!userData)
                 return null;
-            return new Userentities_1.UserIntities(userData.id, userData.username, userData.email, userData.phone, userData.password, userData.isActive, userData.profilePic, userData.isAdmin, userData.authSource, userData.role, userData.createdAt, userData.updatedAt);
+            return new Userentities_1.UserIntities(userData.id, userData.username, userData.email, userData.phone, userData.password, userData.isActive, userData.profilePic, userData.isAdmin, userData.authSource, userData.role, userData.location, userData.createdAt, userData.updatedAt);
         });
     }
     findByIdAndUpdatePassword(id, password) {
@@ -61,7 +61,17 @@ class UserMongodbRepositories {
     findEmployees() {
         return __awaiter(this, void 0, void 0, function* () {
             const employees = yield EmployeeModel_1.EmployeeModel.find();
-            return employees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.id, item.username, item.email, item.phone, item.password, item.skills, item.experience, item.isActive, item.profilePic, item.location, item.authSource, item.role, item.revenue, item.createdAt, item.updatedAt));
+            return employees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.id, item.username, item.email, item.phone, item.password, item.skills, item.experience, item.isActive, item.profilePic, item.location, item.authSource, item.role, item.revenue, item.onDuty, item.createdAt, item.updatedAt));
+        });
+    }
+    findByIdAndUpdatelocation(id, location) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userData = yield UserModel_1.UserModel.findByIdAndUpdate(id, {
+                location: location
+            }, { new: true, upsert: true });
+            if (!userData)
+                return null;
+            return new Userentities_1.UserIntities(userData.id, userData.username, userData.email, userData.phone, userData.password, userData.isActive, userData.profilePic, userData.isAdmin, userData.authSource, userData.role, userData.location, userData.createdAt, userData.updatedAt);
         });
     }
 }

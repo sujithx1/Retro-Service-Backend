@@ -21,6 +21,7 @@ export class Mongo_admin_user_Repositories implements IUser_Admin_repositories{
                           item.isAdmin,
                           item.authSource,
                           item.role,
+                          item.location,
                           item.createdAt,
                           item.updatedAt
                         )
@@ -42,6 +43,8 @@ export class Mongo_admin_user_Repositories implements IUser_Admin_repositories{
                     user.isAdmin,
                     user.authSource,
                     user.role,
+                    user.location,
+
                     user.createdAt,
                     user.updatedAt
                 )
@@ -72,6 +75,7 @@ export class Mongo_admin_user_Repositories implements IUser_Admin_repositories{
                 userData.isAdmin,
                 userData.authSource,
                 userData.role,
+                userData.location,
                 userData.createdAt,
                 userData.updatedAt
                 

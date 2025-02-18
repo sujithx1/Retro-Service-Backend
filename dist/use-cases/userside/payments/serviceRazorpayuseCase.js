@@ -13,19 +13,28 @@ exports.UserServiceRazorpayPayment = void 0;
 const servicePaymentEntities_1 = require("../../../entities/servicePaymentEntities");
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
+const transactionEntities_1 = require("../../../entities/transactionEntities");
 class UserServiceRazorpayPayment {
-    constructor(paymentRepositories, employeeRepositories, serviceRepositories) {
+    constructor(paymentRepositories, employeeRepositories, serviceRepositories, walletrepositories, transactionrepositories) {
         this.paymentRepositories = paymentRepositories;
         this.employeeRepositories = employeeRepositories;
         this.serviceRepositories = serviceRepositories;
+        this.walletrepositories = walletrepositories;
+        this.transactionrepositories = transactionrepositories;
     }
     execute(name, vehicleNumber, problem, phone, amount, employeeId, userId, jobName, serviceId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newPayment = new servicePaymentEntities_1.ServicePaymentEntity("", userId, employeeId, serviceId, amount, { name,
+            const newPayment = new servicePaymentEntities_1.ServicePaymentEntity("", userId, employeeId, serviceId, 0, { name,
                 phone,
                 problem,
                 vehicleNumber
-            }, "COMPLETED", "", jobName);
+            }, "CONFIRMED", "", jobName);
+            const adminwallet = yield this.walletrepositories.findByAdmin();
+            if (!adminwallet)
+                throw new custom_errors_1.CustomError("adminwallet not Found", 401, error_enum_1.AppError.ResourceNotFound);
+            const updateadminwallet = yield this.walletrepositories.findByIdandUpdate(adminwallet);
+            if (!updateadminwallet)
+                throw new custom_errors_1.CustomError("wallet not update", 401, error_enum_1.AppError.ServerError);
             const Servicepayment = yield this.paymentRepositories.create(newPayment);
             const employee = yield this.employeeRepositories.findById(employeeId);
             if (!employee)
@@ -33,10 +42,12 @@ class UserServiceRazorpayPayment {
             const service = yield this.serviceRepositories.findbyId(serviceId);
             if (!service)
                 throw new custom_errors_1.CustomError("Service Not Found", 401, error_enum_1.AppError.ResourceNotFound);
-            service.status = "COMPLETED";
+            service.status = "CONFIRMED";
             service.paymentId = Servicepayment.id;
             yield this.serviceRepositories.findByIdAndUpdate(service, employeeId);
             yield this.employeeRepositories.findIdAndUpdateRevenue(employee.id, Servicepayment.amount);
+            const transaction = new transactionEntities_1.TransactionEntities("", Servicepayment.userId, "advancepay", 100, "complete", "razorypay", "service");
+            yield this.transactionrepositories.create(transaction);
             return Servicepayment;
         });
     }

@@ -26,7 +26,7 @@ class MongoAdminRepositories {
             if (!user) {
                 return null;
             }
-            return new Userentities_1.UserIntities(user.id, user.username, user.email, user.phone, user.password, user.isActive, user.profilePic, user.isAdmin, user.authSource, user.role, user.createdAt, user.updatedAt);
+            return new Userentities_1.UserIntities(user.id, user.username, user.email, user.phone, user.password, user.isActive, user.profilePic, user.isAdmin, user.authSource, user.role, user.location, user.createdAt, user.updatedAt);
         });
     }
     save(user) {
@@ -44,7 +44,7 @@ class MongoAdminRepositories {
     findAllEmployees() {
         return __awaiter(this, void 0, void 0, function* () {
             const employees = yield EmployeeModel_1.EmployeeModel.find();
-            return employees.length ? employees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.id, item.username, item.email, item.phone, item.password, item.skills, item.experience, item.isActive, item.profilePic, item.location, item.authSource, item.role, item.revenue, item.createdAt, item.updatedAt)) : [];
+            return employees.length ? employees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.id, item.username, item.email, item.phone, item.password, item.skills, item.experience, item.isActive, item.profilePic, item.location, item.authSource, item.role, item.revenue, item.onDuty, item.createdAt, item.updatedAt)) : [];
         });
     }
     findAllJobs() {

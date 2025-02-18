@@ -29,6 +29,7 @@ export class admin_Block_UnBlock_User_useCase{
                 update.isAdmin,
                 update.authSource,
                 update.role,
+                update.location,
                 update.createdAt,
                 update.updatedAt
                 

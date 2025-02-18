@@ -41,21 +41,27 @@ async markMessagesAsRead(sender: string, receiver: string): Promise<void> {
 
     
 }
-// async getMessagesByUser(userId: string): Promise<MessageEntites[]> {
+async getMessagesByUser(userId: string): Promise<MessageEntites[]> {
 
     
-//     const messages=await MessageModel.find({ sender:userId});
-//     return  messages.map((item)=>new MessageEntites(
-//         item.id,
-//         item.sender,
-//         item.receiver,
-//         item.message,
-//         item.userType,
-//         item.timestamp,
-//         item.isRead
+    const messages = await MessageModel.find({
+        $or: [
+            { sender: userId },
+            { receiver: userId }
+        ]
+    });
+
+    return  messages.map((item)=>new MessageEntites(
+        item.id,
+        item.sender.toString(),
+        item.receiver.toString(),
+        item.message,
+        item.userType,
+        item.timestamp,
+        item.isRead
         
-//     ))
-// }
+    ))
+}
 async getMessagesByEmployee(employeeId: string): Promise<MessageEntites[]> {
 
     

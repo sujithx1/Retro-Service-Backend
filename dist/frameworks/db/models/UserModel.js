@@ -33,8 +33,25 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserModel = void 0;
+exports.UserModel = exports.LocationSchema = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+const AddressSchema = new mongoose_1.Schema({
+    country: { type: String, required: true },
+    county: { type: String, required: false },
+    neighbourhood: { type: String, required: false },
+    postcode: { type: String, required: false },
+    road: { type: String, required: false },
+    state: { type: String, required: true },
+    state_district: { type: String, required: false },
+    suburb: { type: String, required: false },
+    town: { type: String, required: false },
+});
+// Location Schema
+exports.LocationSchema = new mongoose_1.Schema({
+    lat: { type: Number, required: true },
+    lng: { type: Number, required: true },
+    address: { type: AddressSchema, required: true },
+});
 const userSchema = new mongoose_1.Schema({
     username: {
         type: String,
@@ -74,6 +91,10 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         enum: ['user', 'admin'],
         default: "user"
+    },
+    location: {
+        type: exports.LocationSchema,
+        required: false
     }
 }, {
     timestamps: true,

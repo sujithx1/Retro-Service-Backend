@@ -9,7 +9,7 @@ export class User_putReqserviceUsecase{
     constructor(private reqserviceRepositories:IreqservicemechanicsRepositories) {
         
     }
-    async execute(id:string,status:"CONFIRMED"|"CANCELLED"|"COMPLETED"|"PENDING"):Promise<RequestserviceMechEntities>{
+    async execute(id:string,status:"CONFIRMED"|"CANCELLED"|"COMPLETED"|"PENDING"|"ACCEPTED"):Promise<RequestserviceMechEntities>{
 
         const reqService=await this.reqserviceRepositories.findbyId(id)
         if(!reqService) throw new CustomError("Invalid id",401,AppError.ResourceNotFound);
@@ -18,8 +18,5 @@ export class User_putReqserviceUsecase{
         if(!update) throw new CustomError("Not updated",401,AppError.InvalidCredentials)
         
             return update
-        
-
-        
     }
 }

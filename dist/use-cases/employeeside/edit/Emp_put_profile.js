@@ -14,7 +14,7 @@ class Employee_put_Profile_useCase {
     constructor(employeeRep) {
         this.employeeRep = employeeRep;
     }
-    execute(id, username, phone, profilePic, experience, location) {
+    execute(id, username, phone, profilePic, experience) {
         return __awaiter(this, void 0, void 0, function* () {
             const employe = yield this.employeeRep.findById(id);
             if (!employe)
@@ -28,7 +28,6 @@ class Employee_put_Profile_useCase {
             //     }
             //   });
             employe.experience = experience;
-            employe.location = location;
             const update = yield this.employeeRep.findByIdAndUpdate(employe);
             if (!update)
                 throw new Error("employee not updated");
