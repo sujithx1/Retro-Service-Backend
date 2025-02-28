@@ -4,13 +4,14 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./frameworks/routes/userRoutes";
 import adminRouter from "./frameworks/routes/adminRouters";
-import employeeRouter from "./frameworks/routes/empRoutes";
+import employeeRouter from "./frameworks/routes/mechRoutes";
 import { errorHandler } from "./interfaces/middleware/Errorhadler";
 import http from "http";
 import { Server } from "socket.io";
 import morgan from "morgan";
 import { ActiveConnection } from "./frameworks/db/models/ActivateModel";
 import {  MessageModel } from "./frameworks/db/models/messageModel";
+import storeRouter from "./frameworks/routes/storeRoutes"
 import "./utils/helper/db_helper/cronjobReject"
 const app = express();
 const server = http.createServer(app);
@@ -38,6 +39,7 @@ app.use(morgan("dev"));
 app.use("/api/user", userRouter);
 app.use("/api/employee", employeeRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/store", storeRouter);
 app.use(errorHandler as express.ErrorRequestHandler);
 
 // Store the socket connections by user/employee IDs

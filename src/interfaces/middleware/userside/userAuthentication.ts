@@ -5,6 +5,7 @@ import { UserModel } from "../../../frameworks/db/models/UserModel";
 import { UserIntities } from "../../../entities/Userentities";
 import { EmployeeModel } from "../../../frameworks/db/models/EmployeeModel";
 import { EmployeeEntities } from "../../../entities/EmployeeEntities";
+import { StoreModel } from "../../../frameworks/db/models/Storemodel";
 
 
 const jwtSecret=process.env.access_token||""
@@ -152,7 +153,16 @@ export const Authentication: RequestHandler = async (req, res, next) => {
                 res.status(403).json({ error: "Not an admin or invalid user" });
                 return;
             }
-        } else {
+           
+        
+        } else if (role === "store") {
+            const store = await StoreModel.findById(id).select("-password");
+            if (!store || !store.isActive) {
+                res.status(403).json({ error: "store not found or inactive" });
+                return;
+            }
+        }
+         else {
             res.status(403).json({ error: "Invalid role in token" });
             return;
         }

@@ -37,7 +37,7 @@ export const startBookingCronJob3min = () => {
 
 export const stopBookingCronJob = () => {
   if (bookingCronJob) {
-    console.log("Stopping cron job as no pending bookings exist.");
+    console.log("Stopping cron job as no   bookings exist.");
     bookingCronJob.stop();
     bookingCronJob = null;
   }

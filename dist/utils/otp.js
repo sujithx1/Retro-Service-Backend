@@ -11,8 +11,9 @@ const generate_otp = () => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 exports.generate_otp = generate_otp;
-const sendOtp = (email, username, otp) => {
+const sendOtp = (email, username, otp, storeValid) => {
     return new Promise((resolve, reject) => {
+        let mailOption;
         const transpailer = nodemailer_1.default.createTransport({
             service: 'gmail',
             auth: {
@@ -20,21 +21,40 @@ const sendOtp = (email, username, otp) => {
                 pass: process.env.Password
             }
         });
-        const mailOption = {
-            from: process.env.Email,
-            to: email,
-            subject: 'Welcome! Verify Your Email with This OTP Code',
-            html: `<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
-            <h2>Hi${username},</h2>
-            <p>Thank you for using <strong> Retor Service </strong>.</p>
-            <p>Your OTP code for verification is:</p>
-            <p style="font-size: 1.5rem; font-weight: bold; color: red;">${otp}</p>
-            <p>This code is valid for the next 1 minutes. Please do not share it with anyone.</p>
-            <p>If you did not request this code, please contact our support team immediately.</p>
-            <p>Best regards,<br>Retro Service Team</p>
-          </div>
-        `,
-        };
+        if (storeValid) {
+            mailOption = {
+                from: process.env.Email,
+                to: email,
+                subject: 'Welcome! Retro Service ',
+                html: `<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+                <h2>Hi${username},</h2>
+                <p>Thank you for using <strong> Retor Service </strong>.</p>
+                <p>Your Store Id  is:</p>
+                <p style="font-size: 1.5rem; font-weight: bold; color: red;">${otp}</p>
+                <p> Please do not share it with anyone.</p>
+                <p>If you did not request this code, please contact our support team immediately.</p>
+                <p>Best regards,<br>Retro Service Team</p>
+              </div>
+            `,
+            };
+        }
+        else {
+            mailOption = {
+                from: process.env.Email,
+                to: email,
+                subject: 'Welcome! Verify Your Email with This OTP Code',
+                html: `<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+                <h2>Hi${username},</h2>
+                <p>Thank you for using <strong> Retor Service </strong>.</p>
+                <p>Your OTP code for verification is:</p>
+                <p style="font-size: 1.5rem; font-weight: bold; color: red;">${otp}</p>
+                <p>This code is valid for the next 1 minutes. Please do not share it with anyone.</p>
+                <p>If you did not request this code, please contact our support team immediately.</p>
+                <p>Best regards,<br>Retro Service Team</p>
+              </div>
+            `,
+            };
+        }
         transpailer.sendMail(mailOption, (err, info) => {
             if (err) {
                 console.log('error from sending mail ', err);

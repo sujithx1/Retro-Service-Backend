@@ -16,6 +16,7 @@ exports.Authentication = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const UserModel_1 = require("../../../frameworks/db/models/UserModel");
 const EmployeeModel_1 = require("../../../frameworks/db/models/EmployeeModel");
+const Storemodel_1 = require("../../../frameworks/db/models/Storemodel");
 const jwtSecret = process.env.access_token || "";
 // declare global{
 //     namespace Express {
@@ -142,6 +143,13 @@ const Authentication = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
             const user = yield UserModel_1.UserModel.findById(id).select("-password");
             if (!user || !user.isAdmin) {
                 res.status(403).json({ error: "Not an admin or invalid user" });
+                return;
+            }
+        }
+        else if (role === "store") {
+            const store = yield Storemodel_1.StoreModel.findById(id).select("-password");
+            if (!store || !store.isActive) {
+                res.status(403).json({ error: "store not found or inactive" });
                 return;
             }
         }

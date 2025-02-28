@@ -18,8 +18,8 @@ export const UserValidation = (data: {
 };
 export const StoreSignupValidation = (data: {
   name: string;
-  owner_name:string;
   owner_email: string;
+  owner_name:string;
   owner_phone: string;
   password: string;
   

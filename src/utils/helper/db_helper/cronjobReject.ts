@@ -11,34 +11,46 @@ export const startBookingCronJob = () => {
 
   console.log("Starting cron job to auto-cancel pending bookings...");
   bookingCronJob = cron.schedule("* * * * *", async () => {
-    console.log("Checking for expired pending requests...");
-    const oneMinuteAgo = new Date(Date.now() - 40 * 1000); // 1 minute ago
+    console.log("Cron job triggered at:", new Date().toLocaleTimeString()); 
+
+    const oneMinuteAgo = new Date(Date.now() - 50  * 1000); // 1 minute ago
 
     try {
-      const result = await Request_Service_Mech_model.updateMany(
-        { status: "PENDING", createdAt: { $lte: oneMinuteAgo } }, // Find pending bookings older than 1 min
-        { $set: { status: "REJECT" } }
-      );
+      const expiredBookings = await Request_Service_Mech_model.find({
+        status: "PENDING",
+        createdAt: { $lte: oneMinuteAgo }
+      });
 
-      if (result.modifiedCount > 0) {
-        
+      console.log("Expired bookings to cancel:", expiredBookings.length);
+
+      if (expiredBookings.length > 0) {
+        const result = await Request_Service_Mech_model.updateMany(
+          { status: "PENDING", createdAt: { $lte: oneMinuteAgo } },
+          { $set: { status: "REJECT" } }
+        );
+
         console.log(`Cancelled ${result.modifiedCount} expired bookings.`);
       }
 
-      // Check if there are any remaining pending bookings
+
       const pendingBookings = await Request_Service_Mech_model.countDocuments({ status: "PENDING" });
-      if (pendingBookings === 0) {
-        stopBookingCronJob(); // Stop the cron job if no pending bookings exist
-      }
+
+if (pendingBookings === 0) {
+  console.log("No more pending bookings, stopping cron job temporarily.");
+  stopBookingCronJob();
+     
+}
     } catch (error) {
       console.error("Error updating pending requests:", error);
     }
   });
+
+  bookingCronJob.start(); // Ensure cron starts
 };
 
 export const stopBookingCronJob = () => {
   if (bookingCronJob) {
-    console.log("Stopping cron job as no pending bookings exist.");
+    console.log("Stopping cron job.");
     bookingCronJob.stop();
     bookingCronJob = null;
   }

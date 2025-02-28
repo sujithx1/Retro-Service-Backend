@@ -16,12 +16,11 @@ interface IWallet extends Document {
       userId: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'User', 
       },
       userType: {
         type: String,
         required: true,
-        enum: ['user', 'employee','admin'], 
+        enum: ['user', 'employee','admin',"store"], 
       },
       balance: {
         type: Number,

@@ -39,12 +39,11 @@ const WalletSchema = new mongoose_1.Schema({
     userId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        ref: 'User',
     },
     userType: {
         type: String,
         required: true,
-        enum: ['user', 'employee', 'admin'],
+        enum: ['user', 'employee', 'admin', "store"],
     },
     balance: {
         type: Number,

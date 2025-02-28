@@ -42,8 +42,8 @@ const storeSchema = new mongoose_1.Schema({
         required: true
     },
     storeId: {
-        type: Number,
-        default: 0
+        type: String,
+        default: ""
     },
     owner_name: {
         type: String,
@@ -71,7 +71,7 @@ const storeSchema = new mongoose_1.Schema({
     },
     revenue: {
         type: Number,
-        required: true
+        default: 0
     },
     profile_pic: {
         type: String,

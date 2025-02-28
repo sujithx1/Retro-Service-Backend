@@ -9,7 +9,7 @@ export class Product_Entities{
         public name:string,
         public description:string,
         public stock:number,
-        public categoryId:string,
+        public category:string,
         public price:number,
         public images:string[],
         public isBlock:boolean=false,

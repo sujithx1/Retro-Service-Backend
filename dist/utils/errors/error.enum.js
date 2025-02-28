@@ -13,4 +13,5 @@ var AppError;
     AppError["UnauthorizedAccess"] = "UnauthorizedAccess";
     AppError["ResourceNotFound"] = "ResourceNotFound";
     AppError["DuplicateError"] = "Duplicate Entry";
+    AppError["PasswordNotmatch"] = "Password Not Match";
 })(AppError || (exports.AppError = AppError = {}));

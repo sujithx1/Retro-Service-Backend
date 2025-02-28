@@ -29,7 +29,6 @@ const error_enum_1 = require("../../../utils/errors/error.enum");
 const razorpay_1 = __importDefault(require("razorpay"));
 const cronjobReject_1 = require("../../../utils/helper/db_helper/cronjobReject");
 const cronjobCancelling_1 = require("../../../utils/helper/db_helper/cronjobCancelling");
-const app_1 = require("../../../app");
 class UserServiceController {
     constructor(createrewservicesmech, getreqServiceUsecase, putServicepaymentComplete, getbookingHistory, putReqserviceuseCase, getServicePayment, getsrachjobsUser, getNearestEmployees, putserviceSpecificemp, createServicePayment, gettranasactionByuser) {
         this.createrewservicesmech = createrewservicesmech;
@@ -62,8 +61,6 @@ class UserServiceController {
                 const reqService = yield this.createrewservicesmech.execute(userId, userEmail, userName, userLocation, jobId, jobName, Min_wage, problem);
                 console.log(reqService);
                 (0, cronjobReject_1.startBookingCronJob)();
-                if (reqService.mechanics.length == 0)
-                    app_1.io.emit("bookingFailed", { id: reqService.id });
                 return res
                     .status(201)
                     .json({ message: "success", succes: true, reqService: reqService });

@@ -14,28 +14,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SendOtp = void 0;
 const StoreEntities_1 = require("../../entities/StoreEntities");
+const walletEntities_1 = require("../../entities/walletEntities");
+const generateStoreId_1 = require("../../utils/helper/generateStoreId");
 const redis_1 = __importDefault(require("../../utils/helper/redis"));
 const otp_1 = require("../../utils/otp");
 class SendOtp {
-    constructor(storeRepositories) {
+    constructor(storeRepositories, walletrepositories) {
         this.storeRepositories = storeRepositories;
+        this.walletrepositories = walletrepositories;
     }
-    execute(email, username, otp, storeDetails // ✅ Default empty values
+    execute(username, otp, storeDetails //
     ) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(email);
-            const storeOwner = yield this.storeRepositories.findByowner_email(email);
+            console.log(storeDetails.owner_email);
+            const storeOwner = yield this.storeRepositories.findByowner_email(storeDetails.owner_email);
             if (storeOwner) {
                 console.log("User already exists");
-                const storeId = (0, otp_1.generate_otp)();
+                const storeId = yield (0, generateStoreId_1.generateStoreID)(storeDetails.name);
                 const newstore = new StoreEntities_1.StoreEntities("", storeDetails.name, storeDetails.owner_name, storeDetails.owner_email, storeDetails.owner_phone, true, storeDetails.password, storeId);
-                yield this.storeRepositories.create(newstore);
+                const store = yield this.storeRepositories.create(newstore);
+                yield (0, otp_1.sendOtp)(storeDetails.owner_email, username, storeId, true);
+                const wallet = new walletEntities_1.WalletEntities("", store.id, "store", 0);
+                this.walletrepositories.create(wallet);
                 return storeId;
             }
             try {
-                const sendOtpMail = yield (0, otp_1.sendOtp)(email, username, otp);
-                yield redis_1.default.setEx("otp", 60, JSON.stringify(otp));
-                yield redis_1.default.setEx("userData", 60, JSON.stringify(storeDetails));
+                const sendOtpMail = yield (0, otp_1.sendOtp)(storeDetails.owner_email, username, otp);
+                const storeData = new StoreEntities_1.StoreEntities("", storeDetails.name, storeDetails.owner_name, storeDetails.owner_email, storeDetails.owner_phone, true, storeDetails.password, "");
+                yield redis_1.default.setEx("storeotp", 60, JSON.stringify(otp));
+                yield redis_1.default.setEx("storeData", 60, JSON.stringify(storeData));
                 console.log(sendOtpMail);
             }
             catch (error) {

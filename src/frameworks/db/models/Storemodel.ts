@@ -1,11 +1,12 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, ObjectId, Schema } from "mongoose";
 import { Locationuser_types } from "../../../types/user";
 import { LocationSchema } from "./UserModel";
 
 export interface IStore_types extends Document{
+    _id:ObjectId,
     name:string;
     location:Locationuser_types,
-    storeId:number,
+    storeId:string,
     owner_name:string,
     owner_email:string,
     owner_phone:string,
@@ -16,7 +17,6 @@ export interface IStore_types extends Document{
     createdAt:Date,
     updatedAt:Date,
     
-
 }
 
 const storeSchema=new Schema<IStore_types>({
@@ -25,8 +25,8 @@ const storeSchema=new Schema<IStore_types>({
         required:true
     },
     storeId:{
-        type:Number,
-        default:0
+        type:String,
+        default:""
     }
     
     ,
@@ -59,7 +59,7 @@ const storeSchema=new Schema<IStore_types>({
     },
     revenue:{
         type:Number,
-        required:true
+        default:0
     }
 ,profile_pic:{
     type:String,

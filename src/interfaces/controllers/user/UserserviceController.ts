@@ -83,7 +83,6 @@ export class UserServiceController {
       console.log(reqService);
       startBookingCronJob();
     
-      if(reqService.mechanics.length==0)io.emit("bookingFailed",{id:reqService.id})
       return res
         .status(201)  
         .json({ message: "success", succes: true, reqService: reqService });
