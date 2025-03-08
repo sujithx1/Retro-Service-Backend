@@ -25,7 +25,7 @@ export class CartController{
             
             const {storeId,productId,quantity,price,userId}=req.body
             if(!storeId||!productId||!price||!quantity||!userId)return next(new CustomError('missing field',401,AppError.ValidationError))
-const cart=await this.newCart.execute({id:"",userId,storeId,productId,quantity,price})
+const cart=await this.newCart.execute(userId,storeId,productId,quantity,price)
    
             return res.status(201).json({success:true,cart})
             
@@ -43,7 +43,7 @@ const cart=await this.newCart.execute({id:"",userId,storeId,productId,quantity,p
             
             const {id,storeId,productId,quantity,price,userId}=req.body
             if(!id||!storeId||!productId||!price||!quantity||!userId)return next(new CustomError('missing field',401,AppError.ValidationError))
-const cart=await this.updatedcart.execute({id,userId,storeId,productId,quantity,price})
+const cart=await this.updatedcart.execute(id,userId,storeId,productId,quantity,price)
    
             return res.status(200).json({success:true,cart})
             
@@ -83,13 +83,18 @@ const cart=await this.getcartbyProductId.execute(productId)
         try {
 
             console.log(req.body);
+            const {productId}=req.body
             const {id}=req.params
             if(!id)return next(new CustomError('missing id',401,AppError.ValidationError))
-const cart=await this.deletecartuseingId.execute(id)
+            if(!productId)return next(new CustomError('missing productId',401,AppError.ValidationError))
+const cart=await this.deletecartuseingId.execute(id,productId)
             return res.status(200).json({success:true,cart})
             
         } catch (error) {
             return next(error)
         }
     }
+
+
+   
 }

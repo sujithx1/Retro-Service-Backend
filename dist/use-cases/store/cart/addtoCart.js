@@ -10,13 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AddtoCartuseCase = void 0;
+const cartEntities_1 = require("../../../entities/cartEntities");
 class AddtoCartuseCase {
     constructor(cartrepositories) {
         this.cartrepositories = cartrepositories;
     }
-    execute(cartData) {
+    execute(userId, storeId, productId, quantity, price) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.cartrepositories.create(cartData);
+            const products = [{
+                    product: productId,
+                    quantity,
+                    price
+                }];
+            const cart = new cartEntities_1.CartEntities("", userId, storeId, products);
+            return yield this.cartrepositories.create(cart);
         });
     }
 }

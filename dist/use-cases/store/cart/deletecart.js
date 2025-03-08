@@ -16,11 +16,25 @@ class Cart_deleteCartid {
     constructor(cartrepositories) {
         this.cartrepositories = cartrepositories;
     }
-    execute(id) {
+    execute(cartId, productId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const cart = yield this.cartrepositories.findByIdAndDelete(id);
+            const cart = yield this.cartrepositories.findById(cartId);
             if (!cart)
-                throw new custom_errors_1.CustomError("not updated ", 401, error_enum_1.AppError.ServerError);
+                throw new custom_errors_1.CustomError("cart not found ", 404, error_enum_1.AppError.ServerError);
+            // Check if the product exists in the cart
+            const productIndex = cart.products.findIndex((product) => typeof product.product === 'object' && '_id' in product.product && product.product._id.toString() === productId);
+            if (productIndex === -1) {
+                throw new custom_errors_1.CustomError("Product not found in cart", 404, error_enum_1.AppError.ResourceNotFound);
+            }
+            // Remove the product from the cart
+            cart.products.splice(productIndex, 1);
+            const updatedCart = yield this.cartrepositories.findByIdUpdate(cart);
+            if (!updatedCart) {
+                throw new custom_errors_1.CustomError("Failed to update cart", 500, error_enum_1.AppError.ServerError);
+            }
+            if (cart.products.length == 0) {
+                yield this.cartrepositories.findByIdAndDelete(cart.id);
+            }
             return true;
         });
     }

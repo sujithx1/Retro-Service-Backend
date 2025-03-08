@@ -27,7 +27,7 @@ class CartController {
                 const { storeId, productId, quantity, price, userId } = req.body;
                 if (!storeId || !productId || !price || !quantity || !userId)
                     return next(new custom_errors_1.CustomError('missing field', 401, error_enum_1.AppError.ValidationError));
-                const cart = yield this.newCart.execute({ id: "", userId, storeId, productId, quantity, price });
+                const cart = yield this.newCart.execute(userId, storeId, productId, quantity, price);
                 return res.status(201).json({ success: true, cart });
             }
             catch (error) {
@@ -42,7 +42,7 @@ class CartController {
                 const { id, storeId, productId, quantity, price, userId } = req.body;
                 if (!id || !storeId || !productId || !price || !quantity || !userId)
                     return next(new custom_errors_1.CustomError('missing field', 401, error_enum_1.AppError.ValidationError));
-                const cart = yield this.updatedcart.execute({ id, userId, storeId, productId, quantity, price });
+                const cart = yield this.updatedcart.execute(id, userId, storeId, productId, quantity, price);
                 return res.status(200).json({ success: true, cart });
             }
             catch (error) {
@@ -84,10 +84,13 @@ class CartController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log(req.body);
+                const { productId } = req.body;
                 const { id } = req.params;
                 if (!id)
                     return next(new custom_errors_1.CustomError('missing id', 401, error_enum_1.AppError.ValidationError));
-                const cart = yield this.deletecartuseingId.execute(id);
+                if (!productId)
+                    return next(new custom_errors_1.CustomError('missing productId', 401, error_enum_1.AppError.ValidationError));
+                const cart = yield this.deletecartuseingId.execute(id, productId);
                 return res.status(200).json({ success: true, cart });
             }
             catch (error) {

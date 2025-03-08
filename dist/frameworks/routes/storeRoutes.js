@@ -53,4 +53,10 @@ router.route('/product/:id')
     .put((req, res, next) => {
     store_di_1.storeController.putStoreProduct(req, res, next);
 });
+router.get('/orders/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    store_di_1.storeController._getordersbyStoreIdcontroll(req, res, next);
+});
+router.put('/order/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    store_di_1.storeController._putOrdercompletecontroll(req, res, next);
+});
 exports.default = router;

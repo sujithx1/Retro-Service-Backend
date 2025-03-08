@@ -38,28 +38,22 @@ const mongoose_1 = __importStar(require("mongoose"));
 const cartSchema = new mongoose_1.Schema({
     storeId: {
         type: mongoose_1.Types.ObjectId,
-        ref: 'Store',
-        required: true
+        ref: "Store",
+        required: true,
     },
     userId: {
         type: mongoose_1.Types.ObjectId,
-        ref: 'User',
-        required: true
+        ref: "User",
+        required: true,
     },
-    productId: {
-        type: mongoose_1.Types.ObjectId,
-        ref: 'Product',
-        required: true
-    },
-    price: {
-        type: Number,
-        required: true
-    },
-    quantity: {
-        type: Number,
-        required: true
-    }
+    products: [
+        {
+            product: { type: mongoose_1.Schema.Types.ObjectId, ref: "Product", required: true },
+            quantity: { type: Number, required: true },
+            price: { type: Number, required: true }
+        }
+    ],
 }, {
-    timestamps: true
+    timestamps: true,
 });
-exports.CartModel = mongoose_1.default.model('Cart', cartSchema);
+exports.CartModel = mongoose_1.default.model("Cart", cartSchema);

@@ -17,20 +17,40 @@ class Cart_updateuseCase {
         this.cartrepositories = cartrepositories;
         this.productrepositories = productrepositories;
     }
-    execute(cartData) {
+    execute(id, userId, storeId, productId, quantity, price) {
         return __awaiter(this, void 0, void 0, function* () {
-            const findcart = yield this.cartrepositories.findById(cartData.id);
-            if (!findcart)
-                throw new custom_errors_1.CustomError('cart not found', 401, error_enum_1.AppError.ResourceNotFound);
-            const findproduct = yield this.productrepositories.findById(cartData.productId.toString());
-            if (!findproduct)
-                throw new custom_errors_1.CustomError('product not found', 401, error_enum_1.AppError.ResourceNotFound);
-            findcart.quantity = +cartData.quantity,
-                findcart.price = findcart.quantity * findproduct.price;
-            const updatecart = yield this.cartrepositories.findByIdUpdate(findcart);
-            if (!updatecart)
-                throw new custom_errors_1.CustomError('cart not  updated', 401, error_enum_1.AppError.ServerError);
-            return updatecart;
+            const findCart = yield this.cartrepositories.findById(id);
+            if (!findCart) {
+                throw new custom_errors_1.CustomError("Cart not found", 404, error_enum_1.AppError.ResourceNotFound);
+            }
+            const findProduct = yield this.productrepositories.findById(productId);
+            if (!findProduct) {
+                throw new custom_errors_1.CustomError("Product not found", 404, error_enum_1.AppError.ResourceNotFound);
+            }
+            const productIndex = findCart.products.findIndex((product) => typeof product.product === 'object' && '_id' in product.product && product.product._id.toString() === productId);
+            if (productIndex === -1) {
+                const product = {
+                    product: productId,
+                    quantity,
+                    price
+                };
+                findCart.products.push(product);
+                //   throw new CustomError(
+                //     "Product not found in cart",
+                //     404,
+                //     AppError.ResourceNotFound
+                //   );
+            }
+            else {
+                findCart.products[productIndex].quantity = quantity;
+                findCart.products[productIndex].price = quantity * findProduct.price;
+            }
+            // Save the updated cart
+            const updatedCart = yield this.cartrepositories.findByIdUpdate(findCart);
+            if (!updatedCart) {
+                throw new custom_errors_1.CustomError("Cart update failed", 500, error_enum_1.AppError.ServerError);
+            }
+            return updatedCart;
         });
     }
 }

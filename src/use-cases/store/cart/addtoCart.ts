@@ -4,7 +4,22 @@ import { Icartrepositories } from "../../../interfaces/repositories/cart/Icartre
 export class AddtoCartuseCase {
   constructor(private cartrepositories: Icartrepositories) {}
 
-  async execute(cartData: CartEntities): Promise<CartEntities> {
-    return await this.cartrepositories.create(cartData);
+  async execute(userId:string,storeId:string,productId:string,quantity:number,price:number): Promise<CartEntities> {
+    const products=[{
+      product:productId,
+      quantity,
+      price
+    }]
+    const cart=new CartEntities(
+      "",
+      userId,
+      storeId,
+      products,
+
+
+          )
+
+            
+    return await this.cartrepositories.create(cart);
   }
 }

@@ -17,19 +17,25 @@ import { ProductgetbyIduseCase } from "../../../use-cases/store/product/getprodu
 import { Store_putproductuseCase } from "../../../use-cases/store/product/putproduct";
 import { Store20kmDistance } from "../../../use-cases/store/getallstores";
 import { Store_getproductsbystoreId } from "../../../use-cases/store/getproductsbystoreId";
+import { Store_getiduseCase } from "../../../use-cases/store/getstoreByid";
+import { Orders_getstoriduseCase } from "../../../use-cases/store/checkout/getordersbyStoreId";
+import { User_orderputuseCase } from "../../../use-cases/store/checkout/putorderby";
 
 export class StoreController {
   constructor(
     private sendMails: SendOtp,
     private checkOtp: Store_otpcheck,
     private storelogin: StoreLoginuseCase,
-    private addproduct:Store_addproductuseCase,
-    private allproduts:GetAllproductsuseCase,
-    private storeaddloction:Store_addlocationuseCase,
-    private getproduct:ProductgetbyIduseCase,
-    private putproduct:Store_putproductuseCase,
-    private store20km:Store20kmDistance,
-    private getStoreproducts:Store_getproductsbystoreId
+    private addproduct: Store_addproductuseCase,
+    private allproduts: GetAllproductsuseCase,
+    private storeaddloction: Store_addlocationuseCase,
+    private getproduct: ProductgetbyIduseCase,
+    private putproduct: Store_putproductuseCase,
+    private store20km: Store20kmDistance,
+    private getStoreproducts: Store_getproductsbystoreId,
+    private getStorebyId: Store_getiduseCase,
+    private getOrdersbyStoreId: Orders_getstoriduseCase,
+    private putorderComplete: User_orderputuseCase
   ) {}
 
   async signUp(req: Request, res: Response, next: NextFunction) {
@@ -91,7 +97,6 @@ export class StoreController {
       const access_token = await GenerateAccessToken(store.id, "store");
       const refresh_token = await GenerateRefreshToken(store.id, "store");
 
-      
       const { password: _, ...withoutPassword } = store;
       return res
         .cookie("store_refreshToken", refresh_token, {
@@ -104,128 +109,219 @@ export class StoreController {
     }
   }
 
-
-  async Add_product(req:Request,res:Response,next:NextFunction){
+  async Add_product(req: Request, res: Response, next: NextFunction) {
     try {
-      const {name,quantity,price,description,images,storeId,category}=req.body
-      console.log("add product",req.body);
-      if(!name||!quantity||!price||!description||!images||!storeId||!category)return next(new CustomError("missing field",401,AppError.ValidationError))
-      
-      const product=await this.addproduct.execute(storeId,name,quantity,price,description,images,category)
+      const { name, quantity, price, description, images, storeId, category } =
+        req.body;
+      console.log("add product", req.body);
+      if (
+        !name ||
+        !quantity ||
+        !price ||
+        !description ||
+        !images ||
+        !storeId ||
+        !category
+      )
+        return next(
+          new CustomError("missing field", 401, AppError.ValidationError)
+        );
 
+      const product = await this.addproduct.execute(
+        storeId,
+        name,
+        quantity,
+        price,
+        description,
+        images,
+        category
+      );
 
-    return res.status(201).json({success:true,product})
-  } catch (error) {
-    return next(error)
+      return res.status(201).json({ success: true, product });
+    } catch (error) {
+      return next(error);
     }
-
   }
-  async getAllproducts(req:Request,res:Response,next:NextFunction){
+  async getAllproducts(req: Request, res: Response, next: NextFunction) {
     try {
-      const products=await this.allproduts.execute()
+      const products = await this.allproduts.execute();
       console.log(products);
-      
 
-
-    return res.status(200).json({success:true,products})
-  } catch (error) {
-    return next(error)
+      return res.status(200).json({ success: true, products });
+    } catch (error) {
+      return next(error);
     }
-
   }
-  
-  async putlocation(req:Request,res:Response,next:NextFunction){
+
+  async putlocation(req: Request, res: Response, next: NextFunction) {
     try {
-      const {id}=req.params
-      const {lat,lng,address}=req.body
+      const { id } = req.params;
+      const { lat, lng, address } = req.body;
       console.log(req.body);
-      
-      if(!id) return next(new CustomError("missing id",401,AppError.ValidationError))
-      if(!lat||!lng||!address) return next(new CustomError("missing field",401,AppError.ValidationError))
-      const location=await this.storeaddloction.execute(id,lat,lng,address)
-     
-     
-      return res.status(200).json({message:"success",success:true,location})
 
+      if (!id)
+        return next(
+          new CustomError("missing id", 401, AppError.ValidationError)
+        );
+      if (!lat || !lng || !address)
+        return next(
+          new CustomError("missing field", 401, AppError.ValidationError)
+        );
+      const location = await this.storeaddloction.execute(
+        id,
+        lat,
+        lng,
+        address
+      );
 
-
-  } catch (error) {
-    return next(error)
+      return res
+        .status(200)
+        .json({ message: "success", success: true, location });
+    } catch (error) {
+      return next(error);
     }
-
   }
 
-  async storeLogout(req:Request,res:Response,next:NextFunction){
+  async storeLogout(req: Request, res: Response, next: NextFunction) {
     try {
-     
       const storeToken = req.cookies.store_refreshToken;
-      if (storeToken) res.clearCookie("store_refreshToken")
+      if (storeToken) res.clearCookie("store_refreshToken");
 
-    return res.status(200).json({success:true})
-  } catch (error) {
-    return next(error)
+      return res.status(200).json({ success: true });
+    } catch (error) {
+      return next(error);
     }
-
   }
 
-  async getStoreProduct(req:Request,res:Response,next:NextFunction){
+  async getStoreProduct(req: Request, res: Response, next: NextFunction) {
     try {
-   const {id}=req.params
-   if(!id)return next(new CustomError('missing field',401,AppError.ValidationError))
-    const product=await this.getproduct.execute(id)
+      const { id } = req.params;
+      if (!id)
+        return next(
+          new CustomError("missing field", 401, AppError.ValidationError)
+        );
+      const product = await this.getproduct.execute(id);
 
-
-    return res.status(200).json({success:true,product})
-  } catch (error) {
-    return next(error)
+      return res.status(200).json({ success: true, product });
+    } catch (error) {
+      return next(error);
     }
-
   }
 
-  async putStoreProduct(req:Request,res:Response,next:NextFunction){
+  async putStoreProduct(req: Request, res: Response, next: NextFunction) {
     try {
-   const {id}=req.params
-   const {name,quantity,price,description,images,category}=req.body
-   if(!id)return next(new CustomError('missing field',401,AppError.ValidationError))
-    const product=await this.putproduct.execute(id,name,quantity,price,description,images,category)
-    return res.status(200).json({success:true,product})
-  } catch (error) {
-    return next(error)
+      const { id } = req.params;
+      const { name, quantity, price, description, images, category } = req.body;
+      if (!id)
+        return next(
+          new CustomError("missing field", 401, AppError.ValidationError)
+        );
+      const product = await this.putproduct.execute(
+        id,
+        name,
+        quantity,
+        price,
+        description,
+        images,
+        category
+      );
+      return res.status(200).json({ success: true, product });
+    } catch (error) {
+      return next(error);
     }
-
   }
 
-  async getstores20kmUsersdie(req:Request,res:Response,next:NextFunction){
+  async getstores20kmUsersdie(req: Request, res: Response, next: NextFunction) {
     try {
-
       const lat = parseFloat(req.query.lat as string);
-    const lng = parseFloat(req.query.lng as string);
-      
-      if(!lat||!lng) return next(new CustomError("missing field",401,AppError.ValidationError))
-        const stores=await this.store20km.execute(lat,lng)
+      const lng = parseFloat(req.query.lng as string);
+
+      if (!lat || !lng)
+        return next(
+          new CustomError("missing field", 401, AppError.ValidationError)
+        );
+      const stores = await this.store20km.execute(lat, lng);
       console.log(stores);
-      
-    return res.status(200).json({success:true,stores})
-  } catch (error) {
-    return next(error)
-    }
 
+      return res.status(200).json({ success: true, stores });
+    } catch (error) {
+      return next(error);
+    }
   }
 
-  async getProductsByStore(req:Request,res:Response,next:NextFunction){
+  async getProductsByStore(req: Request, res: Response, next: NextFunction) {
     try {
-      const {id}=req.params
-      if(!id) return next(new CustomError("missing id",401,AppError.ValidationError))
+      const { id } = req.params;
+      if (!id)
+        return next(
+          new CustomError("missing id", 401, AppError.ValidationError)
+        );
 
-      const products=await this.getStoreproducts.execute(id)
-      
-    return res.status(200).json({success:true,products})
-  } catch (error) {
-    return next(error)
+      const products = await this.getStoreproducts.execute(id);
+
+      return res.status(200).json({ success: true, products });
+    } catch (error) {
+      return next(error);
     }
+  }
+  async _getStorebyIdcontroll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      if (!id)
+        return next(
+          new CustomError("missing id", 401, AppError.ValidationError)
+        );
 
+      const store = await this.getStorebyId.execute(id);
+
+      return res.status(200).json({ success: true, store });
+    } catch (error) {
+      return next(error);
+    }
   }
 
+  async _getordersbyStoreIdcontroll(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.params;
+      if (!id)
+        return next(
+          new CustomError("missing id", 401, AppError.ValidationError)
+        );
+      const orders = await this.getOrdersbyStoreId.execute(id);
+      return res.status(200).json({ success: true, orders });
+    } catch (error) {
+      return next(error);
+    }
+  }
 
+  async _putOrdercompletecontroll(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.params;
 
+      const { status, concern } = req.body;
+
+      if (!id)
+        return next(
+          new CustomError("missing id", 400, AppError.ValidationError)
+        );
+      if (!status)
+        return next(
+          new CustomError("missing field", 400, AppError.ValidationError)
+        );
+       
+
+      const order = await this.putorderComplete.execute(id, status, concern);
+      return res.status(200).json({ success: true, order });
+    } catch (error) {
+      return next(error);
+    }
+  }
 }

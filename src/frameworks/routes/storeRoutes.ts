@@ -72,4 +72,14 @@ router.route('/product/:id')
  storeController.putStoreProduct(req,res,next)
 })
 
+
+router.get('/orders/:id',Authentication,(req,res,next)=>{
+    storeController._getordersbyStoreIdcontroll(req,res,next)
+
+})
+router.put('/order/:id',Authentication,(req,res,next)=>{
+    storeController._putOrdercompletecontroll(req,res,next)
+
+})
+
 export default router

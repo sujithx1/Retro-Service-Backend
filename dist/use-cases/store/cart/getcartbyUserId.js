@@ -17,6 +17,8 @@ class Cart_getUseriduseCase {
     execute(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             const cart = yield this.cartrepositories.findByuserId(userId);
+            if (!cart)
+                return null;
             return cart;
         });
     }

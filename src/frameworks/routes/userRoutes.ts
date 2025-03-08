@@ -7,6 +7,8 @@ import { storeController } from "../dependency_injection/store.di";
 import { productcontroller } from "../dependency_injection/product.di";
 import { admincontroller } from "../dependency_injection/admin.di";
 import { cartcontroller } from "../dependency_injection/cart.di";
+import { checkoutController } from "../dependency_injection/checkout";
+import { wishlistcontroller } from "../dependency_injection/wishlist.di";
 
 
 
@@ -190,6 +192,9 @@ userRouter.get("/categories", Authentication, (req, res, next) => {
 userRouter.get('/products/:id',Authentication,(req,res,next)=>{
   productcontroller.getProducts_storeId(req,res,next)
 })
+userRouter.get('/product/:id',Authentication,(req,res,next)=>{
+  productcontroller._getProduct_Id(req,res,next)
+})
 
 
 userRouter
@@ -201,22 +206,68 @@ userRouter
   .put((req,res,next)=>{
   cartcontroller.updateAddtocart(req,res,next)
 })
-.delete((req,res,next)=>{
-  cartcontroller._deletecartId(req,res,next)
-})
+// .delete((req,res,next)=>{
+//   cartcontroller._deletecartId(req,res,next)
+// })
   
+
 userRouter.get('/cart-user/:userId',Authentication,(req,res,next)=>{
   cartcontroller.getcartbyUserId(req,res,next)
+})
+
+userRouter.put('/cart-remove/:id',Authentication,(req,res,next)=>{
+  cartcontroller._deletecartId(req,res,next)
+
+
 })
    
 userRouter.get('/cart-product/:productId',Authentication,(req,res,next)=>{
   cartcontroller._getcartbyproductId(req,res,next)
 })
+userRouter.get('/store/:id',Authentication,(req,res,next)=>{
+ storeController._getStorebyIdcontroll(req,res,next)
+})
+
+userRouter.post('/checkout/payment',Authentication,(req,res,next)=>{
+ checkoutController._postCheckout(req,res,next)
+})
+
+userRouter.get('/order-histories/:id',Authentication,(req,res,next)=>{
+ checkoutController._getOrdersbyUserId(req,res,next)
+})
 
 
 
+userRouter.get('/order-detail/:id',Authentication,(req,res,next)=>{
+  checkoutController._getOrdersbyId(req,res,next)})
+userRouter.put('/order-detail/:id',Authentication,(req,res,next)=>{
+  checkoutController._putOrdercancellReject(req,res,next)})
+
+// .all(Authentication)
+// .get((req,res,next)=>{
+//   checkoutController._getOrdersbyId(req,res,next)})
+  // .post((req,res,next)=>{
+  //   console.log('puttttt');
+    
+  //   checkoutController._putOrdercancellReject(req,res,next)})
+  
 
 
 
+  userRouter.post('/wishlist',Authentication,(req,res,next)=>{
+    wishlistcontroller._postcreateWislist(req,res,next)
+  })
+
+ 
+
+  
+  
+  userRouter.get('/wishlist-userId/:id',Authentication,(req,res,next)=>{
+    wishlistcontroller._getwishlistsbyUserId(req,res,next)
+  })
+  
+  
+  userRouter.delete('/wishlist/:id',Authentication,(req,res,next)=>{
+    wishlistcontroller._deletewishlistsbyId(req,res,next)})
 
 export default userRouter;

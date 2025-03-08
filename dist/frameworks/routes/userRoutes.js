@@ -12,6 +12,8 @@ const store_di_1 = require("../dependency_injection/store.di");
 const product_di_1 = require("../dependency_injection/product.di");
 const admin_di_1 = require("../dependency_injection/admin.di");
 const cart_di_1 = require("../dependency_injection/cart.di");
+const checkout_1 = require("../dependency_injection/checkout");
+const wishlist_di_1 = require("../dependency_injection/wishlist.di");
 const userRouter = express_1.default.Router();
 userRouter.post("/refresh-token", (req, res) => {
     (0, jwt_auth_token_1.createAccessToken)(req, res, "user");
@@ -126,6 +128,9 @@ userRouter.get("/categories", userAuthentication_1.Authentication, (req, res, ne
 userRouter.get('/products/:id', userAuthentication_1.Authentication, (req, res, next) => {
     product_di_1.productcontroller.getProducts_storeId(req, res, next);
 });
+userRouter.get('/product/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    product_di_1.productcontroller._getProduct_Id(req, res, next);
+});
 userRouter
     .route('/cart/:id?')
     .all(userAuthentication_1.Authentication)
@@ -134,14 +139,47 @@ userRouter
 })
     .put((req, res, next) => {
     cart_di_1.cartcontroller.updateAddtocart(req, res, next);
-})
-    .delete((req, res, next) => {
-    cart_di_1.cartcontroller._deletecartId(req, res, next);
 });
+// .delete((req,res,next)=>{
+//   cartcontroller._deletecartId(req,res,next)
+// })
 userRouter.get('/cart-user/:userId', userAuthentication_1.Authentication, (req, res, next) => {
     cart_di_1.cartcontroller.getcartbyUserId(req, res, next);
 });
+userRouter.put('/cart-remove/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    cart_di_1.cartcontroller._deletecartId(req, res, next);
+});
 userRouter.get('/cart-product/:productId', userAuthentication_1.Authentication, (req, res, next) => {
     cart_di_1.cartcontroller._getcartbyproductId(req, res, next);
+});
+userRouter.get('/store/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    store_di_1.storeController._getStorebyIdcontroll(req, res, next);
+});
+userRouter.post('/checkout/payment', userAuthentication_1.Authentication, (req, res, next) => {
+    checkout_1.checkoutController._postCheckout(req, res, next);
+});
+userRouter.get('/order-histories/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    checkout_1.checkoutController._getOrdersbyUserId(req, res, next);
+});
+userRouter.get('/order-detail/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    checkout_1.checkoutController._getOrdersbyId(req, res, next);
+});
+userRouter.put('/order-detail/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    checkout_1.checkoutController._putOrdercancellReject(req, res, next);
+});
+// .all(Authentication)
+// .get((req,res,next)=>{
+//   checkoutController._getOrdersbyId(req,res,next)})
+// .post((req,res,next)=>{
+//   console.log('puttttt');
+//   checkoutController._putOrdercancellReject(req,res,next)})
+userRouter.post('/wishlist', userAuthentication_1.Authentication, (req, res, next) => {
+    wishlist_di_1.wishlistcontroller._postcreateWislist(req, res, next);
+});
+userRouter.get('/wishlist-userId/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    wishlist_di_1.wishlistcontroller._getwishlistsbyUserId(req, res, next);
+});
+userRouter.delete('/wishlist/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    wishlist_di_1.wishlistcontroller._deletewishlistsbyId(req, res, next);
 });
 exports.default = userRouter;

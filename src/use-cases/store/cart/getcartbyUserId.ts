@@ -9,8 +9,10 @@ export class Cart_getUseriduseCase{
         
     }
 
-    async execute(userId:string):Promise<CartEntities[]>{
+    async execute(userId:string):Promise<CartEntities|null>{
         const cart=await this.cartrepositories.findByuserId(userId)
+        if(!cart) return null
+        
         return cart
     }
 }

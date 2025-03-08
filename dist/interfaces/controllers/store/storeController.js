@@ -27,7 +27,7 @@ const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 const jwt_auth_token_1 = require("../../jwt/jwt_auth_token");
 class StoreController {
-    constructor(sendMails, checkOtp, storelogin, addproduct, allproduts, storeaddloction, getproduct, putproduct, store20km, getStoreproducts) {
+    constructor(sendMails, checkOtp, storelogin, addproduct, allproduts, storeaddloction, getproduct, putproduct, store20km, getStoreproducts, getStorebyId, getOrdersbyStoreId, putorderComplete) {
         this.sendMails = sendMails;
         this.checkOtp = checkOtp;
         this.storelogin = storelogin;
@@ -38,6 +38,9 @@ class StoreController {
         this.putproduct = putproduct;
         this.store20km = store20km;
         this.getStoreproducts = getStoreproducts;
+        this.getStorebyId = getStorebyId;
+        this.getOrdersbyStoreId = getOrdersbyStoreId;
+        this.putorderComplete = putorderComplete;
     }
     signUp(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -106,7 +109,13 @@ class StoreController {
             try {
                 const { name, quantity, price, description, images, storeId, category } = req.body;
                 console.log("add product", req.body);
-                if (!name || !quantity || !price || !description || !images || !storeId || !category)
+                if (!name ||
+                    !quantity ||
+                    !price ||
+                    !description ||
+                    !images ||
+                    !storeId ||
+                    !category)
                     return next(new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError));
                 const product = yield this.addproduct.execute(storeId, name, quantity, price, description, images, category);
                 return res.status(201).json({ success: true, product });
@@ -139,7 +148,9 @@ class StoreController {
                 if (!lat || !lng || !address)
                     return next(new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError));
                 const location = yield this.storeaddloction.execute(id, lat, lng, address);
-                return res.status(200).json({ message: "success", success: true, location });
+                return res
+                    .status(200)
+                    .json({ message: "success", success: true, location });
             }
             catch (error) {
                 return next(error);
@@ -164,7 +175,7 @@ class StoreController {
             try {
                 const { id } = req.params;
                 if (!id)
-                    return next(new custom_errors_1.CustomError('missing field', 401, error_enum_1.AppError.ValidationError));
+                    return next(new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError));
                 const product = yield this.getproduct.execute(id);
                 return res.status(200).json({ success: true, product });
             }
@@ -179,7 +190,7 @@ class StoreController {
                 const { id } = req.params;
                 const { name, quantity, price, description, images, category } = req.body;
                 if (!id)
-                    return next(new custom_errors_1.CustomError('missing field', 401, error_enum_1.AppError.ValidationError));
+                    return next(new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError));
                 const product = yield this.putproduct.execute(id, name, quantity, price, description, images, category);
                 return res.status(200).json({ success: true, product });
             }
@@ -212,6 +223,51 @@ class StoreController {
                     return next(new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError));
                 const products = yield this.getStoreproducts.execute(id);
                 return res.status(200).json({ success: true, products });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    _getStorebyIdcontroll(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError));
+                const store = yield this.getStorebyId.execute(id);
+                return res.status(200).json({ success: true, store });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    _getordersbyStoreIdcontroll(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError));
+                const orders = yield this.getOrdersbyStoreId.execute(id);
+                return res.status(200).json({ success: true, orders });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    _putOrdercompletecontroll(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const { status, concern } = req.body;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("missing id", 400, error_enum_1.AppError.ValidationError));
+                if (!status)
+                    return next(new custom_errors_1.CustomError("missing field", 400, error_enum_1.AppError.ValidationError));
+                const order = yield this.putorderComplete.execute(id, status, concern);
+                return res.status(200).json({ success: true, order });
             }
             catch (error) {
                 return next(error);

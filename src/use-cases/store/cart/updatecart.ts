@@ -4,24 +4,65 @@ import { IproductRepositories } from "../../../interfaces/repositories/product/I
 import { CustomError } from "../../../utils/errors/custom.errors";
 import { AppError } from "../../../utils/errors/error.enum";
 
-export class Cart_updateuseCase{
-    constructor(
-        private cartrepositories:Icartrepositories,
-        private productrepositories:IproductRepositories
-    ) {
-        
+export class Cart_updateuseCase {
+  constructor(
+    private cartrepositories: Icartrepositories,
+    private productrepositories: IproductRepositories
+  ) {}
+
+  async execute(
+    id: string,
+    userId: string,
+    storeId: string,
+    productId: string,
+    quantity: number,
+    price: number
+  ): Promise<CartEntities> {
+    const findCart = await this.cartrepositories.findById(id);
+    if (!findCart) {
+      throw new CustomError("Cart not found", 404, AppError.ResourceNotFound);
     }
 
-    async execute(cartData:CartEntities):Promise<CartEntities>{
-        const findcart=await this.cartrepositories.findById(cartData.id)
-        if(!findcart)throw new CustomError('cart not found',401,AppError.ResourceNotFound)
-            const findproduct=await this.productrepositories.findById(cartData.productId.toString())
-        if(!findproduct)throw new CustomError('product not found',401,AppError.ResourceNotFound)
-        findcart.quantity=+cartData.quantity,
-    findcart.price=findcart.quantity*findproduct.price
-    
-    const updatecart=await this.cartrepositories.findByIdUpdate(findcart)
-    if(!updatecart)throw new CustomError('cart not  updated',401,AppError.ServerError)
-        return updatecart
+    const findProduct = await this.productrepositories.findById(productId);
+    if (!findProduct) {
+      throw new CustomError(
+        "Product not found",
+        404,
+        AppError.ResourceNotFound
+      );
     }
+
+    const productIndex = findCart.products.findIndex(
+        (product) => typeof product.product === 'object' && '_id' in product.product && product.product._id.toString() === productId
+    );
+
+    if (productIndex === -1) {
+        const product={
+            product:productId,
+      quantity,
+      price
+        }
+        findCart.products.push(product)
+
+    //   throw new CustomError(
+    //     "Product not found in cart",
+    //     404,
+    //     AppError.ResourceNotFound
+    //   );
+
+    }else{
+
+        findCart.products[productIndex].quantity = quantity;
+        findCart.products[productIndex].price = quantity * findProduct.price;
+    }
+    
+
+    // Save the updated cart
+    const updatedCart = await this.cartrepositories.findByIdUpdate(findCart);
+    if (!updatedCart) {
+      throw new CustomError("Cart update failed", 500, AppError.ServerError);
+    }
+
+    return updatedCart;
+  }
 }

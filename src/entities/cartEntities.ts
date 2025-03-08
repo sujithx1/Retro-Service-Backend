@@ -8,9 +8,11 @@ export class CartEntities{
         public id:string,
         public userId:string|ObjectId|IuserTypes,
         public storeId:string|ObjectId|IStore_types,
-        public productId:string|ObjectId|IProduct,
-        public quantity:number,
-        public price:number,
+        public products: Array<{
+            product: string | ObjectId | IProduct;
+            quantity: number;
+            price: number;
+        }>,       
         public createdAt?:Date,
         public updatedAt?:Date,
     ){}

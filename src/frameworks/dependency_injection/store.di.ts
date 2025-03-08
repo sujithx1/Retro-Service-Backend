@@ -13,10 +13,17 @@ import { ProductgetbyIduseCase } from "../../use-cases/store/product/getproductb
 import { Store_putproductuseCase } from "../../use-cases/store/product/putproduct";
 import { Store20kmDistance } from "../../use-cases/store/getallstores";
 import { Store_getproductsbystoreId } from "../../use-cases/store/getproductsbystoreId";
+import { Store_getiduseCase } from "../../use-cases/store/getstoreByid";
+import { Orders_getstoriduseCase } from "../../use-cases/store/checkout/getordersbyStoreId";
+import { CheckoutMongoRepositories } from "../../interfaces/repositories/checkout/checkoutMongoRepositories";
+import { User_orderputuseCase } from "../../use-cases/store/checkout/putorderby";
+import { TransactionMongoRepositories } from "../../interfaces/repositories/transaction/transactionMongoRepositories";
 
 const storeRepositories = new StoreMongoRepositories();
 const walletRepositories = new WalletMongoRepositories();
 const productRepositories = new ProductMongoRepositories();
+const checkoutrepositoires=new  CheckoutMongoRepositories()
+const transactionrepositoires=new TransactionMongoRepositories()
 
 const otpvalidate = new CheckOtp();
 const sendOtp = new SendOtp(storeRepositories, walletRepositories);
@@ -25,7 +32,7 @@ const checkotp = new Store_otpcheck(
   storeRepositories,
   walletRepositories
 );
-const login = new StoreLoginuseCase(storeRepositories);
+const login = new StoreLoginuseCase(storeRepositories)
 const stores20km = new Store20kmDistance(
   storeRepositories,
   productRepositories
@@ -37,7 +44,9 @@ const addLoction = new Store_addlocationuseCase(storeRepositories);
 const getproduct = new ProductgetbyIduseCase(productRepositories);
 const putproduct = new Store_putproductuseCase(productRepositories);
 const storeProducts = new Store_getproductsbystoreId(productRepositories);
-
+const getstorebyid=new Store_getiduseCase(storeRepositories)
+const getordersbyStoreId=new Orders_getstoriduseCase(checkoutrepositoires)
+const putordertstatus=new User_orderputuseCase(checkoutrepositoires,walletRepositories,transactionrepositoires)
 export const storeController = new StoreController(
   sendOtp,
   checkotp,
@@ -48,5 +57,8 @@ export const storeController = new StoreController(
   getproduct,
   putproduct,
   stores20km,
-  storeProducts
+  storeProducts,
+  getstorebyid,
+  getordersbyStoreId,
+  putordertstatus
 );
