@@ -20,6 +20,7 @@ import { Store_getproductsbystoreId } from "../../../use-cases/store/getproducts
 import { Store_getiduseCase } from "../../../use-cases/store/getstoreByid";
 import { Orders_getstoriduseCase } from "../../../use-cases/store/checkout/getordersbyStoreId";
 import { User_orderputuseCase } from "../../../use-cases/store/checkout/putorderby";
+import { User_getOrderbyIduseCase } from "../../../use-cases/store/checkout/getorderById";
 
 export class StoreController {
   constructor(
@@ -35,7 +36,8 @@ export class StoreController {
     private getStoreproducts: Store_getproductsbystoreId,
     private getStorebyId: Store_getiduseCase,
     private getOrdersbyStoreId: Orders_getstoriduseCase,
-    private putorderComplete: User_orderputuseCase
+    private putorderComplete: User_orderputuseCase,
+    private getorderById:User_getOrderbyIduseCase
   ) {}
 
   async signUp(req: Request, res: Response, next: NextFunction) {
@@ -319,6 +321,28 @@ export class StoreController {
        
 
       const order = await this.putorderComplete.execute(id, status, concern);
+      return res.status(200).json({ success: true, order });
+    } catch (error) {
+      return next(error);
+    }
+  }
+  async _getOrderDetailcontroll(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.params;
+
+
+      if (!id)
+        return next(
+          new CustomError("missing id", 400, AppError.ValidationError)
+        );
+     ;
+       
+
+      const order = await this.getorderById.execute(id)
       return res.status(200).json({ success: true, order });
     } catch (error) {
       return next(error);

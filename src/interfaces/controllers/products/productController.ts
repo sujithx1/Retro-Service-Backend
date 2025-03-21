@@ -3,12 +3,14 @@ import { Store_getproductsbystoreId } from "../../../use-cases/store/getproducts
 import { CustomError } from "../../../utils/errors/custom.errors";
 import { AppError } from "../../../utils/errors/error.enum";
 import { ProductgetbyIduseCase } from "../../../use-cases/store/product/getproductbyid";
+import { GetProductSearchuseCase } from "../../../use-cases/store/product/SearchProduct";
 
 
 export class ProductController{
     constructor(
         private getproductbyStorid:Store_getproductsbystoreId,
         private getproductByid:ProductgetbyIduseCase,
+        private getproductSearch:GetProductSearchuseCase
     ) {
         
     }
@@ -34,6 +36,20 @@ export class ProductController{
         console.log(product);
         
             return res.status(200).json({success:true,product})
+        } catch (error) {
+            return next(error)
+            
+        }
+    }
+    async _getProductByearch(req:Request,res:Response,next:NextFunction){
+        try {
+            const searchQuery = (req.query.search as string) || ""; // Get 'search' query parameter
+            console.log(searchQuery,"searching");
+            
+            const products=await this.getproductSearch.execute(searchQuery)
+        console.log(products);
+        
+            return res.status(200).json({success:true,products})
         } catch (error) {
             return next(error)
             

@@ -200,7 +200,12 @@ userRouter.get('/product/:id',Authentication,(req,res,next)=>{
 userRouter
 .route('/cart/:id?')
   .all(Authentication)
+
+  .get((req,res,next)=>{
+    cartcontroller._getBycartId(req,res,next)
+  })
   .post((req,res,next)=>{
+
   cartcontroller.addToCart(req,res,next)
 })
   .put((req,res,next)=>{
@@ -269,5 +274,7 @@ userRouter.put('/order-detail/:id',Authentication,(req,res,next)=>{
   
   userRouter.delete('/wishlist/:id',Authentication,(req,res,next)=>{
     wishlistcontroller._deletewishlistsbyId(req,res,next)})
+  userRouter.get('/product',Authentication,(req,res,next)=>{
+    productcontroller._getProductByearch(req,res,next)})
 
 export default userRouter;

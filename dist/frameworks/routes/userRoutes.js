@@ -134,6 +134,9 @@ userRouter.get('/product/:id', userAuthentication_1.Authentication, (req, res, n
 userRouter
     .route('/cart/:id?')
     .all(userAuthentication_1.Authentication)
+    .get((req, res, next) => {
+    cart_di_1.cartcontroller._getBycartId(req, res, next);
+})
     .post((req, res, next) => {
     cart_di_1.cartcontroller.addToCart(req, res, next);
 })
@@ -181,5 +184,8 @@ userRouter.get('/wishlist-userId/:id', userAuthentication_1.Authentication, (req
 });
 userRouter.delete('/wishlist/:id', userAuthentication_1.Authentication, (req, res, next) => {
     wishlist_di_1.wishlistcontroller._deletewishlistsbyId(req, res, next);
+});
+userRouter.get('/product', userAuthentication_1.Authentication, (req, res, next) => {
+    product_di_1.productcontroller._getProductByearch(req, res, next);
 });
 exports.default = userRouter;

@@ -3,6 +3,7 @@ import { TransactionEntities } from "../../../entities/transactionEntities";
 import { Icartrepositories } from "../../../interfaces/repositories/cart/Icartrepositories";
 import { IcheckoutRepositories } from "../../../interfaces/repositories/checkout/icheckoutRepositories";
 import { ItransactionRepositories } from "../../../interfaces/repositories/transaction/ItransactionRepositories";
+import { IwalletRepositories } from "../../../interfaces/repositories/wallet/Iwalletrepositories";
 import { CustomError } from "../../../utils/errors/custom.errors";
 import { AppError } from "../../../utils/errors/error.enum";
 
@@ -10,7 +11,8 @@ export class CheckOut_useCase{
     constructor(
         private checkoutrepositories:IcheckoutRepositories,
         private cartrepositoires:Icartrepositories,
-           private transactionrepositories:ItransactionRepositories
+        private transactionrepositories:ItransactionRepositories,
+        private walletrepositories:IwalletRepositories
     ) {
         
     }
@@ -50,13 +52,20 @@ export class CheckOut_useCase{
                     "purchase",
                     Number(total),
                     "complete",
-                    "razorypay",
+                    paymentMethod as "razorypay" | "wallet" | "cod",
                   "product"
         
                    )
         
                    await this.transactionrepositories.create(usertransaction)
-
+if (paymentMethod=="wallet") {
+    const userwallet=await this.walletrepositories.findByuserId(cart.userId.toString())
+    if (userwallet) {
+     userwallet.balance=-total   
+    }
+    
+    
+}
 
         await this.cartrepositoires.findByIdAndDelete(cart.id)
 

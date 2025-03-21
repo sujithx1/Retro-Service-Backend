@@ -1,4 +1,5 @@
 import { Product_Entities } from "../../../entities/ProductEntities";
+import { ICategory } from "../../../frameworks/db/models/Category_Model";
 import { IProduct, Product_Model } from "../../../frameworks/db/models/ProductModel";
 import { IproductRepositories } from "./IproductRepositories";
 
@@ -11,7 +12,7 @@ const returnproduct = (product: IProduct): Product_Entities => {
     product.name,
     product.description,
     product.stock,
-    product.category.toString(),
+    product.category as ICategory,
     product.price,
     product.images,
     product.isBlock,
@@ -45,7 +46,12 @@ export class ProductMongoRepositories implements IproductRepositories{
 
   async findById(id: string): Promise<Product_Entities|null> {
       const product=await Product_Model.findById(id)
+      .populate('category','name description')
+.exec()
       if(!product)return null
+
+      // await product.populate("storeId", "name ownername")
+
       return  returnproduct(product)
   }
 
@@ -57,15 +63,35 @@ export class ProductMongoRepositories implements IproductRepositories{
         { new: true, runValidators: true,upsert:true } // `new: true` returns the updated document
     );
     if(!updatedProduct)return null
+
+    // await updatedProduct.populate({
+    //   path: "category",
+    //   select: "name description",
+    // })
+    // await updatedProduct.populate({
+    //   path:'storeId',
+    //   select:'name owner_name'
+    // })
     return returnproduct(updatedProduct)
 
   }
 
   async findBystoreId(storeId: string): Promise<Product_Entities[] > {
       const products=await Product_Model.find({storeId:storeId})
+
     
       return products.map((item)=>returnproduct(item))
   }
+
+
+   async searchByname(quary: string): Promise<Product_Entities[]> {
+    
+    const products=await Product_Model.find({
+      name: { $regex: quary, $options: "i" }, // Case-insensitive search
+    })
+
+return products.map((item)=>returnproduct(item))      
+   }
 
   
 }

@@ -27,7 +27,7 @@ const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 const jwt_auth_token_1 = require("../../jwt/jwt_auth_token");
 class StoreController {
-    constructor(sendMails, checkOtp, storelogin, addproduct, allproduts, storeaddloction, getproduct, putproduct, store20km, getStoreproducts, getStorebyId, getOrdersbyStoreId, putorderComplete) {
+    constructor(sendMails, checkOtp, storelogin, addproduct, allproduts, storeaddloction, getproduct, putproduct, store20km, getStoreproducts, getStorebyId, getOrdersbyStoreId, putorderComplete, getorderById) {
         this.sendMails = sendMails;
         this.checkOtp = checkOtp;
         this.storelogin = storelogin;
@@ -41,6 +41,7 @@ class StoreController {
         this.getStorebyId = getStorebyId;
         this.getOrdersbyStoreId = getOrdersbyStoreId;
         this.putorderComplete = putorderComplete;
+        this.getorderById = getorderById;
     }
     signUp(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -267,6 +268,21 @@ class StoreController {
                 if (!status)
                     return next(new custom_errors_1.CustomError("missing field", 400, error_enum_1.AppError.ValidationError));
                 const order = yield this.putorderComplete.execute(id, status, concern);
+                return res.status(200).json({ success: true, order });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    _getOrderDetailcontroll(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("missing id", 400, error_enum_1.AppError.ValidationError));
+                ;
+                const order = yield this.getorderById.execute(id);
                 return res.status(200).json({ success: true, order });
             }
             catch (error) {

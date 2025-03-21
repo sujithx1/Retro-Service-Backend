@@ -16,6 +16,9 @@ export class User_orderputuseCase {
     status: "returned" | "cancelled"|"completed"|"return-confirmed",
     message?: string
   ): Promise<CheckoutEntities> {
+
+    console.log("return functionm",status , message);
+    
     const findorder = await this.orderrepositories.findById(id);
     if (!findorder)
       throw new CustomError("order not found", 404, AppError.ResourceNotFound);

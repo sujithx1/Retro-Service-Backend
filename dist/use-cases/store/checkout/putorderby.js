@@ -21,6 +21,7 @@ class User_orderputuseCase {
     }
     execute(id, status, message) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("return functionm", status, message);
             const findorder = yield this.orderrepositories.findById(id);
             if (!findorder)
                 throw new custom_errors_1.CustomError("order not found", 404, error_enum_1.AppError.ResourceNotFound);

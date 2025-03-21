@@ -16,7 +16,7 @@ const walletrepositories=new WalletMongoRepositories()
 
 
 
-const postcheckout=new CheckOut_useCase(checkoutrepositories,cartrepositoires,transactionrepositories)
+const postcheckout=new CheckOut_useCase(checkoutrepositories,cartrepositoires,transactionrepositories,walletrepositories)
 const getordersByuserId=new Orders_getuserIduseCase(checkoutrepositories)
 const getorderbyId=new User_getOrderbyIduseCase(checkoutrepositories)
 const putchekcoutorder=new User_orderputuseCase(checkoutrepositories,walletrepositories,transactionrepositories)

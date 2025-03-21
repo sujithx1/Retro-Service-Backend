@@ -77,9 +77,15 @@ router.get('/orders/:id',Authentication,(req,res,next)=>{
     storeController._getordersbyStoreIdcontroll(req,res,next)
 
 })
-router.put('/order/:id',Authentication,(req,res,next)=>{
+
+router.route('/order/:id')
+.all(Authentication)
+.put((req,res,next)=>{
     storeController._putOrdercompletecontroll(req,res,next)
 
+})
+.get((req,res,next)=>{
+    storeController._getOrderDetailcontroll(req,res,next)
 })
 
 export default router

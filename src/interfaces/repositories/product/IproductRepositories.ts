@@ -7,4 +7,5 @@ export interface IproductRepositories{
     findById(id:string):Promise<Product_Entities|null>
     findByIdandUpdate(productData:Product_Entities):Promise<Product_Entities|null>
     findBystoreId(storeId:string):Promise<Product_Entities[]>
+    searchByname(quary:string):Promise<Product_Entities[]>
 }

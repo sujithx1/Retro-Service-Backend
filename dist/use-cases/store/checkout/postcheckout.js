@@ -15,10 +15,11 @@ const transactionEntities_1 = require("../../../entities/transactionEntities");
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 class CheckOut_useCase {
-    constructor(checkoutrepositories, cartrepositoires, transactionrepositories) {
+    constructor(checkoutrepositories, cartrepositoires, transactionrepositories, walletrepositories) {
         this.checkoutrepositories = checkoutrepositories;
         this.cartrepositoires = cartrepositoires;
         this.transactionrepositories = transactionrepositories;
+        this.walletrepositories = walletrepositories;
     }
     execute(cartId, total, paymentMethod, transactionId) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -31,8 +32,14 @@ class CheckOut_useCase {
             }, total, paymentMethod, "completed", "pending", transactionId);
             console.log(checkoutEntity);
             const checkout = yield this.checkoutrepositories.create(checkoutEntity);
-            const usertransaction = new transactionEntities_1.TransactionEntities("", checkout.userId.toString(), "purchase", Number(total), "complete", "razorypay", "product");
+            const usertransaction = new transactionEntities_1.TransactionEntities("", checkout.userId.toString(), "purchase", Number(total), "complete", paymentMethod, "product");
             yield this.transactionrepositories.create(usertransaction);
+            if (paymentMethod == "wallet") {
+                const userwallet = yield this.walletrepositories.findByuserId(cart.userId.toString());
+                if (userwallet) {
+                    userwallet.balance = -total;
+                }
+            }
             yield this.cartrepositoires.findByIdAndDelete(cart.id);
             return checkout;
         });

@@ -41,115 +41,126 @@ app.use("/api/employee", employeeRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/store", storeRouter);
 app.use(errorHandler as express.ErrorRequestHandler);
+  const activeUsers = new Map<string, string>(); // userId -> socketId
+  const roomPeers: Record<string, { offerReceived: boolean }> = {};
+  const roomAnswer: Record<string, {  answerSent:boolean}> = {};
 
-// Store the socket connections by user/employee IDs
-  let activeConnections: { [key: string]: string } = {};
-// When a user or employee connects
+
 io.on("connection", (socket) => {
-  console.log("A user/employee connected");
+  console.log(`A user connected: ${socket.id}`);
+  console.log(`Total connections: ${io.engine.clientsCount}`);
 
- 
 
+  // 🔹 Register user with socket ID
   socket.on("register", async (userType: string, userId: string) => {
-    console.log("message types connection",userType,userId);
-    
-    try {
-      // Save or update active connection in the database
+    console.log(`User registered: ${userType}, ID: ${userId}, Socket: ${socket.id}`);
 
+    // Store in activeUsers map
+    activeUsers.set(userId, socket.id); 
+ 
+    try { 
+      // Store in database
       await ActiveConnection.findOneAndUpdate(
         { userType, userId },
         { socketId: socket.id },
         { upsert: true }
       );
-
-
-      console.log(`User/Employee ${userId} registered as ${userType}`);
     } catch (error) {
-      console.error("Error registering user/employee:", error);
+      console.error("Error registering user:", error);
     }
   });
 
+ 
+ // Handle call initiation
+ 
+  // Handle Call Request
+  socket.on('callData',({ senderId, receiverId,  callType })=>{
+    console.log(senderId,receiverId,callType);
+    const usersideId=activeUsers.get(senderId)
+    console.log("userSocket ID",usersideId);
+    console.log("Active users:", [...activeUsers.entries()]);
+    console.log("All rooms:", io.sockets.adapter.rooms);
+    
+    
+    if (usersideId) {
+      io.to(usersideId).emit('callDetails',{senderId,receiverId,callType})
+      console.log("sended call data",usersideId);
+      
+      
+    }
+
+    
+    
+  })
+  socket.on("call", ({ senderId,senderName, receiverId, roomId, callType }) => {
+    console.log("📞 Incoming Call Request:", { senderId,senderName, receiverId, callType });
+socket.join(roomId)
+    const receiverSocketId = activeUsers.get(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("callIncoming", { callType, senderId, roomId,senderName });
+      console.log("📢 Call Incoming event emitted");
+    }
+  });
+
+  // Handle Call Acceptance
+  socket.on("acceptCall", ({ roomId, employeeId }) => {
+    console.log(`✅ Call Accepted in room: ${roomId}, Employee ID: ${employeeId}`);
+
+    socket.join(roomId); // Ensure user joins the room
+    console.log(`🔗 User joined room: ${roomId}`);
+
+    setTimeout(() => {  
+      console.log(`📢 Emitting "callAccepted" to room: ${roomId}`);
+      io.to(roomId).emit("callAccepted", { roomId, employeeId });
+    }, 100); // Small delay to ensure room join
+  });
+socket.on('rejectCall',({roomId,senderId})=>{
+  console.log(senderId,roomId);
+  io.to(roomId).emit('rejected',{roomId,senderId})
+  
+})
 
 
+  // 🔹 Handle Messages (Fixed)
   socket.on(
     "sendMessage",
-    async ({
-      sender,
-      receiver,
-      message,
-      userType,
-      timestamp,
-      status
-    }: {
-      sender: string;
-      receiver: string;
-      message: string;
-      userType:"user"|"employee",
-      timestamp:string,
-      status: "seen" | "delivered";
-    }) => {
-      console.log("message connnectin ",`
-        from = ${sender},
-        reciver  = ${receiver}  ,
-        message = ${message}  , 
-        usertype: ${userType} . 
-        timestamp ${timestamp}`);
-      
-      try {
-        // Fetch the recipient's socket ID from the database
-        const recipient = await ActiveConnection.findOne({
-          userType: userType,
-          userId: receiver,
-        });
+    async ({ sender, receiver, message, userType, timestamp, status }) => {
+      console.log(`Message from ${sender} to ${receiver}: ${message}`);
 
-        // Save the message in the database
-        await new MessageModel(
-          {  sender, receiver, message,userType})
-          .save();
- 
-        // await MessageModel.create({sender:sender,receiver:receiver,message:message,userType:userType})
+      try {
+        // Get recipient socket from DB
+        const recipient = await ActiveConnection.findOne({ userType, userId: receiver });
+
+        // Save message in DB
+        await new MessageModel({ sender, receiver, message, userType }).save();
 
         if (recipient) {
-          
-          // Send the message to the recipient if they're online
-          io.to(recipient.socketId).emit("chatMessage", {
-            sender: sender,
-            message,
-            timestamp,
-            status
-          });
-
-          console.log("online","user id",sender,"empId",receiver,"message",message );
-          
+          io.to(recipient.socketId).emit("chatMessage", { sender, message, timestamp, status });
+          console.log(`Message sent to ${receiver} (Socket: ${recipient.socketId})`);
         } else {
-          console.log("offline","user id",sender,"empId",receiver,"message",message );
-          console.log(`Employee ${receiver} is not online.`);
+          console.log(`User ${receiver} is offline.`);
         }
       } catch (error) {
         console.error("Error sending message:", error);
-      } 
+      }
     }
   );
 
-  
+  // 🔹 New Booking Notification
   socket.on("newBooking", (booking) => {
     console.log("New Booking Request:", booking);
-    io.emit("bookingNotification", booking); // Notify all clients
+    io.emit("bookingNotification", booking);
   });
 
- 
-
-
-  socket.on("disconnect", async () => {
-    try {
-      // Remove disconnected socket from active connections in the database
-      await ActiveConnection.deleteOne({ socketId: socket.id });
-      console.log(`Socket ${socket.id} disconnected`);
-    } catch (error) {
-      console.error("Error during disconnection:", error);
+  // 🔹 Handle disconnection (Fixed)
+  socket.on("disconnect", async (reason) => {
+    const userId = [...activeUsers.entries()].find(([_, sid]) => sid === socket.id)?.[0];
+    if (userId) {
+      activeUsers.delete(userId);
+      console.log(`User ${userId} removed.`);
     }
-  });
-  });
+      });
+});
 
 // Start the server
 export {io}

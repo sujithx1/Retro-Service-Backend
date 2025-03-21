@@ -13,9 +13,10 @@ exports.ProductController = void 0;
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 class ProductController {
-    constructor(getproductbyStorid, getproductByid) {
+    constructor(getproductbyStorid, getproductByid, getproductSearch) {
         this.getproductbyStorid = getproductbyStorid;
         this.getproductByid = getproductByid;
+        this.getproductSearch = getproductSearch;
     }
     getProducts_storeId(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -41,6 +42,20 @@ class ProductController {
                 const product = yield this.getproductByid.execute(id);
                 console.log(product);
                 return res.status(200).json({ success: true, product });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    _getProductByearch(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const searchQuery = req.query.search || ""; // Get 'search' query parameter
+                console.log(searchQuery, "searching");
+                const products = yield this.getproductSearch.execute(searchQuery);
+                console.log(products);
+                return res.status(200).json({ success: true, products });
             }
             catch (error) {
                 return next(error);

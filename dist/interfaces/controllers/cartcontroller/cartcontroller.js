@@ -13,12 +13,13 @@ exports.CartController = void 0;
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 class CartController {
-    constructor(newCart, updatedcart, cartbyUserId, getcartbyProductId, deletecartuseingId) {
+    constructor(newCart, updatedcart, cartbyUserId, getcartbyProductId, deletecartuseingId, getBIcartId) {
         this.newCart = newCart;
         this.updatedcart = updatedcart;
         this.cartbyUserId = cartbyUserId;
         this.getcartbyProductId = getcartbyProductId;
         this.deletecartuseingId = deletecartuseingId;
+        this.getBIcartId = getBIcartId;
     }
     addToCart(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -53,7 +54,6 @@ class CartController {
     getcartbyUserId(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log(req.body);
                 const { userId } = req.params;
                 if (!userId)
                     return next(new custom_errors_1.CustomError('missing field', 401, error_enum_1.AppError.ValidationError));
@@ -91,6 +91,20 @@ class CartController {
                 if (!productId)
                     return next(new custom_errors_1.CustomError('missing productId', 401, error_enum_1.AppError.ValidationError));
                 const cart = yield this.deletecartuseingId.execute(id, productId);
+                return res.status(200).json({ success: true, cart });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    _getBycartId(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError('missing id', 401, error_enum_1.AppError.ValidationError));
+                const cart = yield this.getBIcartId.execute(id);
                 return res.status(200).json({ success: true, cart });
             }
             catch (error) {

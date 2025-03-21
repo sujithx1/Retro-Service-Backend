@@ -54,7 +54,7 @@ const CheckoutSchema = new mongoose_1.Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ["razorpay", "cod"],
+        enum: ["razorpay", "cod", "wallet"],
         required: true
     },
     transactionId: { type: String, default: null }, // Razorpay transaction ID

@@ -47,7 +47,7 @@ const CheckoutSchema = new Schema<ICheckout>(
     },
     paymentMethod: { 
       type: String, 
-      enum: ["razorpay", "cod"], 
+      enum: ["razorpay", "cod","wallet"], 
       required: true 
     },
     transactionId: { type: String, default: null }, // Razorpay transaction ID

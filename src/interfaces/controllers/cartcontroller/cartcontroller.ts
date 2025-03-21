@@ -6,6 +6,7 @@ import { Cart_updateuseCase } from "../../../use-cases/store/cart/updatecart";
 import { Cart_getUseriduseCase } from "../../../use-cases/store/cart/getcartbyUserId";
 import { Cart_getProductIduseCase } from "../../../use-cases/store/cart/getcartbyProductId";
 import { Cart_deleteCartid } from "../../../use-cases/store/cart/deletecart";
+import { GetCart_byIduseCase } from "../../../use-cases/store/cart/getbycart";
 
 export class CartController{
     constructor(
@@ -14,6 +15,7 @@ export class CartController{
         private cartbyUserId:Cart_getUseriduseCase,
         private getcartbyProductId:Cart_getProductIduseCase,
         private deletecartuseingId:Cart_deleteCartid,
+        private getBIcartId:GetCart_byIduseCase
 
     ) {
         
@@ -56,7 +58,6 @@ const cart=await this.updatedcart.execute(id,userId,storeId,productId,quantity,p
     async getcartbyUserId(req:Request,res:Response,next:NextFunction){
         try {
 
-            console.log(req.body);
             const {userId}=req.params
             if(!userId)return next(new CustomError('missing field',401,AppError.ValidationError))
 const cart=await this.cartbyUserId.execute(userId)
@@ -66,6 +67,8 @@ const cart=await this.cartbyUserId.execute(userId)
             return next(error)
         }
     }
+
+
     async _getcartbyproductId(req:Request,res:Response,next:NextFunction){
         try {
 
@@ -94,6 +97,21 @@ const cart=await this.deletecartuseingId.execute(id,productId)
             return next(error)
         }
     }
+    async _getBycartId(req:Request,res:Response,next:NextFunction){
+        try {
+
+            
+            const {id}=req.params
+            if(!id)return next(new CustomError('missing id',401,AppError.ValidationError))
+const cart=await this.getBIcartId.execute(id)
+   
+            return res.status(200).json({success:true,cart})
+            
+        } catch (error) {
+            return next(error)
+        }
+    }
+    
 
 
    

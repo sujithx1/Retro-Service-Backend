@@ -1,4 +1,5 @@
 import { ObjectId } from "mongoose";
+import { ICategory } from "../frameworks/db/models/Category_Model";
 
 
 
@@ -9,7 +10,7 @@ export class Product_Entities{
         public name:string,
         public description:string,
         public stock:number,
-        public category:string,
+        public category:string | ObjectId | ICategory,
         public price:number,
         public images:string[],
         public isBlock:boolean=false,

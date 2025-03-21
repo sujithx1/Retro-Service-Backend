@@ -3,6 +3,7 @@ import { CartMongoRepositories } from "../../interfaces/repositories/cart/cartMo
 import { ProductMongoRepositories } from "../../interfaces/repositories/product/productmongorepositories";
 import { AddtoCartuseCase } from "../../use-cases/store/cart/addtoCart";
 import { Cart_deleteCartid } from "../../use-cases/store/cart/deletecart";
+import { GetCart_byIduseCase } from "../../use-cases/store/cart/getbycart";
 import { Cart_getProductIduseCase } from "../../use-cases/store/cart/getcartbyProductId";
 import { Cart_getUseriduseCase } from "../../use-cases/store/cart/getcartbyUserId";
 import { Cart_updateuseCase } from "../../use-cases/store/cart/updatecart";
@@ -18,5 +19,6 @@ const updatedCart=new Cart_updateuseCase(cartrepositories,
 const cartgetuserId=new Cart_getUseriduseCase(cartrepositories)
 const cartgetproductId=new Cart_getProductIduseCase(cartrepositories)
 const cart_delete=new Cart_deleteCartid(cartrepositories)
+const cartgetById=new GetCart_byIduseCase(cartrepositories)
 
-export const cartcontroller=new CartController(newCart,updatedCart,cartgetuserId,cartgetproductId,cart_delete)
+export const cartcontroller=new CartController(newCart,updatedCart,cartgetuserId,cartgetproductId,cart_delete,cartgetById)
