@@ -27,8 +27,8 @@ const loginValidates = (email, password) => {
 };
 exports.loginValidates = loginValidates;
 const EmployeeSignupValidate = (data) => {
-    const { username, email, phone, password, skills, experience } = data;
-    if (!username || !email || !phone || !password || !skills || !experience) {
+    const { username, email, phone, password, skills, experience, proof } = data;
+    if (!username || !email || !phone || !password || !skills || !experience || !proof) {
         throw new Error("All field Required");
     }
     return true;

@@ -21,12 +21,14 @@ class Emp_Login_useCase {
             const employee = yield this.employeeRespositories.findByEmail(email);
             if (!employee)
                 throw new Error("Email not registerd");
+            if (employee.isValidated === false)
+                throw new Error('Employee is not Verified');
             if (employee.isActive == false)
                 throw new Error("Employee is Blocked");
             const compare = yield (0, hashPassword_1.comparePassword)(password, employee.password);
             if (!compare)
                 throw new Error("Password not matched");
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isValidated, employee.proof, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
         });
     }
 }

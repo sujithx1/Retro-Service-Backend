@@ -20,9 +20,9 @@ class EmployeeSignup {
     }
     execute(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { username, email, phone, password, skills, experience } = data;
+            const { username, email, phone, password, skills, experience, proof } = data;
             const hashPassword = yield (0, hashPassword_1.hashpass)(password);
-            const employee = new EmployeeEntities_1.EmployeeEntities("", username, email, phone, hashPassword, skills, experience);
+            const employee = new EmployeeEntities_1.EmployeeEntities("", username, email, phone, hashPassword, skills, experience, false, proof);
             const newEmployee = yield this.employeRepositories.save(employee);
             const wallet = new walletEntities_1.WalletEntities("", newEmployee.id, "employee", 0);
             this.walletrepositories.create(wallet);

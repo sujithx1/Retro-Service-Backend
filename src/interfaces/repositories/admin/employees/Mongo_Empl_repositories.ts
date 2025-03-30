@@ -1,3 +1,4 @@
+import { isTemplateExpression } from "typescript";
 import { EmployeeEntities } from "../../../../entities/EmployeeEntities";
 import { EmployeeModel } from "../../../../frameworks/db/models/EmployeeModel";
 import { IEmployee_admin_Repositories } from "./admin_emplRepositories";
@@ -16,8 +17,11 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
                   item.password,
                   item.skills,
                   item.experience,
+                  item.isValidated,
+                  item.proof,
                   item.isActive,
                   item.profilePic,
+
                   item.location
                  ,
                   item.authSource,
@@ -41,6 +45,8 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
             employee.password,
             employee.skills,
             employee.experience,
+            employee.isValidated,
+            employee.proof,
             employee.isActive,
             employee.profilePic,
             employee.location,
@@ -74,6 +80,8 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
         employedata.password,
         employedata.skills,
         employedata.experience,
+        employedata.isValidated,
+        employedata.proof,
         employedata.isActive,
         employedata.profilePic,
         employedata.location 

@@ -26,9 +26,7 @@ const jwt_auth_token_1 = require("../../jwt/jwt_auth_token");
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 class AdminController {
-    constructor(admiside, getcategory, newCategory, editCategory, blockCategory, getJobs, newJobs, editJobs, delJobs, getEmployees, editEmployee, delEmployee, getUserss, putUser, delUser, getfeedbacks, putfeedbackrefund
-    // private newProduct: Admin_add_product_Usecase,
-    ) {
+    constructor(admiside, getcategory, newCategory, editCategory, blockCategory, getJobs, newJobs, editJobs, delJobs, getEmployees, editEmployee, delEmployee, getUserss, putUser, delUser, getfeedbacks, putfeedbackrefund, approve_mechanic, getAlltransactions) {
         this.admiside = admiside;
         this.getcategory = getcategory;
         this.newCategory = newCategory;
@@ -46,6 +44,8 @@ class AdminController {
         this.delUser = delUser;
         this.getfeedbacks = getfeedbacks;
         this.putfeedbackrefund = putfeedbackrefund;
+        this.approve_mechanic = approve_mechanic;
+        this.getAlltransactions = getAlltransactions;
     }
     login(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -88,7 +88,7 @@ class AdminController {
                 });
             }
             catch (error) {
-                console.log("Admin login error", error.message);
+                // console.log("Admin login error", error.message);
                 return next(error);
             }
         });
@@ -108,7 +108,7 @@ class AdminController {
     //     );
     //      res.status(201).json({message:'product cretaed',product})
     //      return
-    //   } catch (error:any) {
+    //   } catch (error) {
     //     console.log("error -> admin_product",error.message);
     //     res.status(400).json({error:error.message})
     //     return
@@ -144,7 +144,6 @@ class AdminController {
                 return res.status(200).json({ message: "Category Updated", category });
             }
             catch (error) {
-                console.log("error-> admin_edit_controll", error.message);
                 // res.status(400).json({error:error.message})
                 return next(error);
             }
@@ -158,10 +157,12 @@ class AdminController {
             }
             try {
                 const category = yield this.blockCategory.execute(id);
-                return res.status(200).json({ message: "Success Blocked Category", category });
+                return res
+                    .status(200)
+                    .json({ message: "Success Blocked Category", category });
             }
             catch (error) {
-                console.log("error -> admin category_del", error.message);
+                // console.log("error -> admin category_del", error.message);
                 return next(error);
             }
         });
@@ -171,10 +172,10 @@ class AdminController {
             try {
                 console.log("get job controller");
                 const jobs = yield this.getJobs.execute();
-                return res.status(200).json({ message: 'success', jobs });
+                return res.status(200).json({ message: "success", jobs });
             }
             catch (error) {
-                console.log("error-> admin-getjob controller", error.message);
+                // console.log("error-> admin-getjob controller",error.message);
                 return next(error);
             }
         });
@@ -191,7 +192,7 @@ class AdminController {
                 return;
             }
             catch (error) {
-                next(error);
+                return next(error);
             }
         });
     }
@@ -209,7 +210,7 @@ class AdminController {
                 res.status(200).json({ message: "Job edited", job });
             }
             catch (error) {
-                next(error);
+                return next(error);
             }
         });
     }
@@ -239,7 +240,7 @@ class AdminController {
                 res.status(200).json({ message: "success", employees: withoutPassword });
             }
             catch (error) {
-                console.log("error->adminget_Employees controll", error.message);
+                // console.log("error->adminget_Employees controll", error.message);
                 next(error);
             }
         });
@@ -256,7 +257,7 @@ class AdminController {
                 res.status(200).json({ message: "success ", employee: withoutpassword });
             }
             catch (error) {
-                console.log("error-> admin put employee controller", error.message);
+                // console.log("error-> admin put employee controller", error.message);
                 next(error);
             }
         });
@@ -286,7 +287,7 @@ class AdminController {
                 res.status(200).json({ message: "success", users: withoutPassword });
             }
             catch (error) {
-                console.log("error->adminget_Employees controll", error.message);
+                // console.log("error->adminget_Employees controll", error.message);
                 next(error);
             }
         });
@@ -303,7 +304,7 @@ class AdminController {
                 res.status(200).json({ message: "success ", user: withoutpassword });
             }
             catch (error) {
-                console.log("error->admin -> putuser ", error.message);
+                // console.log("error->admin -> putuser ",error.message);
                 next(error);
             }
         });
@@ -317,7 +318,7 @@ class AdminController {
                 res.status(200).json({ message: "success", user: withoutPassword });
             }
             catch (error) {
-                console.log("error -> admin user del controller", error.message);
+                // console.log("error -> admin user del controller", error.message);
                 next(error);
             }
         });
@@ -329,7 +330,7 @@ class AdminController {
                 res.status(200).json({ message: "success", categories });
             }
             catch (error) {
-                console.log("error - > admin Controller getcategory", error.message);
+                // console.log("error - > admin Controller getcategory",error.message);
                 next(error);
             }
         });
@@ -342,7 +343,7 @@ class AdminController {
                 res.status(200).json({ message: "success", feedback });
             }
             catch (error) {
-                console.log("error - > admin Controller getfeedbacks", error.message);
+                // console.log("error - > admin Controller getfeedbacks",error.message);
                 next(error);
             }
         });
@@ -358,8 +359,33 @@ class AdminController {
                 res.status(200).json({ message: "success", feedback });
             }
             catch (error) {
-                console.log("error - > admin Controller getfeedbacks", error.message);
                 next(error);
+            }
+        });
+    }
+    Admin_put_approvedMechancic_controll(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError));
+                yield this.approve_mechanic.execute(id);
+                return res.status(200).json({ message: "success" });
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    _admingetallTransactions(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const transactions = yield this.getAlltransactions.execute();
+                return res.status(200).json({ message: "success", transactions });
+            }
+            catch (error) {
+                console.log(error);
+                return next(error);
             }
         });
     }

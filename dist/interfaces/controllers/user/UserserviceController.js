@@ -30,7 +30,7 @@ const razorpay_1 = __importDefault(require("razorpay"));
 const cronjobReject_1 = require("../../../utils/helper/db_helper/cronjobReject");
 const cronjobCancelling_1 = require("../../../utils/helper/db_helper/cronjobCancelling");
 class UserServiceController {
-    constructor(createrewservicesmech, getreqServiceUsecase, putServicepaymentComplete, getbookingHistory, putReqserviceuseCase, getServicePayment, getsrachjobsUser, getNearestEmployees, putserviceSpecificemp, createServicePayment, gettranasactionByuser) {
+    constructor(createrewservicesmech, getreqServiceUsecase, putServicepaymentComplete, getbookingHistory, putReqserviceuseCase, getServicePayment, getsrachjobsUser, getNearestEmployees, putserviceSpecificemp, createServicePayment, gettranasactionByuser, getserviceBookingDetails) {
         this.createrewservicesmech = createrewservicesmech;
         this.getreqServiceUsecase = getreqServiceUsecase;
         this.putServicepaymentComplete = putServicepaymentComplete;
@@ -42,6 +42,7 @@ class UserServiceController {
         this.putserviceSpecificemp = putserviceSpecificemp;
         this.createServicePayment = createServicePayment;
         this.gettranasactionByuser = gettranasactionByuser;
+        this.getserviceBookingDetails = getserviceBookingDetails;
     }
     reqserviceEmployee(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -113,7 +114,6 @@ class UserServiceController {
     userServiceRazorpaypayment_Confirm_Controll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("ctroll");
                 const { id } = req.params;
                 const { vehicleNumber, phone, amount, } = req.body;
                 if (!vehicleNumber ||
@@ -297,6 +297,23 @@ class UserServiceController {
                 const transactions = yield this.gettranasactionByuser.execute(id);
                 console.log('transactions ', transactions);
                 res.status(200).json({ message: 'success', success: true, transactions });
+            }
+            catch (error) {
+                console.log("error user put contrroll", error);
+                return next(error);
+            }
+        });
+    }
+    _admingetBookingDetail(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("Missing id", 401, error_enum_1.AppError.ValidationError));
+                const service_booking = yield this.getserviceBookingDetails.execute(id);
+                return res
+                    .status(200)
+                    .json({ message: "succes", success: true, booking: service_booking });
             }
             catch (error) {
                 console.log("error user put contrroll", error);

@@ -42,7 +42,7 @@ export class Admin_putfeedBackrefunduseCase {
     const userwallet = await this.Walletrepositories.findByuserId(user.id);
     if (!userwallet)
       throw new CustomError(
-        " user wallet Not Found",
+        "user wallet Not Found",
         401,
         AppError.ResourceNotFound
       );
@@ -63,8 +63,8 @@ export class Admin_putfeedBackrefunduseCase {
       await this.Walletrepositories.findByIdandDecrementBalance(adminwallet);
     if (!updateadminwallet)
       throw new CustomError(
-        " admin wallet Not updated",
-        401,
+        "admin wallet Not updated",
+        500,
         AppError.ServerError
       );
 

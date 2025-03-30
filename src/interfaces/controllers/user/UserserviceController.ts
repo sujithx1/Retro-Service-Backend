@@ -29,7 +29,8 @@ export class UserServiceController {
     private getNearestEmployees: User_getNearestEmployees,
     private putserviceSpecificemp:User_putserviceSpecificEmp,
     private createServicePayment:UserServiceRazorpayPayment,
-    private gettranasactionByuser:Transaction_getbyuserId
+    private gettranasactionByuser:Transaction_getbyuserId,
+    private getserviceBookingDetails:User_getReqServiceuseCase
   ) {}
 
   async reqserviceEmployee(req: Request, res: Response, next: NextFunction) {
@@ -149,7 +150,6 @@ export class UserServiceController {
     next: NextFunction
   ) {
     try {
-      console.log("ctroll");
 const{id}=req.params
       const {
        
@@ -430,59 +430,34 @@ const{id}=req.params
       return next(error); 
     }
   }
-  // async userService_postReportEmp(
-  //   req: Request,
-  //   res: Response,
-  //   next: NextFunction
-  // ) {
-  //   try {
+  async _admingetBookingDetail(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
      
-  //     const {
-  //       name,
-  //       vehicleNumber,
-  //       problem,
-  //       phone,
-  //       amount,
-  //       employeeId,
-  //       userId,
-  //       jobName,
-  //       serviceId,
-  //     } = req.body;
+      const {
+       id
+      } = req.params;
 
-  //     if (
-  //       !name ||
-  //       !vehicleNumber ||
-  //       !problem ||
-  //       !phone ||
-  //       !amount ||
-  //       !employeeId ||
-  //       !userId ||
-  //       !jobName ||
-  //       !serviceId
-  //     )
-  //       return next(new CustomError("Missing fields", 401, AppError.ValidationError));
-  //     const servicepayment = await this.createServicePayment.execute(
-  //       name,
-  //       vehicleNumber,
-  //       problem,
-  //       phone,
-  //       Number(amount),
-  //       employeeId,
-  //       userId,
-  //       jobName,
-  //       serviceId
-  //     );
+      if (
+       !id
+      )
+        return next(new CustomError("Missing id", 401, AppError.ValidationError));
+      
 
-  //     return res
-  //       .status(201)
-  //       .json({ message: "succes", success: true, servicepayment });
+        const service_booking=await this.getserviceBookingDetails.execute(id)
+      return res
+        .status(200)
+        .json({ message: "succes", success: true, booking:service_booking});
 
 
       
-  //   } catch (error) {
-  //     console.log("error user put contrroll",error);
+    } catch (error) {
+      console.log("error user put contrroll",error);
       
-  //     return next(error); 
-  //   }
-  // }
+      return next(error); 
+    }
+  }
 }

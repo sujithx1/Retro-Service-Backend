@@ -46,7 +46,7 @@ export class EmployeeController {
 
   async Signup(req: Request, res: Response) {
     try {
-      const { username, email, phone, password, skills, experience } = req.body;
+      const { username, email, phone, password, skills, experience,proof } = req.body;
       const employeData = {
         username,
         email,
@@ -54,6 +54,7 @@ export class EmployeeController {
         password,
         skills,
         experience,
+        proof
       };
       EmployeeSignupValidate(employeData);
       const otp = generate_otp();

@@ -1,4 +1,9 @@
-
+interface Attachment{
+    type: string;   
+    url: string;
+    name: string;
+    size: number;
+}
 
 export class MessageEntites{
     constructor(
@@ -8,7 +13,8 @@ export class MessageEntites{
         public message:string,
         public userType:"user"|"employee",
         public timestamp:Date,
-        public isRead:boolean 
+        public isRead:boolean,
+        public attachment?:Attachment,
         
 
     ){}

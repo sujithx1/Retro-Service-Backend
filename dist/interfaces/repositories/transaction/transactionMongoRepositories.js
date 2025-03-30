@@ -47,5 +47,11 @@ class TransactionMongoRepositories {
             return servcie.map((item) => new transactionEntities_1.TransactionEntities(item.id, item.userId._id.toString(), item.type, item.amount, item.status, item.paymentMethod, item.serviceType, item.createdAt, item.updatedAt));
         });
     }
+    findAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const trasnctions = yield transactionHistory_model_1.TransactionModel.find();
+            return trasnctions.map((item) => new transactionEntities_1.TransactionEntities(item.id, item.userId._id.toString(), item.type, item.amount, item.status, item.paymentMethod, item.serviceType, item.createdAt, item.updatedAt));
+        });
+    }
 }
 exports.TransactionMongoRepositories = TransactionMongoRepositories;

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectdb = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const connectdb = () => {
-    const dbUrl = process.env.DB_URL;
+    const dbUrl = process.env.DB_ATLES;
     mongoose_1.default
         .connect(`${dbUrl}`)
         .then(() => console.log("mongoDb connected"))

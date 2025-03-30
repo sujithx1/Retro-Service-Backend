@@ -16,7 +16,8 @@ async findById(id: string): Promise<MessageEntites|null> {
     chat.message,
     chat.userType,
     chat.timestamp,
-    chat.isRead
+    chat.isRead,
+    chat.attachment
    )
     
     
@@ -31,7 +32,8 @@ async getMessages(sender: string, receiver: string): Promise<MessageEntites[]> {
         item.message,
         item.userType,
         item.timestamp,
-        item.isRead
+        item.isRead,
+        item.attachment
         
     ))
     
@@ -58,7 +60,8 @@ async getMessagesByUser(userId: string): Promise<MessageEntites[]> {
         item.message,
         item.userType,
         item.timestamp,
-        item.isRead
+        item.isRead,
+        item.attachment
         
     ))
 }
@@ -79,7 +82,8 @@ async getMessagesByEmployee(employeeId: string): Promise<MessageEntites[]> {
         item.message,
         item.userType,
         item.timestamp,
-        item.isRead
+        item.isRead,
+        item.attachment
         
     ))
 }

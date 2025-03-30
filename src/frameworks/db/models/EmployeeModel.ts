@@ -37,6 +37,8 @@ export interface IEmployee_types extends Document{
   authSource:"self"|"google",
   role:string,
   revenue:number,
+  proof:string;
+  isValidated:boolean, 
   createdAt:Date,
   updatedAt:Date,
 
@@ -99,6 +101,14 @@ const EmployeSchema=new Schema<IEmployee_types>({
         type:Boolean,
         default:false
  },
+ proof:{
+    type:String,
+    required:true
+ },
+ isValidated:{
+    type:Boolean,
+    default:false
+ }
 
 
 },

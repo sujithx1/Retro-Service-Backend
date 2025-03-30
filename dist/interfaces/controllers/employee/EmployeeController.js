@@ -52,7 +52,7 @@ class EmployeeController {
     Signup(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { username, email, phone, password, skills, experience } = req.body;
+                const { username, email, phone, password, skills, experience, proof } = req.body;
                 const employeData = {
                     username,
                     email,
@@ -60,6 +60,7 @@ class EmployeeController {
                     password,
                     skills,
                     experience,
+                    proof
                 };
                 (0, Validation_1.EmployeeSignupValidate)(employeData);
                 const otp = (0, otp_1.generate_otp)();

@@ -55,10 +55,11 @@ export const EmployeeSignupValidate=(data: {
   password: string;
   skills:string;
   experience:string,
+  proof:string
   
 }): boolean => {
-  const { username, email, phone, password,skills,experience } = data;
-  if (!username || !email || !phone || !password|| !skills || !experience) {
+  const { username, email, phone, password,skills,experience,proof } = data;
+  if (!username || !email || !phone || !password|| !skills || !experience||!proof) {
      throw new Error("All field Required");
    
   }

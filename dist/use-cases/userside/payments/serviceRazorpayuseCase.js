@@ -32,6 +32,7 @@ class UserServiceRazorpayPayment {
             const adminwallet = yield this.walletrepositories.findByAdmin();
             if (!adminwallet)
                 throw new custom_errors_1.CustomError("adminwallet not Found", 401, error_enum_1.AppError.ResourceNotFound);
+            adminwallet.balance += 100;
             const updateadminwallet = yield this.walletrepositories.findByIdandUpdate(adminwallet);
             if (!updateadminwallet)
                 throw new custom_errors_1.CustomError("wallet not update", 401, error_enum_1.AppError.ServerError);

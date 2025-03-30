@@ -81,5 +81,28 @@ async findbyUserId(userId: string): Promise<TransactionEntities[]> {
 
 
     ))    
+
+
+
+}
+
+
+async findAll(): Promise<TransactionEntities[]> {
+
+    const trasnctions=await TransactionModel.find()
+    return   trasnctions.map((item)=>new TransactionEntities(
+        item.id,
+        item.userId._id.toString(),
+        item.type,
+        item.amount,
+        item.status,
+        item.paymentMethod,
+        item.serviceType,
+        item.createdAt,
+        item.updatedAt
+
+
+    )) 
+    
 }
 }

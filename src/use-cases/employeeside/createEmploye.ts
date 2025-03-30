@@ -12,9 +12,9 @@ export  class EmployeeSignup{
         private walletrepositories:IwalletRepositories
 
     ) {}
-    async execute(data:{username:string,email:string,phone:string,password:string,skills:string[],experience:number}):Promise<EmployeeEntities>{
+    async execute(data:{username:string,email:string,phone:string,password:string,skills:string[],experience:number,proof:string}):Promise<EmployeeEntities>{
 
-        const {username,email,phone,password,skills,experience}=data
+        const {username,email,phone,password,skills,experience,proof}=data
         const hashPassword=await hashpass(password)
         const employee=new EmployeeEntities(
             "",
@@ -23,7 +23,11 @@ export  class EmployeeSignup{
             phone,
             hashPassword,
             skills,
-            experience
+            experience,
+            false,
+            proof
+
+            
         )
         const newEmployee=await this.employeRepositories.save(employee)
         const wallet=new WalletEntities(

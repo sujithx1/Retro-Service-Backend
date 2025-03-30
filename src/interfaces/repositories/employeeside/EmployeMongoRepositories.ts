@@ -17,6 +17,8 @@ export class EmployeeMongoRepositories implements IEmployeeRepositories{
             employee.password,
             employee.skills,
             employee.experience,
+            employee.isValidated,
+            employee.proof,
             employee.isActive,
             employee.profilePic,
             employee.location,
@@ -39,6 +41,8 @@ export class EmployeeMongoRepositories implements IEmployeeRepositories{
             newEmploye.password,
             newEmploye.skills,
             newEmploye.experience,
+            false,
+          
             
         )
     }
@@ -53,6 +57,8 @@ export class EmployeeMongoRepositories implements IEmployeeRepositories{
             employee.password,
             employee.skills,
             employee.experience,
+            employee.isValidated,
+            employee.proof,
             employee.isActive,
             employee.profilePic,
             employee.location,
@@ -87,6 +93,8 @@ export class EmployeeMongoRepositories implements IEmployeeRepositories{
         employee.password,
         employee.skills,
         employee.experience,
+        employee.isValidated,
+        employee.proof,
         employee.isActive,
         employee.profilePic,
         employee.location,
@@ -113,6 +121,8 @@ export class EmployeeMongoRepositories implements IEmployeeRepositories{
                  item.password,
                  item.skills,
                  item.experience,
+                 item.isValidated,
+                 item.proof,
                  item.isActive,
                  item.profilePic,
                  item.location,
@@ -144,6 +154,8 @@ return new EmployeeEntities(
   employee.password,
   employee.skills,
   employee.experience,
+  employee.isValidated,
+  employee.proof,
   employee.isActive,
   employee.profilePic,
   employee.location,
@@ -184,6 +196,8 @@ return new EmployeeEntities(
   employee.password,
   employee.skills,
   employee.experience,
+  employee.isValidated,
+  employee.proof,
   employee.isActive,
   employee.profilePic,
   employee.location,
@@ -212,6 +226,8 @@ return new EmployeeEntities(
   employee.password,
   employee.skills,
   employee.experience,
+  employee.isValidated,
+  employee.proof,
   employee.isActive,
   employee.profilePic,
   employee.location,
@@ -277,6 +293,8 @@ async findempnearestWithOnduty(userLocation: { lat: number; lng: number; }): Pro
           item.employee.password,
           item.employee.skills,
           item.employee.experience,
+          item.employee.isValidated,
+          item.employee.proof,
           item.employee.isActive,
           item.employee.profilePic,
           item.employee.location,
@@ -324,6 +342,8 @@ async findempnearest10km(userLocation: { lat: number; lng: number; }): Promise<E
       item.employee.password,
       item.employee.skills,
       item.employee.experience,
+      item.employee.isValidated,
+      item.employee.proof,
       item.employee.isActive,
       item.employee.profilePic,
       item.employee.location,
@@ -361,6 +381,8 @@ return new EmployeeEntities(
   employee.password,
   employee.skills,
   employee.experience,
+  employee.isValidated,
+  employee.proof,
   employee.isActive,
   employee.profilePic,
   employee.location,
@@ -374,5 +396,25 @@ return new EmployeeEntities(
     
 }
 
+
+
+async checkValidate(empId: string): Promise<boolean|null> {
+  const employee=await EmployeeModel.findById(empId)
+  if (!employee)return null
+  return employee.isValidated 
+    
+}
+
+async setValidate(empId: string): Promise<boolean> {
+  const mechanic = await EmployeeModel.findByIdAndUpdate(
+    empId,
+    { $set: { isValidated: true } },
+    { new: true } // Ensures the updated document is returned
+);
+
+if(!mechanic)return false
+return true
+}
+  
 
 } 

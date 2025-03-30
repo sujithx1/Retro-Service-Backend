@@ -119,6 +119,8 @@ export class UserMongodbRepositories implements IUserRepositories {
             item.password,
             item.skills,
             item.experience,
+            item.isValidated,
+            item.proof,
             item.isActive,
             item.profilePic,
             item.location,

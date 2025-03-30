@@ -106,6 +106,14 @@ const EmployeSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false
     },
+    proof: {
+        type: String,
+        required: true
+    },
+    isValidated: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true
 });

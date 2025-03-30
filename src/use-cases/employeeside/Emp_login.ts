@@ -12,6 +12,7 @@ export class Emp_Login_useCase{
     async execute(email:string,password:string):Promise<EmployeeEntities>{
         const employee=await this.employeeRespositories.findByEmail(email)
         if(!employee) throw new Error("Email not registerd")
+        if(employee.isValidated===false)throw new Error('Employee is not Verified')
         if(employee.isActive==false)
         throw new Error("Employee is Blocked")
         const compare=await comparePassword(password,employee.password)
@@ -27,6 +28,8 @@ export class Emp_Login_useCase{
     employee.password,
     employee.skills,
     employee.experience,
+    employee.isValidated,
+    employee.proof,
     employee.isActive,
     employee.profilePic,
     employee.location,

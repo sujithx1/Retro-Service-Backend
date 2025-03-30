@@ -2,6 +2,7 @@ import express from "express";
 import { createAccessToken } from "../../interfaces/jwt/jwt_auth_token";
 import { admincontroller } from "../dependency_injection/admin.di";
 import { Authentication } from "../../interfaces/middleware/userside/userAuthentication";
+import { serviceController, userWalletController } from "../dependency_injection/user.di";
 
 const router = express.Router();
 
@@ -101,18 +102,35 @@ router.delete("/job/:id",
 
 router.get('/report-feedback',
   Authentication,
-  (req,res,next)=>{
-    console.log("calling feedback");
-    
+  (req,res,next)=>{    
   admincontroller.Admin_get_Feedbacks_controll(req,res,next)
 })
 
 router.put('/report-feedback/:id',
   Authentication,
-  (req,res,next)=>{
-    console.log("calling feedback");
-    
+  (req,res,next)=>{    
   admincontroller.Admin_put_FeedbacksRefund_controll(req,res,next)
+})
+
+router.put('/approve-mechanic/:id',
+  Authentication,
+  (req,res,next)=>{    
+  admincontroller.Admin_put_approvedMechancic_controll(req,res,next)
+})
+router.get('/service-booking/:id',
+  Authentication,
+  (req,res,next)=>{    
+    serviceController._admingetBookingDetail(req,res,next)
+})
+router.get('/wallet',
+  Authentication,
+  (req,res,next)=>{    
+   userWalletController.admin_getwalletbyAdminId_controller(req,res,next)
+})
+router.get('/transactions',
+  Authentication,
+  (req,res,next)=>{    
+   admincontroller._admingetallTransactions(req,res,next)
 })
 
 export default router;

@@ -27,7 +27,7 @@ class Admin_put_employee_useCase {
             const update = yield this.employeeRepositories.findByIdAndUpdate(employe);
             if (!update)
                 throw new Error("Not updateded");
-            return new EmployeeEntities_1.EmployeeEntities(update.id, update.username, update.email, update.phone, update.password, update.skills, update.experience, update.isActive, update.profilePic, update.location, update.authSource, update.role, update.revenue, update.onDuty, update.createdAt, update.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(update.id, update.username, update.email, update.phone, update.password, update.skills, update.experience, update.isValidated, update.proof, update.isActive, update.profilePic, update.location, update.authSource, update.role, update.revenue, update.onDuty, update.createdAt, update.updatedAt);
         });
     }
 }

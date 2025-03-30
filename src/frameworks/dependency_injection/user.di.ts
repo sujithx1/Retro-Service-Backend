@@ -46,6 +46,7 @@ import { UserwalletController } from "../../interfaces/controllers/user/userWall
 import { Wallet_getuserIduseCase } from "../../use-cases/wallet/getbyuserId";
 import { TransactionMongoRepositories } from "../../interfaces/repositories/transaction/transactionMongoRepositories";
 import { Transaction_getbyuserId } from "../../use-cases/transactions/getuaserid";
+import { AdminGetWalletuseCase } from "../../use-cases/wallet/getByAdminId";
 const userRepositories = new UserMongodbRepositories();
 const jobRepositories = new Mongo_Job_admin_Repositories();
 const Admin_employeeRepositories = new Mongo_Admin_Employees_Repositories();
@@ -138,6 +139,10 @@ const usergetwallet=new Wallet_getuserIduseCase(walletRepositories)
 
 
 const gettranasactionByuser=new Transaction_getbyuserId(transactionrepositories)
+const getService_booking=new User_getReqServiceuseCase(reqServiceMechanicsRepositories)
+
+
+const getadminWallet=new AdminGetWalletuseCase(walletRepositories)
 
 export const userController = new Usercontroller(
   createUser,
@@ -169,8 +174,9 @@ export const serviceController = new UserServiceController(
   getnearestEmployees10km,
   putserviceSendSpecificEmployee,
   createServicepayment,
-  gettranasactionByuser
+  gettranasactionByuser,
+  getService_booking
 );
 
 export const userChatController=new UserChatcontroller(getMessagesByUser)
-export const userWalletController=new UserwalletController(usergetwallet)
+export const userWalletController=new UserwalletController(usergetwallet,getadminWallet)

@@ -10,6 +10,9 @@ export class EmployeeEntities{
         public password: string,
         public skills:string[],
         public experience:number,
+        public isValidated:boolean,
+        public proof:string="",
+        
         public isActive:boolean=true,
         public profilePic: string = "https://example.com/default-profile-pic.png",
         public location?:Locationuser_types,

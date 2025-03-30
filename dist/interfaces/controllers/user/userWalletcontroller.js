@@ -13,8 +13,9 @@ exports.UserwalletController = void 0;
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 class UserwalletController {
-    constructor(getuserWallet) {
+    constructor(getuserWallet, getadminWallet) {
         this.getuserWallet = getuserWallet;
+        this.getadminWallet = getadminWallet;
     }
     user_getwalletbyuserId_controller(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -23,6 +24,19 @@ class UserwalletController {
                 if (!id)
                     return next(new custom_errors_1.CustomError("id missing ", 401, error_enum_1.AppError.ValidationError));
                 const wallet = yield this.getuserWallet.execute(id);
+                return res.status(200).json({
+                    message: 'success', success: true, wallet
+                });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    admin_getwalletbyAdminId_controller(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const wallet = yield this.getadminWallet.execute();
                 return res.status(200).json({
                     message: 'success', success: true, wallet
                 });

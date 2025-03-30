@@ -18,13 +18,13 @@ class Message_mongoRepositories {
             const chat = yield messageModel_1.MessageModel.findById(id);
             if (!chat)
                 return null;
-            return new chatEntities_1.MessageEntites(chat.id, chat.sender, chat.receiver, chat.message, chat.userType, chat.timestamp, chat.isRead);
+            return new chatEntities_1.MessageEntites(chat.id, chat.sender, chat.receiver, chat.message, chat.userType, chat.timestamp, chat.isRead, chat.attachment);
         });
     }
     getMessages(sender, receiver) {
         return __awaiter(this, void 0, void 0, function* () {
             const messages = yield messageModel_1.MessageModel.find({ sender, receiver }).sort({ timestamp: 1 });
-            return messages.map((item) => new chatEntities_1.MessageEntites(item.id, item.sender, item.receiver, item.message, item.userType, item.timestamp, item.isRead));
+            return messages.map((item) => new chatEntities_1.MessageEntites(item.id, item.sender, item.receiver, item.message, item.userType, item.timestamp, item.isRead, item.attachment));
         });
     }
     markMessagesAsRead(sender, receiver) {
@@ -40,7 +40,7 @@ class Message_mongoRepositories {
                     { receiver: userId }
                 ]
             });
-            return messages.map((item) => new chatEntities_1.MessageEntites(item.id, item.sender.toString(), item.receiver.toString(), item.message, item.userType, item.timestamp, item.isRead));
+            return messages.map((item) => new chatEntities_1.MessageEntites(item.id, item.sender.toString(), item.receiver.toString(), item.message, item.userType, item.timestamp, item.isRead, item.attachment));
         });
     }
     getMessagesByEmployee(employeeId) {
@@ -51,7 +51,7 @@ class Message_mongoRepositories {
                     { receiver: employeeId }
                 ]
             });
-            return messages.map((item) => new chatEntities_1.MessageEntites(item.id, item.sender, item.receiver, item.message, item.userType, item.timestamp, item.isRead));
+            return messages.map((item) => new chatEntities_1.MessageEntites(item.id, item.sender, item.receiver, item.message, item.userType, item.timestamp, item.isRead, item.attachment));
         });
     }
 }

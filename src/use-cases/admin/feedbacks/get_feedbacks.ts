@@ -11,4 +11,4 @@ export class Admin_get_feedbacks_useCase{
         const feedbacks=await this.reportFeedbackrep.findAll()
         return feedbacks
     }
-}
+}   

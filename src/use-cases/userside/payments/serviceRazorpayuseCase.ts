@@ -51,6 +51,7 @@ serviceId:string){
 
         const adminwallet=await this.walletrepositories.findByAdmin()
         if(!adminwallet) throw new CustomError("adminwallet not Found",401,AppError.ResourceNotFound);
+        adminwallet.balance+=100
         const updateadminwallet=await this.walletrepositories.findByIdandUpdate(adminwallet)
         if(!updateadminwallet) throw new CustomError("wallet not update",401,AppError.ServerError);
 

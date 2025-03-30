@@ -18,13 +18,13 @@ class EmployeeMongoRepositories {
             const employee = yield EmployeeModel_1.EmployeeModel.findOne({ email: email });
             if (!employee)
                 return null;
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isValidated, employee.proof, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
         });
     }
     save(employee) {
         return __awaiter(this, void 0, void 0, function* () {
             const newEmploye = yield EmployeeModel_1.EmployeeModel.create(employee);
-            return new EmployeeEntities_1.EmployeeEntities(newEmploye.id, newEmploye.username, newEmploye.email, newEmploye.phone, newEmploye.password, newEmploye.skills, newEmploye.experience);
+            return new EmployeeEntities_1.EmployeeEntities(newEmploye.id, newEmploye.username, newEmploye.email, newEmploye.phone, newEmploye.password, newEmploye.skills, newEmploye.experience, false);
         });
     }
     findById(id) {
@@ -32,7 +32,7 @@ class EmployeeMongoRepositories {
             const employee = yield EmployeeModel_1.EmployeeModel.findById(id);
             if (!employee)
                 return null;
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isValidated, employee.proof, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
         });
     }
     findByIdAndUpdate(emmployee) {
@@ -47,13 +47,13 @@ class EmployeeMongoRepositories {
             }, { new: true });
             if (!employee)
                 return null;
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isValidated, employee.proof, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
         });
     }
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
             const employees = yield EmployeeModel_1.EmployeeModel.find();
-            return employees.length ? employees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.id, item.username, item.email, item.phone, item.password, item.skills, item.experience, item.isActive, item.profilePic, item.location, item.authSource, item.role, item.revenue, item.onDuty, item.createdAt, item.updatedAt)) : [];
+            return employees.length ? employees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.id, item.username, item.email, item.phone, item.password, item.skills, item.experience, item.isValidated, item.proof, item.isActive, item.profilePic, item.location, item.authSource, item.role, item.revenue, item.onDuty, item.createdAt, item.updatedAt)) : [];
         });
     }
     findIdAndUpdateRevenue(id, revenue) {
@@ -63,7 +63,7 @@ class EmployeeMongoRepositories {
             );
             if (!employee)
                 return null;
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isValidated, employee.proof, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
         });
     }
     findByIdAndUpdatePassword(id, password) {
@@ -80,7 +80,7 @@ class EmployeeMongoRepositories {
             }, { new: true });
             if (!employee)
                 return null;
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isValidated, employee.proof, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
         });
     }
     findByIdAndUpdatelocation(id, location) {
@@ -90,7 +90,7 @@ class EmployeeMongoRepositories {
             }, { new: true, upsert: true });
             if (!employee)
                 return null;
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isValidated, employee.proof, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
         });
     }
     calculateDistance(lat1, lon1, lat2, lon2) {
@@ -133,7 +133,7 @@ class EmployeeMongoRepositories {
                 const sortedEmployees = nearbyEmployees.sort((a, b) => a.distance - b.distance);
                 // Return the sorted list of employees wrapped in EmployeeEntities
                 return sortedEmployees.length
-                    ? sortedEmployees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.employee.id, item.employee.username, item.employee.email, item.employee.phone, item.employee.password, item.employee.skills, item.employee.experience, item.employee.isActive, item.employee.profilePic, item.employee.location, item.employee.authSource, item.employee.role, item.employee.revenue, item.employee.onDuty, item.employee.createdAt, item.employee.updatedAt))
+                    ? sortedEmployees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.employee.id, item.employee.username, item.employee.email, item.employee.phone, item.employee.password, item.employee.skills, item.employee.experience, item.employee.isValidated, item.employee.proof, item.employee.isActive, item.employee.profilePic, item.employee.location, item.employee.authSource, item.employee.role, item.employee.revenue, item.employee.onDuty, item.employee.createdAt, item.employee.updatedAt))
                     : []; // Return empty array if no employees found
             }
             catch (error) {
@@ -162,7 +162,7 @@ class EmployeeMongoRepositories {
             // Filter employees who are within 5 km
             const nearbyEmployees = employeesWithDistances.filter(item => item.distance <= 10);
             return nearbyEmployees.length
-                ? nearbyEmployees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.employee.id, item.employee.username, item.employee.email, item.employee.phone, item.employee.password, item.employee.skills, item.employee.experience, item.employee.isActive, item.employee.profilePic, item.employee.location, item.employee.authSource, item.employee.role, item.employee.revenue, item.employee.onDuty, item.employee.createdAt, item.employee.updatedAt))
+                ? nearbyEmployees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.employee.id, item.employee.username, item.employee.email, item.employee.phone, item.employee.password, item.employee.skills, item.employee.experience, item.employee.isValidated, item.employee.proof, item.employee.isActive, item.employee.profilePic, item.employee.location, item.employee.authSource, item.employee.role, item.employee.revenue, item.employee.onDuty, item.employee.createdAt, item.employee.updatedAt))
                 : []; // Return empty array if no employees found
         });
     }
@@ -173,7 +173,24 @@ class EmployeeMongoRepositories {
             );
             if (!employee)
                 return null;
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isValidated, employee.proof, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
+        });
+    }
+    checkValidate(empId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const employee = yield EmployeeModel_1.EmployeeModel.findById(empId);
+            if (!employee)
+                return null;
+            return employee.isValidated;
+        });
+    }
+    setValidate(empId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const mechanic = yield EmployeeModel_1.EmployeeModel.findByIdAndUpdate(empId, { $set: { isValidated: true } }, { new: true } // Ensures the updated document is returned
+            );
+            if (!mechanic)
+                return false;
+            return true;
         });
     }
 }

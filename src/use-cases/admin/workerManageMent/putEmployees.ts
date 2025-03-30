@@ -27,6 +27,8 @@ export class Admin_put_employee_useCase{
                 update.password,
                 update.skills,
                 update.experience,
+                update.isValidated,
+                update.proof,
                 update.isActive,
                 update.profilePic,
                 update.location,

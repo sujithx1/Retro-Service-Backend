@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const jwt_auth_token_1 = require("../../interfaces/jwt/jwt_auth_token");
 const admin_di_1 = require("../dependency_injection/admin.di");
 const userAuthentication_1 = require("../../interfaces/middleware/userside/userAuthentication");
+const user_di_1 = require("../dependency_injection/user.di");
 const router = express_1.default.Router();
 router.post("/refresh-token", (req, res) => {
     (0, jwt_auth_token_1.createAccessToken)(req, res, "admin");
@@ -59,11 +60,21 @@ router.delete("/job/:id", userAuthentication_1.Authentication, (req, res, next) 
     admin_di_1.admincontroller.Admin_del_jobs_controll(req, res, next);
 });
 router.get('/report-feedback', userAuthentication_1.Authentication, (req, res, next) => {
-    console.log("calling feedback");
     admin_di_1.admincontroller.Admin_get_Feedbacks_controll(req, res, next);
 });
 router.put('/report-feedback/:id', userAuthentication_1.Authentication, (req, res, next) => {
-    console.log("calling feedback");
     admin_di_1.admincontroller.Admin_put_FeedbacksRefund_controll(req, res, next);
+});
+router.put('/approve-mechanic/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    admin_di_1.admincontroller.Admin_put_approvedMechancic_controll(req, res, next);
+});
+router.get('/service-booking/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    user_di_1.serviceController._admingetBookingDetail(req, res, next);
+});
+router.get('/wallet', userAuthentication_1.Authentication, (req, res, next) => {
+    user_di_1.userWalletController.admin_getwalletbyAdminId_controller(req, res, next);
+});
+router.get('/transactions', userAuthentication_1.Authentication, (req, res, next) => {
+    admin_di_1.admincontroller._admingetallTransactions(req, res, next);
 });
 exports.default = router;

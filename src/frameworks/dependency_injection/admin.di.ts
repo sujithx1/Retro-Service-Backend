@@ -31,6 +31,8 @@ import { UserMongodbRepositories } from "../../interfaces/repositories/userSide/
 import { EmployeeMongoRepositories } from "../../interfaces/repositories/employeeside/EmployeMongoRepositories";
 import { MongoReqServiceMechnics } from "../../interfaces/repositories/reqservicemechanics/mongoreqservicemechrep";
 import { TransactionMongoRepositories } from "../../interfaces/repositories/transaction/transactionMongoRepositories";
+import { Approve_MechanicadminuseCase } from "../../use-cases/admin/workerManageMent/approveMechainc";
+import { Get_alltrasactions } from "../../use-cases/transactions/getall";
 
 const adminrepositories = new MongoAdminRepositories();
 const categoriesRepositories = new Mongo_catgoriesRepositories();
@@ -77,7 +79,8 @@ const deluser = new admin_Block_UnBlock_User_useCase(admin_userRepositories);
 
 const getFeedbacks=new Admin_get_feedbacks_useCase(feedBack_repositories)
 const putrefundFeedback=new Admin_putfeedBackrefunduseCase(userepositories,employeeRepositoires,walletrepositories,feedBack_repositories,serviceRepositories,transactionrepositories )
-
+const putmechanicApprove=new Approve_MechanicadminuseCase(employeeRepositoires)
+const get_allTrasnactions=new Get_alltrasactions(transactionrepositories)
 export const admincontroller = new AdminController(
   adminlogin,
   admingetCategories,
@@ -95,5 +98,7 @@ export const admincontroller = new AdminController(
   putuser,
   deluser,
   getFeedbacks,
-  putrefundFeedback
+  putrefundFeedback,
+  putmechanicApprove,
+  get_allTrasnactions
 );

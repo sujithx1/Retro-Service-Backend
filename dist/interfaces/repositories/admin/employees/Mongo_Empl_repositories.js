@@ -16,7 +16,7 @@ class Mongo_Admin_Employees_Repositories {
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
             const employees = yield EmployeeModel_1.EmployeeModel.find();
-            return employees.length ? employees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.id, item.username, item.email, item.phone, item.password, item.skills, item.experience, item.isActive, item.profilePic, item.location, item.authSource, item.role, item.revenue, item.onDuty, item.createdAt, item.updatedAt)) : [];
+            return employees.length ? employees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.id, item.username, item.email, item.phone, item.password, item.skills, item.experience, item.isValidated, item.proof, item.isActive, item.profilePic, item.location, item.authSource, item.role, item.revenue, item.onDuty, item.createdAt, item.updatedAt)) : [];
         });
     }
     findById(id) {
@@ -24,7 +24,7 @@ class Mongo_Admin_Employees_Repositories {
             const employee = yield EmployeeModel_1.EmployeeModel.findById(id);
             if (!employee)
                 return null;
-            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employee.id, employee.username, employee.email, employee.phone, employee.password, employee.skills, employee.experience, employee.isValidated, employee.proof, employee.isActive, employee.profilePic, employee.location, employee.authSource, employee.role, employee.revenue, employee.onDuty, employee.createdAt, employee.updatedAt);
         });
     }
     findByIdAndUpdate(employe) {
@@ -40,7 +40,7 @@ class Mongo_Admin_Employees_Repositories {
             }, { new: true });
             if (!employedata)
                 return null;
-            return new EmployeeEntities_1.EmployeeEntities(employedata.id, employedata.username, employedata.email, employedata.phone, employedata.password, employedata.skills, employedata.experience, employedata.isActive, employedata.profilePic, employedata.location, employedata.authSource, employedata.role, employedata.revenue, employedata.onDuty, employedata.createdAt, employedata.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(employedata.id, employedata.username, employedata.email, employedata.phone, employedata.password, employedata.skills, employedata.experience, employedata.isValidated, employedata.proof, employedata.isActive, employedata.profilePic, employedata.location, employedata.authSource, employedata.role, employedata.revenue, employedata.onDuty, employedata.createdAt, employedata.updatedAt);
         });
     }
 }

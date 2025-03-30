@@ -6,4 +6,5 @@ export interface ItransactionRepositories{
     create(transaction:TransactionEntities):Promise<TransactionEntities>
     findByidAndUpdate(transaction:TransactionEntities):Promise<TransactionEntities|null>
     findbyUserId(userId:string):Promise<TransactionEntities[]>
+    findAll():Promise<TransactionEntities[]>
 }

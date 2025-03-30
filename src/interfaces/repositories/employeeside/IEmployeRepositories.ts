@@ -6,6 +6,8 @@ import { FinduserLocation, Locationuser_types } from "../../../types/user";
 export interface IEmployeeRepositories{
     findByEmail(email:string):Promise<EmployeeEntities|null>
     save(employee:EmployeeEntities):Promise<EmployeeEntities>
+    setValidate(empId:string):Promise<boolean>
+    checkValidate(empId:string):Promise<boolean|null>
      findById(id:string):Promise<EmployeeEntities|null>
      findByIdAndUpdate(employee:EmployeeEntities):Promise<EmployeeEntities|null>
      findAll():Promise<EmployeeEntities[]>

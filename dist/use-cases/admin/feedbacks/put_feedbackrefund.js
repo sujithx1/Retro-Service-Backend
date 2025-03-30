@@ -36,7 +36,7 @@ class Admin_putfeedBackrefunduseCase {
                 throw new custom_errors_1.CustomError("employee Not Found", 401, error_enum_1.AppError.UserNotFound);
             const userwallet = yield this.Walletrepositories.findByuserId(user.id);
             if (!userwallet)
-                throw new custom_errors_1.CustomError(" user wallet Not Found", 401, error_enum_1.AppError.ResourceNotFound);
+                throw new custom_errors_1.CustomError("user wallet Not Found", 401, error_enum_1.AppError.ResourceNotFound);
             const adminwallet = yield this.Walletrepositories.findByAdmin();
             if (!adminwallet)
                 throw new custom_errors_1.CustomError(" admin wallet Not Found", 401, error_enum_1.AppError.ResourceNotFound);
@@ -44,7 +44,7 @@ class Admin_putfeedBackrefunduseCase {
             feedback.amount ? (adminwallet.balance = -feedback.amount) : adminwallet;
             const updateadminwallet = yield this.Walletrepositories.findByIdandDecrementBalance(adminwallet);
             if (!updateadminwallet)
-                throw new custom_errors_1.CustomError(" admin wallet Not updated", 401, error_enum_1.AppError.ServerError);
+                throw new custom_errors_1.CustomError("admin wallet Not updated", 500, error_enum_1.AppError.ServerError);
             const updateuserWallet = yield this.Walletrepositories.findByIdandUpdate(userwallet);
             if (!updateuserWallet)
                 throw new custom_errors_1.CustomError("user wallet Not updated", 401, error_enum_1.AppError.ServerError);
