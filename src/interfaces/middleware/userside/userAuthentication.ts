@@ -117,7 +117,10 @@ const jwtSecret=process.env.access_token||""
 //     }
 // };
 
+
 export const Authentication: RequestHandler = async (req, res, next) => {
+    console.log("jwt -secret ",jwtSecret);
+    
     try {
         const token = req.header('Authorization')?.replace('Bearer ', "").trim();
 
