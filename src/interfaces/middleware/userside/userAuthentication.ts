@@ -8,7 +8,7 @@ import { EmployeeEntities } from "../../../entities/EmployeeEntities";
 import { StoreModel } from "../../../frameworks/db/models/Storemodel";
 
 
-const jwtSecret=process.env.access_token||""
+const jwtSecret=process.env.ACCESS_TOKEN||"sujithaccesstoken"
 
 
 
@@ -120,6 +120,9 @@ const jwtSecret=process.env.access_token||""
 
 export const Authentication: RequestHandler = async (req, res, next) => {
     console.log("jwt -secret ",jwtSecret);
+    console.log("process.env.ACCESS_TOKEN",process.env.ACCESS_TOKEN);
+    
+    
     
     try {
         const token = req.header('Authorization')?.replace('Bearer ', "").trim();
