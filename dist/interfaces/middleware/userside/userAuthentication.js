@@ -17,7 +17,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const UserModel_1 = require("../../../frameworks/db/models/UserModel");
 const EmployeeModel_1 = require("../../../frameworks/db/models/EmployeeModel");
 const Storemodel_1 = require("../../../frameworks/db/models/Storemodel");
-const jwtSecret = process.env.access_token || "";
+const jwtSecret = process.env.ACCESS_TOKEN || "sujithaccesstoken";
 // declare global{
 //     namespace Express {
 //         interface Request{
@@ -113,6 +113,8 @@ const jwtSecret = process.env.access_token || "";
 // };
 const Authentication = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
+    console.log("jwt -secret ", jwtSecret);
+    console.log("process.env.ACCESS_TOKEN", process.env.ACCESS_TOKEN);
     try {
         const token = (_a = req.header('Authorization')) === null || _a === void 0 ? void 0 : _a.replace('Bearer ', "").trim();
         if (!token) {
