@@ -86,7 +86,7 @@ class WalletMongoRepositories {
     }
     findByStoreId(storeId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const wallet = yield WalletModel_1.WalletModel.findOne({ userId: storeId, userType: "employee" });
+            const wallet = yield WalletModel_1.WalletModel.findOne({ userId: storeId, userType: "store" });
             if (!wallet)
                 return null;
             return new walletEntities_1.WalletEntities(wallet.id, wallet.userId.toString(), wallet.userType, wallet.balance, wallet.createdAt, wallet.updatedAt);

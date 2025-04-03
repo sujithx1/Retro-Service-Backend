@@ -145,7 +145,7 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
         
     }
    async findByStoreId(storeId: string): Promise<WalletEntities | null> {
-    const wallet=await WalletModel.findOne({userId:storeId,userType:"employee"})
+    const wallet=await WalletModel.findOne({userId:storeId,userType:"store"})
         if(!wallet)return null
 
     return new WalletEntities(
