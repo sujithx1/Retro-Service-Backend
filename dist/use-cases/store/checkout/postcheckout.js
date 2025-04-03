@@ -28,11 +28,19 @@ class CheckOut_useCase {
                 throw new custom_errors_1.CustomError("Cart not Found", 404, error_enum_1.AppError.ResourceNotFound);
             const products = cart.products;
             const checkoutEntity = new checkoutEntities_1.CheckoutEntities("", cart.userId.toString(), cart.storeId, {
-                products
+                products,
             }, total, paymentMethod, "completed", "pending", transactionId);
             console.log(checkoutEntity);
+            console.log(paymentMethod);
             const checkout = yield this.checkoutrepositories.create(checkoutEntity);
-            const usertransaction = new transactionEntities_1.TransactionEntities("", checkout.userId.toString(), "purchase", Number(total), "complete", paymentMethod, "product");
+            const storeWallet = yield this.walletrepositories.findByStoreId(cart.storeId.toString());
+            if (!storeWallet)
+                throw new custom_errors_1.CustomError("storeWallet not Found", 404, error_enum_1.AppError.ResourceNotFound);
+            storeWallet.balance = total;
+            const updatestoreWallet = yield this.walletrepositories.findByuserIdandUpdate(storeWallet);
+            if (!updatestoreWallet)
+                throw new custom_errors_1.CustomError("storeWallet not updated", 500, error_enum_1.AppError.ServerError);
+            const usertransaction = new transactionEntities_1.TransactionEntities("", checkout.userId.toString(), "purchase", Number(total), "complete", paymentMethod.trim(), "product");
             yield this.transactionrepositories.create(usertransaction);
             if (paymentMethod == "wallet") {
                 const userwallet = yield this.walletrepositories.findByuserId(cart.userId.toString());

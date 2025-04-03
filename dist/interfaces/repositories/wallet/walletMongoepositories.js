@@ -84,5 +84,13 @@ class WalletMongoRepositories {
             return new walletEntities_1.WalletEntities(walletData.id, walletData.userId.toString(), walletData.userType, walletData.balance, walletData.createdAt, walletData.updatedAt);
         });
     }
+    findByStoreId(storeId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const wallet = yield WalletModel_1.WalletModel.findOne({ userId: storeId, userType: "employee" });
+            if (!wallet)
+                return null;
+            return new walletEntities_1.WalletEntities(wallet.id, wallet.userId.toString(), wallet.userType, wallet.balance, wallet.createdAt, wallet.updatedAt);
+        });
+    }
 }
 exports.WalletMongoRepositories = WalletMongoRepositories;

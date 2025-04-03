@@ -65,3 +65,6 @@ router.route('/order/:id')
     store_di_1.storeController._getOrderDetailcontroll(req, res, next);
 });
 exports.default = router;
+router.get('/wallet/:id', userAuthentication_1.Authentication, (req, res, next) => {
+    store_di_1.storeController._getWalletsbyStoreIdcontroller(req, res, next);
+});

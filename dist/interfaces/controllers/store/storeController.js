@@ -27,7 +27,7 @@ const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 const jwt_auth_token_1 = require("../../jwt/jwt_auth_token");
 class StoreController {
-    constructor(sendMails, checkOtp, storelogin, addproduct, allproduts, storeaddloction, getproduct, putproduct, store20km, getStoreproducts, getStorebyId, getOrdersbyStoreId, putorderComplete, getorderById) {
+    constructor(sendMails, checkOtp, storelogin, addproduct, allproduts, storeaddloction, getproduct, putproduct, store20km, getStoreproducts, getStorebyId, getOrdersbyStoreId, putorderComplete, getorderById, getWalletbyStoreId) {
         this.sendMails = sendMails;
         this.checkOtp = checkOtp;
         this.storelogin = storelogin;
@@ -42,6 +42,7 @@ class StoreController {
         this.getOrdersbyStoreId = getOrdersbyStoreId;
         this.putorderComplete = putorderComplete;
         this.getorderById = getorderById;
+        this.getWalletbyStoreId = getWalletbyStoreId;
     }
     signUp(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -284,6 +285,21 @@ class StoreController {
                 ;
                 const order = yield this.getorderById.execute(id);
                 return res.status(200).json({ success: true, order });
+            }
+            catch (error) {
+                return next(error);
+            }
+        });
+    }
+    _getWalletsbyStoreIdcontroller(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                if (!id)
+                    return next(new custom_errors_1.CustomError("missing id", 400, error_enum_1.AppError.ValidationError));
+                ;
+                const wallet = yield this.getWalletbyStoreId.execute(id);
+                return res.status(200).json({ success: true, wallet });
             }
             catch (error) {
                 return next(error);

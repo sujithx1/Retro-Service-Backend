@@ -57,8 +57,8 @@ const transactionSchema = new mongoose_1.Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ["razorypay", "wallet", "cod"],
-        default: 'razorypay'
+        enum: ["razorpay", "wallet", "cod"],
+        default: 'razorpay'
     },
     serviceType: {
         type: String,
