@@ -41,6 +41,8 @@ export class CheckOut_useCase {
       transactionId
     );
     console.log(checkoutEntity);
+    console.log(paymentMethod);
+    
 
     const checkout = await this.checkoutrepositories.create(checkoutEntity);
     const storeWallet = await this.walletrepositories.findByStoreId(

@@ -24,12 +24,15 @@ export class CheckoutController {
         return next(
           new CustomError("missing field", 401, AppError.ValidationError)
         );
+      
+        
       const checkout = await this.postcheckout.execute(
         cartId,
         Number(total),
         paymentMethode,
         transactionId
       );
+
       return res.status(201).json({ success: true, checkout });
     } catch (error) {
       return next(error);
