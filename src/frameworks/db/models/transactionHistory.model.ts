@@ -7,7 +7,7 @@ interface  ItransactionHistory extends Document{
     type:"purchase"|"refund"|"deposit"|"withdrawal"|"advancepay"|"payment"|"credited";
     amount:number;
     status:"complete"|"pending"|"failed";
-    paymentMethod:"razorypay"|"wallet"|"cod"
+    paymentMethod:"razorpay"|"wallet"|"cod"
     serviceType:"service"|"product"|"add",
     createdAt:Date,
     updatedAt:Date
@@ -36,8 +36,8 @@ const transactionSchema=new Schema<ItransactionHistory>({
     },
     paymentMethod:{
         type:String,
-        enum:["razorypay","wallet","cod"],
-        default:'razorypay'
+        enum:["razorpay","wallet","cod"],
+        default:'razorpay'
     },
     serviceType:{
         type:String,

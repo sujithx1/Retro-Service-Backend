@@ -5,7 +5,7 @@ export class TransactionEntities {
     public type: "purchase" | "refund" | "deposit" | "withdrawal"|"advancepay"|"payment"|'credited',
     public amount: number,
     public status: "complete" | "pending" | "failed" = "pending",
-    public paymentMethod: "razorypay" | "wallet" | "cod",
+    public paymentMethod: "razorpay" | "wallet" | "cod",
     public serviceType: "service" | "product"|"add",
     public createdAt?: Date,
     public updatedAt?: Date

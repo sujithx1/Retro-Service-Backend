@@ -61,7 +61,7 @@ export class CheckOut_useCase{
                     "purchase",
                     Number(total),
                     "complete",
-                    paymentMethod as "razorypay" | "wallet" | "cod",
+                    paymentMethod as "razorpay" | "wallet" | "cod",
                   "product"
         
                    )
