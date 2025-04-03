@@ -11,4 +11,5 @@ export interface IwalletRepositories{
     findByuserIdandUpdate(wallet:WalletEntities):Promise<WalletEntities | null>
     create(wallet:WalletEntities):Promise<WalletEntities | null>
     findByAdmin():Promise<WalletEntities | null >
+    findByStoreId(storeId:string):Promise<WalletEntities|null>
 }

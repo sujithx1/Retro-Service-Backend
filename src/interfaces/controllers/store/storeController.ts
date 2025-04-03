@@ -21,6 +21,7 @@ import { Store_getiduseCase } from "../../../use-cases/store/getstoreByid";
 import { Orders_getstoriduseCase } from "../../../use-cases/store/checkout/getordersbyStoreId";
 import { User_orderputuseCase } from "../../../use-cases/store/checkout/putorderby";
 import { User_getOrderbyIduseCase } from "../../../use-cases/store/checkout/getorderById";
+import { Wallet_getstoreIduseCase } from "../../../use-cases/wallet/getbystoreId";
 
 export class StoreController {
   constructor(
@@ -37,7 +38,8 @@ export class StoreController {
     private getStorebyId: Store_getiduseCase,
     private getOrdersbyStoreId: Orders_getstoriduseCase,
     private putorderComplete: User_orderputuseCase,
-    private getorderById:User_getOrderbyIduseCase
+    private getorderById:User_getOrderbyIduseCase,
+    private getWalletbyStoreId:Wallet_getstoreIduseCase
   ) {}
 
   async signUp(req: Request, res: Response, next: NextFunction) {
@@ -344,6 +346,28 @@ export class StoreController {
 
       const order = await this.getorderById.execute(id)
       return res.status(200).json({ success: true, order });
+    } catch (error) {
+      return next(error);
+    }
+  }
+  async _getWalletsbyStoreIdcontroller(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.params;
+
+
+      if (!id)
+        return next(
+          new CustomError("missing id", 400, AppError.ValidationError)
+        );
+     ;
+       
+
+      const wallet = await this.getWalletbyStoreId.execute(id)
+      return res.status(200).json({ success: true, wallet });
     } catch (error) {
       return next(error);
     }

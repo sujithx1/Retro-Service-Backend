@@ -19,6 +19,7 @@ import { CheckoutMongoRepositories } from "../../interfaces/repositories/checkou
 import { User_orderputuseCase } from "../../use-cases/store/checkout/putorderby";
 import { TransactionMongoRepositories } from "../../interfaces/repositories/transaction/transactionMongoRepositories";
 import { User_getOrderbyIduseCase } from "../../use-cases/store/checkout/getorderById";
+import { Wallet_getstoreIduseCase } from "../../use-cases/wallet/getbystoreId";
 
 const storeRepositories = new StoreMongoRepositories();
 const walletRepositories = new WalletMongoRepositories();
@@ -49,7 +50,7 @@ const getstorebyid=new Store_getiduseCase(storeRepositories)
 const getordersbyStoreId=new Orders_getstoriduseCase(checkoutrepositoires)
 const putordertstatus=new User_orderputuseCase(checkoutrepositoires,walletRepositories,transactionrepositoires)
 const getOrderbyId=new User_getOrderbyIduseCase(checkoutrepositoires)
-
+const getwalletBystoreId=new Wallet_getstoreIduseCase(walletRepositories)
 export const storeController = new StoreController(
   sendOtp,
   checkotp,
@@ -64,5 +65,6 @@ export const storeController = new StoreController(
   getstorebyid,
   getordersbyStoreId,
   putordertstatus,
-  getOrderbyId
+  getOrderbyId,
+  getwalletBystoreId
 );

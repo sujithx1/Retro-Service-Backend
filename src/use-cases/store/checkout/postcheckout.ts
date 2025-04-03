@@ -44,6 +44,15 @@ export class CheckOut_useCase{
         console.log(checkoutEntity); 
         
         const checkout=await this.checkoutrepositories.create(checkoutEntity)
+        const storeWallet=await this.walletrepositories.findByStoreId(cart.storeId.toString())
+        if(!storeWallet) throw new CustomError("storeWallet not Found",404,AppError.ResourceNotFound);
+
+        storeWallet.balance=total
+        const updatestoreWallet=await this.walletrepositories.findByuserIdandUpdate(storeWallet)
+
+        if(!updatestoreWallet) throw new CustomError("storeWallet not updated",500,AppError.ServerError);
+
+
 
 
          const usertransaction=new TransactionEntities(
