@@ -47,7 +47,7 @@ class UserServiceRazorpayPayment {
             service.paymentId = Servicepayment.id;
             yield this.serviceRepositories.findByIdAndUpdate(service, employeeId);
             yield this.employeeRepositories.findIdAndUpdateRevenue(employee.id, Servicepayment.amount);
-            const transaction = new transactionEntities_1.TransactionEntities("", Servicepayment.userId, "advancepay", 100, "complete", "razorypay", "service");
+            const transaction = new transactionEntities_1.TransactionEntities("", Servicepayment.userId, "advancepay", 100, "complete", "razorpay", "service");
             yield this.transactionrepositories.create(transaction);
             return Servicepayment;
         });

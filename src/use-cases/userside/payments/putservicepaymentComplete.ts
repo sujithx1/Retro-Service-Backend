@@ -51,7 +51,7 @@ export class User_CompleteServiceBooking_payment{
             "payment",
             Number(amount),
             "complete",
-            "razorypay",
+            "razorpay",
           "service"
 
            )
@@ -62,7 +62,7 @@ export class User_CompleteServiceBooking_payment{
             "credited",
             Number(amount),
             "complete",
-            "razorypay",
+            "razorpay",
             "service"
 
            )

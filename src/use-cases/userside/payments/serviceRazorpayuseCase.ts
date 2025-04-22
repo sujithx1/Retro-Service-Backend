@@ -71,7 +71,7 @@ serviceId:string){
             "advancepay",
             100,
             "complete",
-            "razorypay",
+            "razorpay",
             "service"
 
         )

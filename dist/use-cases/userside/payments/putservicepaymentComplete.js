@@ -42,9 +42,9 @@ class User_CompleteServiceBooking_payment {
             service.paymentId = Servicepayment.id;
             yield this.serviceRepositories.findByIdAndUpdate(service, employee.id);
             yield this.employeeRepositories.findIdAndUpdateRevenue(employee.id, Servicepayment.amount);
-            const usertransaction = new transactionEntities_1.TransactionEntities("", Servicepayment.userId, "payment", Number(amount), "complete", "razorypay", "service");
+            const usertransaction = new transactionEntities_1.TransactionEntities("", Servicepayment.userId, "payment", Number(amount), "complete", "razorpay", "service");
             yield this.transactionrepositories.create(usertransaction);
-            const emptransaction = new transactionEntities_1.TransactionEntities("", Servicepayment.employeeId, "credited", Number(amount), "complete", "razorypay", "service");
+            const emptransaction = new transactionEntities_1.TransactionEntities("", Servicepayment.employeeId, "credited", Number(amount), "complete", "razorpay", "service");
             yield this.transactionrepositories.create(emptransaction);
             return Servicepayment;
         });

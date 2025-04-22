@@ -103,7 +103,7 @@ export class Admin_putfeedBackrefunduseCase {
         "refund",
         100,
         "complete",
-        "razorypay",
+        "razorpay",
         "service"
 
       )

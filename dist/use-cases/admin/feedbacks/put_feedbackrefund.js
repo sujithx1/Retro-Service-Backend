@@ -58,7 +58,7 @@ class Admin_putfeedBackrefunduseCase {
             const updateservice = yield this.serviceRepositories.findByIdAndUpdateCancellBooking(service);
             if (!updateservice)
                 throw new custom_errors_1.CustomError("service Not updated", 401, error_enum_1.AppError.ServerError);
-            const usertranasaction = new transactionEntities_1.TransactionEntities("", user.id.toString(), "refund", 100, "complete", "razorypay", "service");
+            const usertranasaction = new transactionEntities_1.TransactionEntities("", user.id.toString(), "refund", 100, "complete", "razorpay", "service");
             yield this.transactionRepositories.create(usertranasaction);
             return update;
         });
