@@ -35,6 +35,7 @@ const getuaserid_1 = require("../../use-cases/transactions/getuaserid");
 const transactionMongoRepositories_1 = require("../../interfaces/repositories/transaction/transactionMongoRepositories");
 const putwithdrawamount_1 = require("../../use-cases/employeeside/payment/putwithdrawamount");
 const getbyemployeeId_1 = require("../../use-cases/wallet/getbyemployeeId");
+const addFCM_token_1 = require("../../use-cases/employeeside/pushNotification/addFCM_token");
 // repositories
 const empRepositories = new EmployeMongoRepositories_1.EmployeeMongoRepositories();
 const service_bookingRep = new mongoServiceRepositories_1.Mongo_Service_Booking_Repositories();
@@ -70,6 +71,7 @@ const getuserDetails = new getUserdetails_usCase_1.User_getdetails(userRepositor
 const gettranasactionByemployee = new getuaserid_1.Transaction_getbyuserId(transactionrepositories);
 const putwithrdrawamount = new putwithdrawamount_1.Employee_putwithrdawamountuseCase(walletRepositories, empRepositories, transactionrepositories);
 const getwalletEmployee = new getbyemployeeId_1.Employee_getWalletDetails(walletRepositories);
-exports.employeeController = new EmployeeController_1.EmployeeController(createEmployee, sendmailOtp, checkOtp, login, putProfieEMployee, putEmp_job, getEmpl_Booking, putEmpl_Service_booking_status, getEmployee, getJobs, getuserDetails, forgotUserCase, newPassword, putonDuty, addlocation);
+const addFCM_token = new addFCM_token_1.FCM_TOKEN_ADDuseCase(empRepositories);
+exports.employeeController = new EmployeeController_1.EmployeeController(createEmployee, sendmailOtp, checkOtp, login, putProfieEMployee, putEmp_job, getEmpl_Booking, putEmpl_Service_booking_status, getEmployee, getJobs, getuserDetails, forgotUserCase, newPassword, putonDuty, addlocation, addFCM_token);
 exports.servicecontroller = new EmpServiceController_1.EmpServiceController(getreqservice, putreqservice, getServicePayment, gettranasactionByemployee, putwithrdrawamount, getwalletEmployee);
 exports.chatcontroller = new employeechatcontroller_1.EmployeeChatcontroller(getchatbyEmployeeside);

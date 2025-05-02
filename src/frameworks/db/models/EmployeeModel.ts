@@ -39,6 +39,7 @@ export interface IEmployee_types extends Document{
   revenue:number,
   proof:string;
   isValidated:boolean, 
+  FCM_Token:string;
   createdAt:Date,
   updatedAt:Date,
 
@@ -108,6 +109,10 @@ const EmployeSchema=new Schema<IEmployee_types>({
  isValidated:{
     type:Boolean,
     default:false
+ },
+ FCM_Token:{
+    type:String,
+    required:false
  }
 
 

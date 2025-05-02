@@ -18,6 +18,7 @@ export interface IEmployeeRepositories{
      findByIdAndUpdatelocation(id:string,location:Locationuser_types):Promise<EmployeeEntities|null>
      findempnearestWithOnduty(userLocation:{lat:number,lng:number}):Promise<EmployeeEntities[]>
      findempnearest10km(userLocation:{lat:number,lng:number}):Promise<EmployeeEntities[]>
+     findByIdAndUpdate_FCMToken(id:string,token:string):Promise<void>
      
 
 

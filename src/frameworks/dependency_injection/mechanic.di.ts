@@ -34,6 +34,7 @@ import { Transaction_getbyuserId } from "../../use-cases/transactions/getuaserid
 import { TransactionMongoRepositories } from "../../interfaces/repositories/transaction/transactionMongoRepositories";
 import { Employee_putwithrdawamountuseCase } from "../../use-cases/employeeside/payment/putwithdrawamount";
 import { Employee_getWalletDetails } from "../../use-cases/wallet/getbyemployeeId";
+import { FCM_TOKEN_ADDuseCase } from "../../use-cases/employeeside/pushNotification/addFCM_token";
 
 // repositories
 const empRepositories = new EmployeeMongoRepositories();
@@ -93,6 +94,7 @@ const putwithrdrawamount = new Employee_putwithrdawamountuseCase(
 );
 
 const getwalletEmployee = new Employee_getWalletDetails(walletRepositories);
+const addFCM_token=new FCM_TOKEN_ADDuseCase(empRepositories)
 export const employeeController = new EmployeeController(
   createEmployee,
   sendmailOtp,
@@ -108,7 +110,8 @@ export const employeeController = new EmployeeController(
   forgotUserCase,
   newPassword,
   putonDuty,
-  addlocation
+  addlocation,
+  addFCM_token
 );
 
 export const servicecontroller = new EmpServiceController(

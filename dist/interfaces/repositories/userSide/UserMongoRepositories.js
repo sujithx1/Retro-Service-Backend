@@ -61,7 +61,7 @@ class UserMongodbRepositories {
     findEmployees() {
         return __awaiter(this, void 0, void 0, function* () {
             const employees = yield EmployeeModel_1.EmployeeModel.find();
-            return employees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.id, item.username, item.email, item.phone, item.password, item.skills, item.experience, item.isValidated, item.proof, item.isActive, item.profilePic, item.location, item.authSource, item.role, item.revenue, item.onDuty, item.createdAt, item.updatedAt));
+            return employees.map((item) => new EmployeeEntities_1.EmployeeEntities(item.id, item.username, item.email, item.phone, item.password, item.skills, item.experience, item.isValidated, item.proof, item.isActive, item.profilePic, item.location, item.authSource, item.role, item.revenue, item.onDuty, item.FCM_Token, item.createdAt, item.updatedAt));
         });
     }
     findByIdAndUpdatelocation(id, location) {

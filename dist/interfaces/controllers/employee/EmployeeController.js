@@ -32,7 +32,7 @@ const cloudinary_1 = __importDefault(require("../../../utils/helper/cloudinary")
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 class EmployeeController {
-    constructor(createEmploye, sendOtp, otpcheking, loginemp, putProfile, putEMp_job, getEmpl_Bopoking, putEmpl_serviceBooking_status, getEmployee, getJobs, getuserDetails, postforgot_passwordservice, newPassworduseCase, putDuty, empladdlocation) {
+    constructor(createEmploye, sendOtp, otpcheking, loginemp, putProfile, putEMp_job, getEmpl_Bopoking, putEmpl_serviceBooking_status, getEmployee, getJobs, getuserDetails, postforgot_passwordservice, newPassworduseCase, putDuty, empladdlocation, empAddFCM_token) {
         this.createEmploye = createEmploye;
         this.sendOtp = sendOtp;
         this.otpcheking = otpcheking;
@@ -48,6 +48,7 @@ class EmployeeController {
         this.newPassworduseCase = newPassworduseCase;
         this.putDuty = putDuty;
         this.empladdlocation = empladdlocation;
+        this.empAddFCM_token = empAddFCM_token;
     }
     Signup(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -60,7 +61,7 @@ class EmployeeController {
                     password,
                     skills,
                     experience,
-                    proof
+                    proof,
                 };
                 (0, Validation_1.EmployeeSignupValidate)(employeData);
                 const otp = (0, otp_1.generate_otp)();
@@ -349,7 +350,9 @@ class EmployeeController {
                     throw new custom_errors_1.CustomError("missig id", 401, error_enum_1.AppError.ValidationError);
                 // if(duty=="")  throw new CustomError("missig duty",401,AppError.ValidationError)
                 const dutyemployee = yield this.putDuty.execute(id, duty);
-                res.status(200).json({ message: "success", success: true, duty: dutyemployee });
+                res
+                    .status(200)
+                    .json({ message: "success", success: true, duty: dutyemployee });
             }
             catch (error) {
                 return next(error);
@@ -369,6 +372,24 @@ class EmployeeController {
                     return new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError);
                 const location = yield this.empladdlocation.execute(id, lat, lng, address);
                 res.status(200).json({ message: "success", success: true, location });
+            }
+            catch (error) {
+                console.log("err->User_get_service_Booking_controll", error);
+                return next(error);
+            }
+        });
+    }
+    _Employee_put_setFCMToken(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const { FCM_token } = req.body;
+                if (!id)
+                    return new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError);
+                if (!FCM_token)
+                    return new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError);
+                yield this.empAddFCM_token.execute(id, FCM_token);
+                res.status(200).json({ message: "success", success: true });
             }
             catch (error) {
                 console.log("err->User_get_service_Booking_controll", error);

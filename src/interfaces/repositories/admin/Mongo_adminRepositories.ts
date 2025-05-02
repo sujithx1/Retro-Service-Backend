@@ -72,6 +72,8 @@ export class MongoAdminRepositories implements IAdminRepositories {
           item.role,
           item.revenue,
           item.onDuty,
+          item.FCM_Token,
+
           item.createdAt,
           item.updatedAt
         )

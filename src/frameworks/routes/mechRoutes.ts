@@ -99,5 +99,8 @@ router.put("/withdraw/:id", Authentication, (req, res, next) => {
 router.get("/wallet/:id", Authentication, (req, res, next) => {
   servicecontroller.employeeService_getWalletdetails(req, res, next);
 });
+router.put("/FCM_token/:id", (req, res, next) => {
+  employeeController._Employee_put_setFCMToken(req, res, next);
+});
 
 export default router;

@@ -28,6 +28,8 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
                   item.role,
                   item.revenue,
                   item.onDuty,
+                  item.FCM_Token,
+
                   item.createdAt,
                   item.updatedAt
                 )
@@ -54,6 +56,8 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
             employee.role,
             employee.revenue,
             employee.onDuty,
+            employee.FCM_Token,
+
             employee.createdAt,
             employee.updatedAt
         )
@@ -90,6 +94,8 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
         employedata.role,
         employedata.revenue,
         employedata.onDuty,
+        employedata.FCM_Token,
+
         employedata.createdAt,
         employedata.updatedAt
         

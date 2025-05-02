@@ -37,6 +37,9 @@ export class Emp_Login_useCase{
     employee.role,
     employee.revenue,
     employee.onDuty,
+    employee.FCM_token,
+    
+
     employee.createdAt,
     employee.updatedAt,
     

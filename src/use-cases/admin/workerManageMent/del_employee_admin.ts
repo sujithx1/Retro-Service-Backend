@@ -33,6 +33,7 @@ export class Admin_del_employee_useCase{
             update.role,
             update.revenue,
             update.onDuty,
+            update.FCM_token,
             update.createdAt,
             update.updatedAt
             

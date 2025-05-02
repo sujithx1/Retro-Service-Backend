@@ -128,6 +128,7 @@ export class UserMongodbRepositories implements IUserRepositories {
             item.role,
             item.revenue,
             item.onDuty,
+            item.FCM_Token,
             item.createdAt,
             item.updatedAt
           )

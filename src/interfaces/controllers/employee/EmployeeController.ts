@@ -24,6 +24,7 @@ import { Emp_NewPassword } from "../../../use-cases/employeeside/postnewpassword
 import { Emp_Forgot_PasswordotpUseCase } from "../../../use-cases/employeeside/forgotpassword";
 import { Emp_putonDutyuseCase } from "../../../use-cases/employeeside/putonDutyuseCase";
 import { Emp_putaddLocationuseCase } from "../../../use-cases/employeeside/putaddlocation";
+import { FCM_TOKEN_ADDuseCase } from "../../../use-cases/employeeside/pushNotification/addFCM_token";
 
 export class EmployeeController {
   constructor(
@@ -37,16 +38,18 @@ export class EmployeeController {
     private putEmpl_serviceBooking_status: Employee_put_Service_booking_useCase,
     private getEmployee: Employee_get_details_useCase,
     private getJobs: Admin_get_jobs_useCase,
-    private getuserDetails:User_getdetails,
-        private postforgot_passwordservice:Emp_Forgot_PasswordotpUseCase,
-        private newPassworduseCase:Emp_NewPassword,
-        private putDuty:Emp_putonDutyuseCase,
-        private empladdlocation:Emp_putaddLocationuseCase
+    private getuserDetails: User_getdetails,
+    private postforgot_passwordservice: Emp_Forgot_PasswordotpUseCase,
+    private newPassworduseCase: Emp_NewPassword,
+    private putDuty: Emp_putonDutyuseCase,
+    private empladdlocation: Emp_putaddLocationuseCase,
+    private empAddFCM_token: FCM_TOKEN_ADDuseCase
   ) {}
 
   async Signup(req: Request, res: Response) {
     try {
-      const { username, email, phone, password, skills, experience,proof } = req.body;
+      const { username, email, phone, password, skills, experience, proof } =
+        req.body;
       const employeData = {
         username,
         email,
@@ -54,12 +57,12 @@ export class EmployeeController {
         password,
         skills,
         experience,
-        proof
+        proof,
       };
       EmployeeSignupValidate(employeData);
       const otp = generate_otp();
-      console.log("otp",otp);
-      
+      console.log("otp", otp);
+
       await this.sendOtp.execute(email, username, otp);
       await redisClient.setEx("empotp", 60, JSON.stringify(otp));
       await redisClient.setEx("empData", 60, JSON.stringify(employeData));
@@ -144,7 +147,7 @@ export class EmployeeController {
       const { id } = req.params;
 
       // Validate inputs
-      if (!username || !phone  || !experience) {
+      if (!username || !phone || !experience) {
         return next(new Error("Required fields are missing"));
       }
       if (!id) {
@@ -169,8 +172,7 @@ export class EmployeeController {
         phone,
         cloudinaryUpload.secure_url,
 
-        Number(experience),
-        
+        Number(experience)
       );
       console.log("Updated user:", user);
 
@@ -219,7 +221,7 @@ export class EmployeeController {
       const putJob = await this.putEMp_job.execute(id, jobAdd.name);
       const { password: _, ...withoutPass } = putJob;
 
-     return res.status(200).json({
+      return res.status(200).json({
         message: "success edited Employee Job ",
         employee: withoutPass,
       });
@@ -288,7 +290,7 @@ export class EmployeeController {
       const { password: _, ...without } = employe;
       return res.status(200).json({ message: "success", employee: without });
     } catch (error) {
-      return next(error)
+      return next(error);
     }
   }
 
@@ -307,7 +309,7 @@ export class EmployeeController {
       return next(error);
     }
   }
-  
+
   async Employee_get_userdetailsControl(
     req: Request,
     res: Response,
@@ -315,13 +317,15 @@ export class EmployeeController {
   ) {
     try {
       const { id } = req.params;
-      if (!id) return next(new CustomError("id missing",401,AppError.ValidationError));
-      const user = await this.getuserDetails.execute(id)
+      if (!id)
+        return next(
+          new CustomError("id missing", 401, AppError.ValidationError)
+        );
+      const user = await this.getuserDetails.execute(id);
       const { password: _, ...without } = user;
       return res.status(200).json({ message: "success", user: without });
     } catch (error) {
-      return next(error)
-
+      return next(error);
     }
   }
   async Employee_Post_forgot_password_controll(
@@ -330,15 +334,14 @@ export class EmployeeController {
     next: NextFunction
   ) {
     try {
-      const {email} = req.body;
-      console.log("forgot password",email);
-      
-      await this.postforgot_passwordservice.execute(email)
+      const { email } = req.body;
+      console.log("forgot password", email);
 
-      res.status(200).json({message:"check Your Email",email})
+      await this.postforgot_passwordservice.execute(email);
+
+      res.status(200).json({ message: "check Your Email", email });
     } catch (error) {
-      return next(error)
-
+      return next(error);
     }
   }
   async Employee_post_forgot_password_otpcheckcontroll(
@@ -347,63 +350,58 @@ export class EmployeeController {
     next: NextFunction
   ) {
     try {
-      const {otp} = req.body;
-      if(!otp)  throw new CustomError("missig filed",401,AppError.ValidationError)
-        console.log(otp);
+      const { otp } = req.body;
+      if (!otp)
+        throw new CustomError("missig filed", 401, AppError.ValidationError);
+      console.log(otp);
       const storedOtp = await redisClient.get("forgot-password-otp");
-      if (!storedOtp) throw new CustomError("OTP expired",401,AppError.OtpExpired);
-      await this.otpcheking.execute(Number(otp),Number(storedOtp))
+      if (!storedOtp)
+        throw new CustomError("OTP expired", 401, AppError.OtpExpired);
+      await this.otpcheking.execute(Number(otp), Number(storedOtp));
 
-        
-      res.status(200).json({message:"change your password"})
+      res.status(200).json({ message: "change your password" });
     } catch (error) {
-      return next(error)
-
+      return next(error);
     }
   }
 
-  
   async Employee_post_newpassword(
     req: Request,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const {email,password} = req.body;
-      if(!email|| !password)  throw new CustomError("missig filed",401,AppError.ValidationError)
-        console.log(email,password);    
-      await this.newPassworduseCase.execute(email,password)
-      res.status(200).json({message:"success",success:true})
+      const { email, password } = req.body;
+      if (!email || !password)
+        throw new CustomError("missig filed", 401, AppError.ValidationError);
+      console.log(email, password);
+      await this.newPassworduseCase.execute(email, password);
+      res.status(200).json({ message: "success", success: true });
     } catch (error) {
-      return next(error)
-
+      return next(error);
     }
   }
 
-  async Employee_put_onDuty(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+  async Employee_put_onDuty(req: Request, res: Response, next: NextFunction) {
     try {
       console.log("duty controller ");
-      
-      const {id} = req.params
-      const {duty } = req.body;
-      console.log(id,duty);  
-      if(!id)  throw new CustomError("missig id",401,AppError.ValidationError)
+
+      const { id } = req.params;
+      const { duty } = req.body;
+      console.log(id, duty);
+      if (!id)
+        throw new CustomError("missig id", 401, AppError.ValidationError);
       // if(duty=="")  throw new CustomError("missig duty",401,AppError.ValidationError)
-        
-      const dutyemployee=await this.putDuty.execute(id,duty)
 
-      res.status(200).json({message:"success",success:true,duty:dutyemployee})
+      const dutyemployee = await this.putDuty.execute(id, duty);
+
+      res
+        .status(200)
+        .json({ message: "success", success: true, duty: dutyemployee });
     } catch (error) {
-      return next(error)
-
+      return next(error);
     }
   }
-
-  
 
   async Employee_putaddlocation(
     req: Request,
@@ -411,25 +409,47 @@ export class EmployeeController {
     next: NextFunction
   ) {
     try {
-      const {id}=req.params
-      console.log("body",req.body);
-      
+      const { id } = req.params;
+      console.log("body", req.body);
+
       console.log(id);
-      
-      const {lat,lng,address}=req.body
-      if(!id) return new CustomError("missing id",401,AppError.ValidationError)
-      if(!lat||!lng||!address) return new CustomError("missing field",401,AppError.ValidationError)
-        const location=await this.empladdlocation.execute(id,lat,lng,address)
-      res.status(200).json({message:"success",success:true,location})
 
-
+      const { lat, lng, address } = req.body;
+      if (!id)
+        return new CustomError("missing id", 401, AppError.ValidationError);
+      if (!lat || !lng || !address)
+        return new CustomError("missing field", 401, AppError.ValidationError);
+      const location = await this.empladdlocation.execute(
+        id,
+        lat,
+        lng,
+        address
+      );
+      res.status(200).json({ message: "success", success: true, location });
     } catch (error) {
       console.log("err->User_get_service_Booking_controll", error);
       return next(error);
     }
   }
 
+  async _Employee_put_setFCMToken(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.params;
 
-
-  
+      const { FCM_token } = req.body;
+      if (!id)
+        return new CustomError("missing id", 401, AppError.ValidationError);
+      if (!FCM_token)
+        return new CustomError("missing field", 401, AppError.ValidationError);
+      await this.empAddFCM_token.execute(id, FCM_token);
+      res.status(200).json({ message: "success", success: true });
+    } catch (error) {
+      console.log("err->User_get_service_Booking_controll", error);
+      return next(error);
+    }
+  }
 }

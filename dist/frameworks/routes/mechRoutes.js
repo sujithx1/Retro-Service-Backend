@@ -72,4 +72,7 @@ router.put("/withdraw/:id", userAuthentication_1.Authentication, (req, res, next
 router.get("/wallet/:id", userAuthentication_1.Authentication, (req, res, next) => {
     mechanic_di_1.servicecontroller.employeeService_getWalletdetails(req, res, next);
 });
+router.put("/FCM_token/:id", (req, res, next) => {
+    mechanic_di_1.employeeController._Employee_put_setFCMToken(req, res, next);
+});
 exports.default = router;

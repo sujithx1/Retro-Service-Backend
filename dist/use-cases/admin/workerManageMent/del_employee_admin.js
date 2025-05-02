@@ -25,7 +25,7 @@ class Admin_del_employee_useCase {
             if (!update)
                 throw new Error("not updated");
             console.log(update);
-            return new EmployeeEntities_1.EmployeeEntities(update.id, update.username, update.email, update.phone, update.password, update.skills, update.experience, update.isValidated, update.proof, update.isActive, update.profilePic, update.location, update.authSource, update.role, update.revenue, update.onDuty, update.createdAt, update.updatedAt);
+            return new EmployeeEntities_1.EmployeeEntities(update.id, update.username, update.email, update.phone, update.password, update.skills, update.experience, update.isValidated, update.proof, update.isActive, update.profilePic, update.location, update.authSource, update.role, update.revenue, update.onDuty, update.FCM_token, update.createdAt, update.updatedAt);
         });
     }
 }

@@ -113,6 +113,10 @@ const EmployeSchema = new mongoose_1.Schema({
     isValidated: {
         type: Boolean,
         default: false
+    },
+    FCM_Token: {
+        type: String,
+        required: false
     }
 }, {
     timestamps: true

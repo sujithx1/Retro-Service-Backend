@@ -11,8 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReqEmployeeServices_useCase = void 0;
 const reqserviceEntities_1 = require("../../../entities/reqserviceEntities");
-const custom_errors_1 = require("../../../utils/errors/custom.errors");
-const error_enum_1 = require("../../../utils/errors/error.enum");
+const pushNotification_1 = require("../../../firebase/pushNotification");
 class ReqEmployeeServices_useCase {
     constructor(userRepositories, employeeRepositoires, reqServicesRepositories) {
         this.userRepositories = userRepositories;
@@ -21,16 +20,19 @@ class ReqEmployeeServices_useCase {
     }
     execute(userId, userEmail, userName, userLocation, jobId, jobName, Min_wage, problem) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield this.userRepositories.findById(userId);
-            if (!user)
-                throw new custom_errors_1.CustomError("User not found", 401, error_enum_1.AppError.UserNotFound);
+            // const user=await this.userRepositories.findById(userId)
+            // if(!user) throw new CustomError("User not found",401,AppError.UserNotFound)
             const employees = yield this.employeeRepositoires.findempnearestWithOnduty(userLocation);
             const mechanics = employees.map(emp => ({
                 employeeId: emp.id,
                 bookingDate: new Date(),
             }));
             const newReqs = new reqserviceEntities_1.RequestserviceMechEntities("", userId, userName, userEmail, userLocation, jobId, jobName, Min_wage, problem, mechanics, "PENDING", new Date());
-            // const userFcmToken = await getUserFcmToken(userId); // Fetch user's FCM token from DB
+            const tokens = employees
+                .map(emp => emp.FCM_token)
+                .filter((token) => typeof token === 'string');
+            const uniqueTokens = Array.from(new Set(tokens));
+            yield (0, pushNotification_1.notifyMechanics)(uniqueTokens);
             return yield this.reqServicesRepositories.create(newReqs);
         });
     }

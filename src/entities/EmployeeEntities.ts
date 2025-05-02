@@ -20,6 +20,7 @@ export class EmployeeEntities{
         public role:string="employee",
         public revenue?:number,
         public onDuty:boolean=false,
+        public FCM_token?:string,
         public createdAt?: Date,
         public updatedAt?: Date
     ) {}

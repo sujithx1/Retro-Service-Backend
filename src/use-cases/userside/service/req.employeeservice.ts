@@ -1,5 +1,6 @@
 import { io } from "../../../app";
 import { ReqService_MechanicTypes, RequestserviceMechEntities } from "../../../entities/reqserviceEntities";
+import { notifyMechanics } from "../../../firebase/pushNotification";
 import { IEmployeeRepositories } from "../../../interfaces/repositories/employeeside/IEmployeRepositories";
 import { IreqservicemechanicsRepositories } from "../../../interfaces/repositories/reqservicemechanics/Ireqservicesmechrepositories";
 import { IUserRepositories } from "../../../interfaces/repositories/userSide/IUserrRepositories";
@@ -24,15 +25,18 @@ export class ReqEmployeeServices_useCase{
         problem:string,
     ){
 
-            const user=await this.userRepositories.findById(userId)
-            if(!user) throw new CustomError("User not found",401,AppError.UserNotFound)
+            // const user=await this.userRepositories.findById(userId)
+            // if(!user) throw new CustomError("User not found",401,AppError.UserNotFound)
             
 
             const employees=await this.employeeRepositoires.findempnearestWithOnduty(userLocation)
+            
+        
+
             const mechanics:ReqService_MechanicTypes[] = employees.map(emp => ({
                 employeeId: emp.id,       
                 bookingDate: new Date(),
-                
+                 
             
                    
             }));
@@ -53,8 +57,14 @@ export class ReqEmployeeServices_useCase{
 
 
             )
-            // const userFcmToken = await getUserFcmToken(userId); // Fetch user's FCM token from DB
+            const tokens: string[] = employees
+            .map(emp => emp.FCM_token)
+            .filter((token): token is string => typeof token === 'string');
+            const uniqueTokens = Array.from(new Set(tokens));
 
+            await notifyMechanics(uniqueTokens);
+
+          
 
             return await this.reqServicesRepositories.create(newReqs)
         
