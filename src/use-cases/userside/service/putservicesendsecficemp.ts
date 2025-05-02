@@ -1,4 +1,5 @@
 import { ReqService_MechanicTypes, RequestserviceMechEntities } from "../../../entities/reqserviceEntities";
+import { notifySingleUser } from "../../../firebase/pushNotification.single";
 import { IEmployeeRepositories } from "../../../interfaces/repositories/employeeside/IEmployeRepositories";
 import { IreqservicemechanicsRepositories } from "../../../interfaces/repositories/reqservicemechanics/Ireqservicesmechrepositories";
 import { CustomError } from "../../../utils/errors/custom.errors";
@@ -54,6 +55,12 @@ export class User_putserviceSpecificEmp {
     }
 
     console.log("Service updated successfully");
+
+      const token=employee.FCM_token
+      if (token) {
+        notifySingleUser(token)
+      }
+
     return updatedService;
   }     
 }

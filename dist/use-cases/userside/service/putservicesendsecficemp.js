@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User_putserviceSpecificEmp = void 0;
+const pushNotification_single_1 = require("../../../firebase/pushNotification.single");
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 class User_putserviceSpecificEmp {
@@ -54,6 +55,10 @@ class User_putserviceSpecificEmp {
                 throw new custom_errors_1.CustomError("Service update failed", 500, error_enum_1.AppError.ServerError);
             }
             console.log("Service updated successfully");
+            const token = employee.FCM_token;
+            if (token) {
+                (0, pushNotification_single_1.notifySingleUser)(token);
+            }
             return updatedService;
         });
     }

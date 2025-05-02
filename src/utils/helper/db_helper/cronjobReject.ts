@@ -13,7 +13,7 @@ export const startBookingCronJob = () => {
   bookingCronJob = cron.schedule("* * * * *", async () => {
     console.log("Cron job triggered at:", new Date().toLocaleTimeString()); 
 
-    const oneMinuteAgo = new Date(Date.now() - 50  * 1000); // 1 minute ago
+    const oneMinuteAgo = new Date(Date.now() - 40  * 1000); // 1 minute ago
 
     try {
       const expiredBookings = await Request_Service_Mech_model.find({

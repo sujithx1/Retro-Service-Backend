@@ -24,7 +24,7 @@ const startBookingCronJob = () => {
     console.log("Starting cron job to auto-cancel pending bookings...");
     bookingCronJob = node_cron_1.default.schedule("* * * * *", () => __awaiter(void 0, void 0, void 0, function* () {
         console.log("Cron job triggered at:", new Date().toLocaleTimeString());
-        const oneMinuteAgo = new Date(Date.now() - 50 * 1000); // 1 minute ago
+        const oneMinuteAgo = new Date(Date.now() - 40 * 1000); // 1 minute ago
         try {
             const expiredBookings = yield reqserviceMechanics_1.Request_Service_Mech_model.find({
                 status: "PENDING",
