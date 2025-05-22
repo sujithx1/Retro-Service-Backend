@@ -51,4 +51,4 @@ const ReviewRatingSchema = new mongoose_1.Schema({
 }, {
     timestamps: true
 });
-exports.ReviewRatingModal = mongoose_1.default.model('ReviewRating', ReviewRatingSchema);
+exports.ReviewRatingModal = mongoose_1.default.model("ReviewRating", ReviewRatingSchema);

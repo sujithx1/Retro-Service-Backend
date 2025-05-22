@@ -11,9 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminLogin = void 0;
 const hashPassword_1 = require("../../utils/hashPassword");
-const AdminEntities_1 = require("../../entities/AdminEntities");
 const custom_errors_1 = require("../../utils/errors/custom.errors");
 const error_enum_1 = require("../../utils/errors/error.enum");
+const user_map_1 = require("../../DTO/map/user.map");
+const mechanic_map_1 = require("../../DTO/map/mechanic.map");
 class AdminLogin {
     constructor(adminrepositories) {
         this.adminrepositories = adminrepositories;
@@ -28,17 +29,19 @@ class AdminLogin {
             const compare = yield (0, hashPassword_1.comparePassword)(password, admin.password);
             if (!compare)
                 throw new custom_errors_1.CustomError("password not matching", 401, error_enum_1.AppError.InvalidCredentials);
-            return new AdminEntities_1.AdminEntities(admin.id, admin.username, admin.email, admin.phone, admin.password, admin.isActive, admin.profilePic, admin.isAdmin, admin.authSource, admin.role, admin.createdAt, admin.updatedAt);
+            return user_map_1.UserMap.toResponse(admin);
         });
     }
     getAlluser() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.adminrepositories.findAllUsers();
+            const users = yield this.adminrepositories.findAllUsers();
+            return users.map((item) => user_map_1.UserMap.toResponse(item));
         });
     }
     getAllEmployees() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.adminrepositories.findAllEmployees();
+            const mechaincs = yield this.adminrepositories.findAllEmployees();
+            return mechaincs.map((item) => mechanic_map_1.MechanicMap.toResponse(item));
         });
     }
     getAllJobs() {

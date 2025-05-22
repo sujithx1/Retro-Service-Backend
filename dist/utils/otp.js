@@ -15,7 +15,7 @@ const sendOtp = (email, username, otp, storeValid) => {
     return new Promise((resolve, reject) => {
         let mailOption;
         const transpailer = nodemailer_1.default.createTransport({
-            service: 'gmail',
+            service: "gmail",
             auth: {
                 user: process.env.Email,
                 pass: process.env.Password
@@ -25,7 +25,7 @@ const sendOtp = (email, username, otp, storeValid) => {
             mailOption = {
                 from: process.env.Email,
                 to: email,
-                subject: 'Welcome! Retro Service ',
+                subject: "Welcome! Retro Service ",
                 html: `<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
                 <h2>Hi${username},</h2>
                 <p>Thank you for using <strong> Retor Service </strong>.</p>
@@ -42,7 +42,7 @@ const sendOtp = (email, username, otp, storeValid) => {
             mailOption = {
                 from: process.env.Email,
                 to: email,
-                subject: 'Welcome! Verify Your Email with This OTP Code',
+                subject: "Welcome! Verify Your Email with This OTP Code",
                 html: `<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
                 <h2>Hi${username},</h2>
                 <p>Thank you for using <strong> Retor Service </strong>.</p>
@@ -57,11 +57,11 @@ const sendOtp = (email, username, otp, storeValid) => {
         }
         transpailer.sendMail(mailOption, (err, info) => {
             if (err) {
-                console.log('error from sending mail ', err);
+                console.log("error from sending mail ", err);
                 reject(err);
                 return;
             }
-            console.log('mail sended', info.response);
+            console.log("mail sended", info.response);
             resolve(info);
         });
     });

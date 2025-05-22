@@ -33,9 +33,9 @@ export class Report_feedBack_user_useCase{
             bookingId
 
 
-        )
+        );
 
-        return await this.reportRep.create(feedBack)
+        return await this.reportRep.create(feedBack);
         
     }
 }

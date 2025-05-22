@@ -7,7 +7,7 @@ export class Admin_get_categories_useCase{
     }
 
     async execute():Promise<CategoryEntities[]>{
-        return await this.categoryRespositories.findAll()
+        return await this.categoryRespositories.findAll();
     }
 }
 

@@ -20,7 +20,7 @@ class GetCart_byIduseCase {
         return __awaiter(this, void 0, void 0, function* () {
             const cart = yield this.cartrepositories.findById(cartId);
             if (!cart)
-                throw new custom_errors_1.CustomError('cart not found', 404, error_enum_1.AppError.ResourceNotFound);
+                throw new custom_errors_1.CustomError("cart not found", 404, error_enum_1.AppError.ResourceNotFound);
             return cart;
         });
     }

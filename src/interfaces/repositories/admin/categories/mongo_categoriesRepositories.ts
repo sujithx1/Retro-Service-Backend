@@ -41,7 +41,7 @@ export class Mongo_catgoriesRepositories implements ICategories_admin_Repositori
         if (!categoryData) {
             return null;
         }
-        categoryData.save()
+        categoryData.save();
     
         return new CategoryEntities(
           categoryData.id,
@@ -52,19 +52,19 @@ export class Mongo_catgoriesRepositories implements ICategories_admin_Repositori
       }
    
      async findAll(): Promise<CategoryEntities[]> {
-          const categories=await CategoryModel.find()
+          const categories=await CategoryModel.find();
           
 
-          return categories.map((item)=>new CategoryEntities(item.id,item.name,item.description,item.isBlock))
+          return categories.map((item)=>new CategoryEntities(item.id,item.name,item.description,item.isBlock));
       }
       async categgoryFindByNameReturnCategory(name: string): Promise<CategoryEntities | null> {
-          const category=await CategoryModel.findOne({name})
-          if(!category)return null
+          const category=await CategoryModel.findOne({name});
+          if(!category)return null;
           return new CategoryEntities(
             category.id,
             category.name,
             category.description,
             category.isBlock
-          )
+          );
       }
 }

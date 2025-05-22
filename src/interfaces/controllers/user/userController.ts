@@ -48,7 +48,7 @@ export class Usercontroller {
     private user_getemployeeDetails:Employee_get_details_useCase
   ) {}
 
-  async signUp(req: Request, res: Response) {
+  async signUp(req: Request, res: Response,next:NextFunction) {
     try {
       const { username, email, phone, password } = req.body;
  
@@ -64,13 +64,11 @@ export class Usercontroller {
       await redisClient.setEx("userData", 60, JSON.stringify(userData));
 
       res.status(200).json({ message: "Enter Otp check your Email" });
-    } catch (error: any) {
-      console.log("errpr", error.message);
-
-      res.status(400).json({ error: error.message });
+    } catch (error) {
+   return next(error)
     }
   }
-  async OtpChecking(req: Request, res: Response) {
+  async OtpChecking(req: Request, res: Response,next:NextFunction) {
     try {
       const { otp } = req.body;
       console.log("otp checking", otp);
@@ -96,18 +94,17 @@ export class Usercontroller {
       if (!userData) throw new Error("userData Not found ");
       const userDetails = JSON.parse(userData);
       const user = await this.createUser.exicute(userDetails);
-      const { password: _, ...withoutPassword } = user;
+      // const { password: _, ...withoutPassword } = user;
 
       res
         .status(201)
-        .json({ mesage: "user registerd ", user: withoutPassword });
-    } catch (error: any) {
-      console.error("Error in OtpChecking:", error.message);
-      res.status(400).json({ error: error.message });
+        .json({ mesage: "user registerd ", user });
+    } catch (error) {
+         return next(error)
     }
   }
 
-  async userlogin(req: Request, res: Response) {
+  async userlogin(req: Request, res: Response,next:NextFunction) {
     try {
       console.log("login render");
 
@@ -117,7 +114,7 @@ export class Usercontroller {
       const refresh_token = GenerateRefreshToken(user.id, user.role);
       const access_token = GenerateAccessToken(user.id, user.role);
 
-      const { password: _, isAdmin, ...withoutpassword } = user;
+      // const { password: _, isAdmin, ...withoutpassword } = user;
       console.log("user log in success");
 
       res
@@ -129,12 +126,10 @@ export class Usercontroller {
         .json({
           message: "login success",
           token: access_token,
-          user: withoutpassword,
+          user,
         });
-    } catch (error: any) {
-      console.log("error from login user ", error.message);
-
-      res.status(400).json({ error: error.message });
+    } catch (error) {
+         return next(error)
     }
   }
 
@@ -149,7 +144,7 @@ export class Usercontroller {
       const refresh_token = GenerateRefreshToken(user.id, user.role);
       const access_token = GenerateAccessToken(user.id, user.role);
 
-      const { password, isAdmin, ...without } = user;
+      // const { password, isAdmin, ...without } = user;
 
       console.log("tokenssss    " + access_token, refresh_token);
 
@@ -158,7 +153,7 @@ export class Usercontroller {
           httpOnly: true,
         })
         .status(200)
-        .json({ message: "login success", user: without, token: access_token });
+        .json({ message: "login success", user, token: access_token });
     } catch (error: any) {
       console.log("error -> usercntrol - > googleSignin", error.message);
       next(error);
@@ -213,16 +208,15 @@ export class Usercontroller {
         );
         console.log("Updated user:", user);
 
-        const { password: _, ...withoutPassword } = user;
+        // const { password: _, ...withoutPassword } = user;
         console.log("heyyyy");
         // Send success response
         return res.status(200).json({
           message: "User updated successfully",
-          user: withoutPassword,
+          user,
         });
       }
-    } catch (error: any) {
-      console.error("Unhandled error in User_Put_controll:", error.message);
+    } catch (error) {
       return next(error);
     }
   }
@@ -249,17 +243,12 @@ export class Usercontroller {
       const localFilePath = req.file.filename; // File path from local upload
       console.log("locaalpath", localFilePath);
 
-      // // Upload the file to Cloudinary
-      // cloudinary.uploader.upload("path/to/test-image.jpg", { folder: "test-folder" })
-      // .then((result) => console.log("Manual test successful:", result))
-      // .catch((error) => console.error("Manual test failed:", error));
 
       const userProfile = await this.putProfileImage.execute(id, localFilePath);
       console.log(userProfile + "userrrrrrrrrrrrrrrrrrrrr");
 
-      const { password: _, ...without } = userProfile;
 
-      return res.status(200).json({ message: "image updated", user: without });
+      return res.status(200).json({ message: "image updated", user: userProfile });
     } catch (error) {
       next(error);
     }
@@ -281,8 +270,8 @@ export class Usercontroller {
   ) {
     try {
       const employees = await this.getAllEmployees.execute();
-      const withoutPassword = employees.map(({ password, ...rest }) => rest);
-      res.status(200).json({ message: "success", employees: withoutPassword });
+      // const withoutPassword = employees.map(({ password, ...rest }) => rest);
+      res.status(200).json({ message: "success", employees });
     } catch (error) {
       next(error);
     }
@@ -399,9 +388,9 @@ export class Usercontroller {
       const {email} = req.body;
       console.log("forgot password",email);
       
-      await this.postforgot_passwordservice.execute(email)
+      await this.postforgot_passwordservice.execute(email);
 
-      res.status(200).json({message:"check Your Email",email})
+      res.status(200).json({message:"check Your Email",email});
 
 
     } catch (error) {
@@ -416,14 +405,14 @@ export class Usercontroller {
   ) {
     try {
       const {otp} = req.body;
-      if(!otp)  throw new CustomError("missig filed",401,AppError.ValidationError)
+      if(!otp)  throw new CustomError("missig filed",401,AppError.ValidationError);
         console.log(otp);
       const storedOtp = await redisClient.get("forgot-password-otp");
       if (!storedOtp) throw new CustomError("OTP expired",401,AppError.OtpExpired);
-      await this.checkOtp.execute(Number(otp),Number(storedOtp))
+      await this.checkOtp.execute(Number(otp),Number(storedOtp));
 
         
-      res.status(200).json({message:"change your password"})
+      res.status(200).json({message:"change your password"});
 
 
     } catch (error) {
@@ -440,10 +429,10 @@ export class Usercontroller {
   ) {
     try {
       const {email,password} = req.body;
-      if(!email|| !password)  throw new CustomError("missig filed",401,AppError.ValidationError)
+      if(!email|| !password)  throw new CustomError("missig filed",401,AppError.ValidationError);
         console.log(email,password);    
-      await this.newPassworduseCase.execute(email,password)
-      res.status(200).json({message:"success",success:true})
+      await this.newPassworduseCase.execute(email,password);
+      res.status(200).json({message:"success",success:true});
 
 
     } catch (error) {
@@ -460,14 +449,14 @@ export class Usercontroller {
     next: NextFunction
   ) {
     try {
-      const {id}=req.params
+      const {id}=req.params;
       console.log("body",req.body);
       
-      const {lat,lng,address}=req.body
-      if(!id) return new CustomError("missing id",401,AppError.ValidationError)
-      if(!lat||!lng||!address) return new CustomError("missing field",401,AppError.ValidationError)
-        const location=await this.userlocationUsecase.execute(id,lat,lng,address)
-      res.status(200).json({message:"success",success:true,location})
+      const {lat,lng,address}=req.body;
+      if(!id) return new CustomError("missing id",401,AppError.ValidationError);
+      if(!lat||!lng||!address) return new CustomError("missing field",401,AppError.ValidationError);
+        const location=await this.userlocationUsecase.execute(id,lat,lng,address);
+      res.status(200).json({message:"success",success:true,location});
 
 
     } catch (error) {
@@ -487,11 +476,10 @@ export class Usercontroller {
     try {
       const { id } = req.params;
       if (!id) return next(new CustomError("id missing",401,AppError.ValidationError));
-      const user = await this.user_getemployeeDetails.execute(id)
-      const { password: _, ...without } = user;
-      return res.status(200).json({ message: "success", user: without });
+      const user = await this.user_getemployeeDetails.execute(id);
+      return res.status(200).json({ message: "success", user });
     } catch (error) {
-      return next(error)
+      return next(error);
 
     }
   }

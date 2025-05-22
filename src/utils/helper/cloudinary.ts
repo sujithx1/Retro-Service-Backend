@@ -1,6 +1,6 @@
 
 // cloudinaryConfig.ts
-import { v2 as cloudinary } from 'cloudinary';
+import { v2 as cloudinary } from "cloudinary";
 
 // Configure Cloudinary with your credentials (stored in environment variables)
 cloudinary.config({

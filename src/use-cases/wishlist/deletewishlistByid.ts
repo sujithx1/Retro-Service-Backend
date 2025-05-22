@@ -9,7 +9,7 @@ export class User_deletewishlistuseCase{
     }
 
     async execute(id:string):Promise<string>{
-        const wishlist=await this.wishlistrepositories.deletewishlist(id)
-        return wishlist
+        const wishlist=await this.wishlistrepositories.deletewishlist(id);
+        return wishlist;
     }
 }

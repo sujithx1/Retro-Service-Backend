@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUser = void 0;
+const user_map_1 = require("../../../DTO/map/user.map");
 const Userentities_1 = require("../../../entities/Userentities");
 const walletEntities_1 = require("../../../entities/walletEntities");
 const hashPassword_1 = require("../../../utils/hashPassword");
@@ -26,7 +27,7 @@ class CreateUser {
             const newUser = yield this.userRepositores.save(user);
             const wallet = new walletEntities_1.WalletEntities("", newUser.id, "user", 0);
             this.walletrepositories.create(wallet);
-            return newUser;
+            return user_map_1.UserMap.toResponse(newUser);
         });
     }
 }

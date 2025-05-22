@@ -36,7 +36,7 @@ const EmployeeSignupValidate = (data) => {
 exports.EmployeeSignupValidate = EmployeeSignupValidate;
 const category_Validation = (name, description, next) => {
     if (!name || !description) {
-        next(new Error('All field is required'));
+        next(new Error("All field is required"));
         return false;
     }
     return true;

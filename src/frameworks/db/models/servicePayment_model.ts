@@ -1,7 +1,7 @@
-import mongoose, { Schema, Document } from 'mongoose';
-import { IuserTypes } from './UserModel';
-import { IEmployee_types } from './EmployeeModel';
-import { IReq_Mechanics_service_types } from './reqserviceMechanics';
+import mongoose, { Schema, Document } from "mongoose";
+import { IuserTypes } from "./UserModel";
+import { IEmployee_types } from "./EmployeeModel";
+import { IReq_Mechanics_service_types } from "./reqserviceMechanics";
 
 interface ServicePayment extends Document {
   userId: mongoose.Types.ObjectId |IuserTypes;
@@ -25,17 +25,17 @@ const ServicePaymentSchema: Schema = new Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
     employeeId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'employee',
+      ref: "employee",
       required: true,
     },
     serviceId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'RequestMechanics',
+      ref: "RequestMechanics",
       required: true,
     },
     amount: {
@@ -67,7 +67,7 @@ const ServicePaymentSchema: Schema = new Schema(
 );
 
 
-export const ServicePaymentModel = mongoose.model<ServicePayment>('ServicePayment', ServicePaymentSchema);
+export const ServicePaymentModel = mongoose.model<ServicePayment>("ServicePayment", ServicePaymentSchema);
 
 
 

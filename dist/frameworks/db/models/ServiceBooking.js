@@ -66,4 +66,4 @@ const Service_booking_schema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-exports.Service_BookingModel = mongoose_1.default.model('ServiceBooking', Service_booking_schema);
+exports.Service_BookingModel = mongoose_1.default.model("ServiceBooking", Service_booking_schema);

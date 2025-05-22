@@ -1,15 +1,16 @@
-import { io } from "../../../app";
+// import { io } from "../../../app";
 import { ReqService_MechanicTypes, RequestserviceMechEntities } from "../../../entities/reqserviceEntities";
 import { notifyMechanics } from "../../../firebase/pushNotification";
 import { IEmployeeRepositories } from "../../../interfaces/repositories/employeeside/IEmployeRepositories";
 import { IreqservicemechanicsRepositories } from "../../../interfaces/repositories/reqservicemechanics/Ireqservicesmechrepositories";
 import { IUserRepositories } from "../../../interfaces/repositories/userSide/IUserrRepositories";
 import { FinduserLocation } from "../../../types/user";
-import { CustomError } from "../../../utils/errors/custom.errors";
-import { AppError } from "../../../utils/errors/error.enum";
+// import { CustomError } from "../../../utils/errors/custom.errors";
+// import { AppError } from "../../../utils/errors/error.enum";
 
 export class ReqEmployeeServices_useCase{
-    constructor(private userRepositories:IUserRepositories,
+    constructor(
+        private userRepositories:IUserRepositories,
         private employeeRepositoires:IEmployeeRepositories,
         private reqServicesRepositories:IreqservicemechanicsRepositories
     ) {}
@@ -29,7 +30,7 @@ export class ReqEmployeeServices_useCase{
             // if(!user) throw new CustomError("User not found",401,AppError.UserNotFound)
             
 
-            const employees=await this.employeeRepositoires.findempnearestWithOnduty(userLocation)
+            const employees=await this.employeeRepositoires.findempnearestWithOnduty(userLocation);
             
         
 
@@ -56,17 +57,17 @@ export class ReqEmployeeServices_useCase{
                 new Date()
 
 
-            )
+            );
             const tokens: string[] = employees
             .map(emp => emp.FCM_token)
-            .filter((token): token is string => typeof token === 'string');
+            .filter((token): token is string => typeof token === "string");
             const uniqueTokens = Array.from(new Set(tokens));
 
             await notifyMechanics(uniqueTokens);
 
           
 
-            return await this.reqServicesRepositories.create(newReqs)
+            return await this.reqServicesRepositories.create(newReqs);
         
 
     }

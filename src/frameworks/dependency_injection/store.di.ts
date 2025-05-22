@@ -24,8 +24,8 @@ import { Wallet_getstoreIduseCase } from "../../use-cases/wallet/getbystoreId";
 const storeRepositories = new StoreMongoRepositories();
 const walletRepositories = new WalletMongoRepositories();
 const productRepositories = new ProductMongoRepositories();
-const checkoutrepositoires=new  CheckoutMongoRepositories()
-const transactionrepositoires=new TransactionMongoRepositories()
+const checkoutrepositoires=new  CheckoutMongoRepositories();
+const transactionrepositoires=new TransactionMongoRepositories();
 
 const otpvalidate = new CheckOtp();
 const sendOtp = new SendOtp(storeRepositories, walletRepositories);
@@ -34,7 +34,7 @@ const checkotp = new Store_otpcheck(
   storeRepositories,
   walletRepositories
 );
-const login = new StoreLoginuseCase(storeRepositories)
+const login = new StoreLoginuseCase(storeRepositories);
 const stores20km = new Store20kmDistance(
   storeRepositories,
   productRepositories
@@ -46,11 +46,11 @@ const addLoction = new Store_addlocationuseCase(storeRepositories);
 const getproduct = new ProductgetbyIduseCase(productRepositories);
 const putproduct = new Store_putproductuseCase(productRepositories);
 const storeProducts = new Store_getproductsbystoreId(productRepositories);
-const getstorebyid=new Store_getiduseCase(storeRepositories)
-const getordersbyStoreId=new Orders_getstoriduseCase(checkoutrepositoires)
-const putordertstatus=new User_orderputuseCase(checkoutrepositoires,walletRepositories,transactionrepositoires)
-const getOrderbyId=new User_getOrderbyIduseCase(checkoutrepositoires)
-const getwalletBystoreId=new Wallet_getstoreIduseCase(walletRepositories)
+const getstorebyid=new Store_getiduseCase(storeRepositories);
+const getordersbyStoreId=new Orders_getstoriduseCase(checkoutrepositoires);
+const putordertstatus=new User_orderputuseCase(checkoutrepositoires,walletRepositories,transactionrepositoires);
+const getOrderbyId=new User_getOrderbyIduseCase(checkoutrepositoires);
+const getwalletBystoreId=new Wallet_getstoreIduseCase(walletRepositories);
 export const storeController = new StoreController(
   sendOtp,
   checkotp,

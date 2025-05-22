@@ -22,14 +22,14 @@ userRouter.post("/refresh-token", (req, res) => {
   createAccessToken(req, res, "user");
   
 });
-userRouter.post("/signup", (req, res) => userController.signUp(req, res));
-userRouter.post("/signup/otp", (req, res) =>
-  userController.OtpChecking(req, res)
+userRouter.post("/signup", (req, res,next) => userController.signUp(req, res,next));
+userRouter.post("/signup/otp", (req, res,next) =>
+  userController.OtpChecking(req, res,next)
 );
-userRouter.post("/signup/resendotp", (req, res) =>
-  userController.signUp(req, res)
+userRouter.post("/signup/resendotp", (req, res,next) =>
+  userController.signUp(req, res,next)
 );
-userRouter.post("/login", (req, res) => userController.userlogin(req, res));
+userRouter.post("/login", (req, res,next) => userController.userlogin(req, res,next));
 userRouter.get("/logout", (req, res, next) =>
   userController.User_get_Logout_controll(req, res, next)
 );
@@ -131,20 +131,20 @@ Authentication,
 );
 
 
-userRouter.get('/service-payment/:id',Authentication,(req,res,next)=>{
-  serviceController.userService_GETservicePayment(req,res,next)
-})
+userRouter.get("/service-payment/:id",Authentication,(req,res,next)=>{
+  serviceController.userService_GETservicePayment(req,res,next);
+});
 // userRouter.get('/chats-userId/:id',Authentication,(req,res,next)=>{
 //   userChatController.user_getChats(req,res,next)
 // })
 
 
-userRouter.get('/home',Authentication,(req,res,next)=>{
-  serviceController.userService_GETsearch(req,res,next)
-})
-userRouter.put('/location/:id',Authentication,(req,res,next)=>{
-  userController.user_putaddlocation(req,res,next)
-})
+userRouter.get("/home",Authentication,(req,res,next)=>{
+  serviceController.userService_GETsearch(req,res,next);
+});
+userRouter.put("/location/:id",Authentication,(req,res,next)=>{
+  userController.user_putaddlocation(req,res,next);
+});
 userRouter
   .route("/nearest-employees/:id?")
   .all(Authentication) 
@@ -165,88 +165,88 @@ userRouter.post(
   }
 );
 
-userRouter.get('/chats-userId/:id',Authentication,
-  (req,res,next)=>{userChatController.user_getChats(req,res,next)}
-)
+userRouter.get("/chats-userId/:id",Authentication,
+  (req,res,next)=>{userChatController.user_getChats(req,res,next);}
+);
 userRouter.get("/employee/:id", Authentication, (req, res, next) => {
-  userController.User_get_employeedetailsControl(req,res,next)
+  userController.User_get_employeedetailsControl(req,res,next);
 });
 userRouter.get("/wallet/userId/:id", Authentication, (req, res, next) => {
-  userWalletController.user_getwalletbyuserId_controller(req,res,next)
+  userWalletController.user_getwalletbyuserId_controller(req,res,next);
 });
 userRouter.post("/report", Authentication, (req, res, next) => {
-  userController.User_post_report_feedBack_employee_controll(req,res,next)
+  userController.User_post_report_feedBack_employee_controll(req,res,next);
 });
 userRouter.get("/transactions/:id", Authentication, (req, res, next) => {
-  serviceController.userService_getTransacationhistory(req,res,next)
+  serviceController.userService_getTransacationhistory(req,res,next);
 });
 userRouter.get("/stores", Authentication, (req, res, next) => {
-  storeController.getstores20kmUsersdie(req,res,next)
+  storeController.getstores20kmUsersdie(req,res,next);
 });
 userRouter.get("/categories", Authentication, (req, res, next) => {
-  admincontroller.Admin_get_categories_controll(req,res,next)
+  admincontroller.Admin_get_categories_controll(req,res,next);
 });
 
 
 
-userRouter.get('/products/:id',Authentication,(req,res,next)=>{
-  productcontroller.getProducts_storeId(req,res,next)
-})
-userRouter.get('/product/:id',Authentication,(req,res,next)=>{
-  productcontroller._getProduct_Id(req,res,next)
-})
+userRouter.get("/products/:id",Authentication,(req,res,next)=>{
+  productcontroller.getProducts_storeId(req,res,next);
+});
+userRouter.get("/product/:id",Authentication,(req,res,next)=>{
+  productcontroller._getProduct_Id(req,res,next);
+});
 
 
 userRouter
-.route('/cart/:id?')
+.route("/cart/:id?")
   .all(Authentication)
 
   .get((req,res,next)=>{
-    cartcontroller._getBycartId(req,res,next)
+    cartcontroller._getBycartId(req,res,next);
   })
   .post((req,res,next)=>{
 
-  cartcontroller.addToCart(req,res,next)
+  cartcontroller.addToCart(req,res,next);
 })
   .put((req,res,next)=>{
-  cartcontroller.updateAddtocart(req,res,next)
-})
+  cartcontroller.updateAddtocart(req,res,next);
+});
 // .delete((req,res,next)=>{
 //   cartcontroller._deletecartId(req,res,next)
 // })
   
 
-userRouter.get('/cart-user/:userId',Authentication,(req,res,next)=>{
-  cartcontroller.getcartbyUserId(req,res,next)
-})
+userRouter.get("/cart-user/:userId",Authentication,(req,res,next)=>{
+  cartcontroller.getcartbyUserId(req,res,next);
+});
 
-userRouter.put('/cart-remove/:id',Authentication,(req,res,next)=>{
-  cartcontroller._deletecartId(req,res,next)
+userRouter.put("/cart-remove/:id",Authentication,(req,res,next)=>{
+  cartcontroller._deletecartId(req,res,next);
 
 
-})
+});
    
-userRouter.get('/cart-product/:productId',Authentication,(req,res,next)=>{
-  cartcontroller._getcartbyproductId(req,res,next)
-})
-userRouter.get('/store/:id',Authentication,(req,res,next)=>{
- storeController._getStorebyIdcontroll(req,res,next)
-})
+userRouter.get("/cart-product/:productId",Authentication,(req,res,next)=>{
+  cartcontroller._getcartbyproductId(req,res,next);
+});
+userRouter.get("/store/:id",Authentication,(req,res,next)=>{
+ storeController._getStorebyIdcontroll(req,res,next);
+});
 
-userRouter.post('/checkout/payment',Authentication,(req,res,next)=>{
- checkoutController._postCheckout(req,res,next)
-})
+userRouter.post("/checkout/payment",Authentication,(req,res,next)=>{
+ checkoutController._postCheckout(req,res,next);
+});
 
-userRouter.get('/order-histories/:id',Authentication,(req,res,next)=>{
- checkoutController._getOrdersbyUserId(req,res,next)
-})
+userRouter.get("/order-histories/:id",Authentication,(req,res,next)=>{
+ checkoutController._getOrdersbyUserId(req,res,next);
+});
 
 
 
-userRouter.get('/order-detail/:id',Authentication,(req,res,next)=>{
-  checkoutController._getOrdersbyId(req,res,next)})
-userRouter.put('/order-detail/:id',Authentication,(req,res,next)=>{
-  checkoutController._putOrdercancellReject(req,res,next)})
+userRouter.get("/order-detail/:id",Authentication,(req,res,next)=>{
+  checkoutController._getOrdersbyId(req,res,next);});
+userRouter.put("/order-detail/:id",Authentication,(req,res,next)=>{
+  checkoutController._putOrdercancellReject(req,res,next);});
 
 // .all(Authentication)
 // .get((req,res,next)=>{
@@ -259,22 +259,22 @@ userRouter.put('/order-detail/:id',Authentication,(req,res,next)=>{
 
 
 
-  userRouter.post('/wishlist',Authentication,(req,res,next)=>{
-    wishlistcontroller._postcreateWislist(req,res,next)
-  })
+  userRouter.post("/wishlist",Authentication,(req,res,next)=>{
+    wishlistcontroller._postcreateWislist(req,res,next);
+  });
 
  
 
   
   
-  userRouter.get('/wishlist-userId/:id',Authentication,(req,res,next)=>{
-    wishlistcontroller._getwishlistsbyUserId(req,res,next)
-  })
+  userRouter.get("/wishlist-userId/:id",Authentication,(req,res,next)=>{
+    wishlistcontroller._getwishlistsbyUserId(req,res,next);
+  });
   
   
-  userRouter.delete('/wishlist/:id',Authentication,(req,res,next)=>{
-    wishlistcontroller._deletewishlistsbyId(req,res,next)})
-  userRouter.get('/product',Authentication,(req,res,next)=>{
-    productcontroller._getProductByearch(req,res,next)})
+  userRouter.delete("/wishlist/:id",Authentication,(req,res,next)=>{
+    wishlistcontroller._deletewishlistsbyId(req,res,next);});
+  userRouter.get("/product",Authentication,(req,res,next)=>{
+    productcontroller._getProductByearch(req,res,next);});
 
 export default userRouter;

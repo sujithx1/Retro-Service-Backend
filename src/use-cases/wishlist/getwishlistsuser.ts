@@ -10,7 +10,7 @@ export class User_getwishlistsbyUserId{
     }
 
     async execute(userId:string):Promise<WishlistEntity[]>{
-        const wishlist=await this.wishlistrepositories.getWishlistByUser(userId)
-        return wishlist
+        const wishlist=await this.wishlistrepositories.getWishlistByUser(userId);
+        return wishlist;
     }
 }

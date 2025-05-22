@@ -39,7 +39,7 @@ class ProductMongoRepositories {
     findById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const product = yield ProductModel_1.Product_Model.findById(id)
-                .populate('category', 'name description')
+                .populate("category", "name description")
                 .exec();
             if (!product)
                 return null;

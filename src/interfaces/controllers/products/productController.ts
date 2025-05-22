@@ -17,27 +17,27 @@ export class ProductController{
 
     async getProducts_storeId(req:Request,res:Response,next:NextFunction){
         try {
-            const {id}=req.params
-            if(!id)return next(new CustomError('missing id',401,AppError.ValidationError))
-            const products=await this.getproductbyStorid.execute(id)
+            const {id}=req.params;
+            if(!id)return next(new CustomError("missing id",401,AppError.ValidationError));
+            const products=await this.getproductbyStorid.execute(id);
         console.log(products);
         
-            return res.status(200).json({success:true,products})
+            return res.status(200).json({success:true,products});
         } catch (error) {
-            return next(error)
+            return next(error);
             
         }
     }
     async _getProduct_Id(req:Request,res:Response,next:NextFunction){
         try {
-            const {id}=req.params
-            if(!id)return next(new CustomError('missing id',401,AppError.ValidationError))
-            const product=await this.getproductByid.execute(id)
+            const {id}=req.params;
+            if(!id)return next(new CustomError("missing id",401,AppError.ValidationError));
+            const product=await this.getproductByid.execute(id);
         console.log(product);
         
-            return res.status(200).json({success:true,product})
+            return res.status(200).json({success:true,product});
         } catch (error) {
-            return next(error)
+            return next(error);
             
         }
     }
@@ -46,12 +46,12 @@ export class ProductController{
             const searchQuery = (req.query.search as string) || ""; // Get 'search' query parameter
             console.log(searchQuery,"searching");
             
-            const products=await this.getproductSearch.execute(searchQuery)
+            const products=await this.getproductSearch.execute(searchQuery);
         console.log(products);
         
-            return res.status(200).json({success:true,products})
+            return res.status(200).json({success:true,products});
         } catch (error) {
-            return next(error)
+            return next(error);
             
         }
     }

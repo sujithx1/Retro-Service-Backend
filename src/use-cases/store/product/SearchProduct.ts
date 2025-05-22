@@ -9,9 +9,9 @@ export class GetProductSearchuseCase{
     }
 
     async execute(quary:string):Promise<Product_Entities[]>{
-        const products=await this.productrepositories.searchByname(quary)
+        const products=await this.productrepositories.searchByname(quary);
 
-        return products
+        return products;
 
     }
 }

@@ -6,10 +6,7 @@ import { CheckOtp } from "../../use-cases/userside/auth/otpchecking";
 import { UserLogin } from "../../use-cases/userside/auth/userLogin";
 import { User_Google_Auth_useCase } from "../../use-cases/userside/auth/Authservice";
 import { User_Edit_useCase } from "../../use-cases/userside/edit/UserEdit";
-import { Authentication } from "../../interfaces/middleware/userside/userAuthentication";
-import { createAccessToken } from "../../interfaces/jwt/jwt_auth_token";
 import { User_Put_Image_UseCase } from "../../use-cases/userside/edit/image_useCase";
-import upload from "../../utils/helper/multer";
 import { Admin_get_jobs_useCase } from "../../use-cases/admin/jobs/getJobs";
 import { Mongo_Job_admin_Repositories } from "../../interfaces/repositories/admin/jobs/mongoJobRepositories";
 import { Admin_get_allEmployees_useCase } from "../../use-cases/admin/workerManageMent/get_employees";
@@ -28,7 +25,6 @@ import { ReqEmployeeServices_useCase } from "../../use-cases/userside/service/re
 import { User_getReqServiceuseCase } from "../../use-cases/userside/service/get_req_service";
 import { UserServiceRazorpayPayment } from "../../use-cases/userside/payments/serviceRazorpayuseCase";
 import { ServicePaymentMongoRepositories } from "../../interfaces/repositories/payments/mongoservicePaymentRepositories";
-import { UserServiceBookingHistoryusecase } from "../../use-cases/userside/payments/getSevicePaymentCompleted";
 import { User_putReqserviceUsecase } from "../../use-cases/userside/service/putReqserviceuseCase";
 import { User_getServiceBookingHistoryByUserId } from "../../use-cases/userside/payments/getservicebookingHistory";
 import { Emp_getPaymentDetails } from "../../use-cases/employeeside/payment/getPaymentDetails";
@@ -56,9 +52,9 @@ const Report_FeedBackRepositoires =
   new Report_FeedBack_user_MongoRepositories();
 const reqServiceMechanicsRepositories = new MongoReqServiceMechnics();
 const servicepaymentRepositoires = new ServicePaymentMongoRepositories();
-const messageRepositories=new Message_mongoRepositories()
-const walletRepositories=new WalletMongoRepositories()
-const transactionrepositories=new TransactionMongoRepositories()
+const messageRepositories=new Message_mongoRepositories();
+const walletRepositories=new WalletMongoRepositories();
+const transactionrepositories=new TransactionMongoRepositories();
 
 
 
@@ -89,7 +85,7 @@ const post_Report_user = new Report_feedBack_user_useCase(
 );
 const forgotUserCase = new Forgot_PasswordotpUseCase(userRepositories);
 const newPassword = new NewPassword(userRepositories);
-const userlocation=new UserLocation_useCase(userRepositories)
+const userlocation=new UserLocation_useCase(userRepositories);
 
 
 
@@ -115,34 +111,34 @@ const createServicepayment = new UserServiceRazorpayPayment(
     employeeRepositories,
     reqServiceMechanicsRepositories,
     transactionrepositories
-  )
+  );
 
 
 const getbookingHistory = new User_getServiceBookingHistoryByUserId(
   reqServiceMechanicsRepositories
 );
-const cancellBookingService=new User_putReqserviceUsecase(reqServiceMechanicsRepositories)
-const getServicePayment=new Emp_getPaymentDetails(servicepaymentRepositoires)
-const serachjobsuser=new User_serchjobsuseCase(jobRepositories)
-const putserviceSendSpecificEmployee=new User_putserviceSpecificEmp(reqServiceMechanicsRepositories,employeeRepositories)
+const cancellBookingService=new User_putReqserviceUsecase(reqServiceMechanicsRepositories);
+const getServicePayment=new Emp_getPaymentDetails(servicepaymentRepositoires);
+const serachjobsuser=new User_serchjobsuseCase(jobRepositories);
+const putserviceSendSpecificEmployee=new User_putserviceSpecificEmp(reqServiceMechanicsRepositories,employeeRepositories);
 
 
-const getnearestEmployees10km=new User_getNearestEmployees(employeeRepositories)
+const getnearestEmployees10km=new User_getNearestEmployees(employeeRepositories);
 // messages
-const getMessagesByUser=new Get_MessagesByuseId(messageRepositories)
-const userGetemployeedetails=new Employee_get_details_useCase(employeeRepositories)
+const getMessagesByUser=new Get_MessagesByuseId(messageRepositories);
+const userGetemployeedetails=new Employee_get_details_useCase(employeeRepositories);
 
 
 
 
-const usergetwallet=new Wallet_getuserIduseCase(walletRepositories)
+const usergetwallet=new Wallet_getuserIduseCase(walletRepositories);
 
 
-const gettranasactionByuser=new Transaction_getbyuserId(transactionrepositories)
-const getService_booking=new User_getReqServiceuseCase(reqServiceMechanicsRepositories)
+const gettranasactionByuser=new Transaction_getbyuserId(transactionrepositories);
+const getService_booking=new User_getReqServiceuseCase(reqServiceMechanicsRepositories);
 
 
-const getadminWallet=new AdminGetWalletuseCase(walletRepositories)
+const getadminWallet=new AdminGetWalletuseCase(walletRepositories);
 
 export const userController = new Usercontroller(
   createUser,
@@ -178,5 +174,5 @@ export const serviceController = new UserServiceController(
   getService_booking
 );
 
-export const userChatController=new UserChatcontroller(getMessagesByUser)
-export const userWalletController=new UserwalletController(usergetwallet,getadminWallet)
+export const userChatController=new UserChatcontroller(getMessagesByUser);
+export const userWalletController=new UserwalletController(usergetwallet,getadminWallet);

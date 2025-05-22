@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Store20kmDistance = void 0;
+// import { Locationuser_types } from "../../types/user";
 const custom_errors_1 = require("../../utils/errors/custom.errors");
 const error_enum_1 = require("../../utils/errors/error.enum");
 class Store20kmDistance {

@@ -92,7 +92,7 @@ const EmployeSchema = new mongoose_1.Schema({
     authSource: {
         type: String,
         enum: ["self", "google"],
-        default: 'self'
+        default: "self"
     },
     role: {
         type: String,
@@ -121,4 +121,4 @@ const EmployeSchema = new mongoose_1.Schema({
 }, {
     timestamps: true
 });
-exports.EmployeeModel = mongoose_1.default.model('employee', EmployeSchema);
+exports.EmployeeModel = mongoose_1.default.model("employee", EmployeSchema);

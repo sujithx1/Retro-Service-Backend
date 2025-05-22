@@ -9,15 +9,15 @@ router.post("/refresh-token", (req, res) => {
   createAccessToken(req, res, "employee");
 });
 
-router.post("/signup", (req, res) => employeeController.Signup(req, res));
-router.post("/signup/otp", (req, res) =>
-  employeeController.OtpChecking_Employee(req, res)
+router.post("/signup", (req, res,next) => employeeController.Signup(req, res,next));
+router.post("/signup/otp", (req, res,next) =>
+  employeeController.OtpChecking_Employee(req, res,next)
 );
-router.post("/signup/resendotp", (req, res) =>
-  employeeController.Signup(req, res)
+router.post("/signup/resendotp", (req, res,next) =>
+  employeeController.Signup(req, res,next)
 );
-router.post("/login", (req, res) =>
-  employeeController.Emp_logiConroll(req, res)
+router.post("/login", (req, res,next) =>
+  employeeController.Emp_logiConroll(req, res,next)
 );
 router.get("/logout", (req, res, next) =>
   employeeController.Employee_get_Logout_controll(req, res, next)

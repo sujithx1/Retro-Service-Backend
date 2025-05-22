@@ -35,7 +35,7 @@ export class EmpServiceController{
       }
       
       
-      const reqService =await this.getemployeeReqservice.execute(id)
+      const reqService =await this.getemployeeReqservice.execute(id);
 
     return res.status(200).json({ message: "success", reqService,succes:true });
     } catch (error) {
@@ -53,11 +53,11 @@ export class EmpServiceController{
       console.log("[put] controller");
 
       const { id } = req.params;
-      const {status,employeeId}=req.body
+      const {status,employeeId}=req.body;
       console.log(req.body);
       
       if (!status||!employeeId) {
-        return next(new CustomError("missing fields",401,AppError.ValidationError))
+        return next(new CustomError("missing fields",401,AppError.ValidationError));
         
       }
       if (!id) {
@@ -66,8 +66,8 @@ export class EmpServiceController{
       console.log("emp id",id);
      
       
-      const reqService =await this.putEmployeeReqservice.execute(id,employeeId,status)
-      io.emit('confirmBooking',{id})
+      const reqService =await this.putEmployeeReqservice.execute(id,employeeId,status);
+      io.emit("confirmBooking",{id});
 
     return res.status(200).json({ message: "success", reqService,succes:true });
     } catch (error) {
@@ -91,7 +91,7 @@ export class EmpServiceController{
       }
       console.log("emp id",id);
 
-      const service=await this.getServicePayment.execute(id)
+      const service=await this.getServicePayment.execute(id);
 
     return res.status(200).json({ message: "success",succes:true,service });
     } catch (error) {
@@ -110,11 +110,11 @@ export class EmpServiceController{
 
    
      
-      const{id}=req.params
-      if(!id) return next(new CustomError("missing field",401,AppError.ValidationError))
+      const{id}=req.params;
+      if(!id) return next(new CustomError("missing field",401,AppError.ValidationError));
  
-       const transactions=await this.gettranasactionByuser.execute(id)
-       console.log('transactions ',transactions);
+       const transactions=await this.gettranasactionByuser.execute(id);
+       console.log("transactions ",transactions);
 
     return res.status(200).json({ message: "success",succes:true,transactions });
     } catch (error) {
@@ -133,13 +133,13 @@ export class EmpServiceController{
 
    
      
-      const{id}=req.params
-      if(!id) return next(new CustomError("missing id",401,AppError.ValidationError))
-        const{amount}=req.body
-      if(!amount)return next(new CustomError("missing amount",401,AppError.ValidationError))
+      const{id}=req.params;
+      if(!id) return next(new CustomError("missing id",401,AppError.ValidationError));
+        const{amount}=req.body;
+      if(!amount)return next(new CustomError("missing amount",401,AppError.ValidationError));
  
-       const wallet=await this.putwithrdrawamount.execute(id,amount)
-       console.log('transactions ',);
+       const wallet=await this.putwithrdrawamount.execute(id,amount);
+       console.log("transactions ",);
 
     return res.status(200).json({ message: "success",succes:true,wallet });
     } catch (error) {
@@ -158,10 +158,10 @@ export class EmpServiceController{
 
    
      
-      const{id}=req.params
-      if(!id) return next(new CustomError("missing id",401,AppError.ValidationError))
+      const{id}=req.params;
+      if(!id) return next(new CustomError("missing id",401,AppError.ValidationError));
       
-       const wallet=await this.getwalletemployee.execute(id)
+       const wallet=await this.getwalletemployee.execute(id);
 
     return res.status(200).json({ message: "success",succes:true,wallet });
     } catch (error) {

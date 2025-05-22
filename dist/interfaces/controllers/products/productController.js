@@ -23,7 +23,7 @@ class ProductController {
             try {
                 const { id } = req.params;
                 if (!id)
-                    return next(new custom_errors_1.CustomError('missing id', 401, error_enum_1.AppError.ValidationError));
+                    return next(new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError));
                 const products = yield this.getproductbyStorid.execute(id);
                 console.log(products);
                 return res.status(200).json({ success: true, products });
@@ -38,7 +38,7 @@ class ProductController {
             try {
                 const { id } = req.params;
                 if (!id)
-                    return next(new custom_errors_1.CustomError('missing id', 401, error_enum_1.AppError.ValidationError));
+                    return next(new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError));
                 const product = yield this.getproductByid.execute(id);
                 console.log(product);
                 return res.status(200).json({ success: true, product });

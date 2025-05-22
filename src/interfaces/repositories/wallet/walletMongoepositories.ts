@@ -6,8 +6,8 @@ import { IwalletRepositories } from "./Iwalletrepositories";
 export class WalletMongoRepositories implements IwalletRepositories{
 
    async findByEmployeeId(userId: string,): Promise<WalletEntities |null> {
-const wallet=await WalletModel.findOne({userId,userType:"employee"})
-        if(!wallet)return null
+const wallet=await WalletModel.findOne({userId,userType:"employee"});
+        if(!wallet)return null;
 
     return new WalletEntities(
             wallet.id,
@@ -16,11 +16,11 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
             wallet.balance,
             wallet.createdAt,
             wallet.updatedAt,
-    )
+    );
     }
   async  findById(id: string): Promise<WalletEntities | null> {
-    const wallet=await WalletModel.findById(id)
-        if(!wallet)return null
+    const wallet=await WalletModel.findById(id);
+        if(!wallet)return null;
 
     return new WalletEntities(
             wallet.id,
@@ -29,13 +29,13 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
             wallet.balance,
             wallet.createdAt,
             wallet.updatedAt,
-    )
+    );
     
           
     } 
   async  findByuserId(userId: string): Promise<WalletEntities |null> {
-    const wallet=await WalletModel.findOne({userId,userType:"user"})
-        if(!wallet)return null
+    const wallet=await WalletModel.findOne({userId,userType:"user"});
+        if(!wallet)return null;
 
     return new WalletEntities(
             wallet.id,
@@ -44,7 +44,7 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
             wallet.balance,
             wallet.createdAt,
             wallet.updatedAt,
-    )
+    );
         
     }
 
@@ -57,7 +57,7 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
             { new: true, runValidators: true,upsert:true } // Ensures updated document is returned
           );
 
-          if(!wallet)return null
+          if(!wallet)return null;
           
           return new WalletEntities(
             walletData.id,
@@ -66,7 +66,7 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
             walletData.balance,
             walletData.createdAt,
             walletData.updatedAt,
-    )
+    );
         
     }
 
@@ -80,7 +80,7 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
             { new: true, runValidators: true,upsert:true } // Ensures updated document is returned
           );
 
-          if(!wallet)return null
+          if(!wallet)return null;
           
           return new WalletEntities(
             walletData.id,
@@ -89,12 +89,12 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
             walletData.balance,
             walletData.createdAt,
             walletData.updatedAt,
-    )
+    );
         
         
     }
    async create(wallet: WalletEntities): Promise<WalletEntities | null> {
-    const walletData=await WalletModel.create(wallet)
+    const walletData=await WalletModel.create(wallet);
     return new WalletEntities(
         walletData.id,
         walletData.userId.toString(),
@@ -103,13 +103,13 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
         walletData.createdAt,
         walletData.updatedAt,
         
-    )
+    );
         
     }
 
     async findByAdmin(): Promise<WalletEntities | null> {
-        const walletData=await WalletModel.findOne({userType:'admin'})
-        if(!walletData) return null
+        const walletData=await WalletModel.findOne({userType:"admin"});
+        if(!walletData) return null;
         return new WalletEntities(
             walletData.id,
             walletData.userId.toString(),
@@ -117,7 +117,7 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
             walletData.balance,
             walletData.createdAt,
             walletData.updatedAt,
-        )
+        );
         
         
     }
@@ -131,7 +131,7 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
              { new: true, runValidators: true,upsert:true } // Ensures updated document is returned
            );
  
-           if(!wallet)return null
+           if(!wallet)return null;
            
            return new WalletEntities(
              walletData.id,
@@ -140,13 +140,13 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
              walletData.balance,
              walletData.createdAt,
              walletData.updatedAt,
-     )
+     );
          
         
     }
    async findByStoreId(storeId: string): Promise<WalletEntities | null> {
-    const wallet=await WalletModel.findOne({userId:storeId,userType:"store"})
-        if(!wallet)return null
+    const wallet=await WalletModel.findOne({userId:storeId,userType:"store"});
+        if(!wallet)return null;
 
     return new WalletEntities(
             wallet.id,
@@ -155,7 +155,7 @@ const wallet=await WalletModel.findOne({userId,userType:"employee"})
             wallet.balance,
             wallet.createdAt,
             wallet.updatedAt,
-    )
+    );
         
     }
 

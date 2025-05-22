@@ -9,8 +9,8 @@ export class AdminGetWalletuseCase{
         private walletrepositories:IwalletRepositories
     ){}
     async execute():Promise<WalletEntities>{
-        const wallet=await this.walletrepositories.findByAdmin()
-        if(!wallet)throw new CustomError('not found',404,AppError.ResourceNotFound)
-            return wallet
+        const wallet=await this.walletrepositories.findByAdmin();
+        if(!wallet)throw new CustomError("not found",404,AppError.ResourceNotFound);
+            return wallet;
     }
 }

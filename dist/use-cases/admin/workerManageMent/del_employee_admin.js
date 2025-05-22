@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Admin_del_employee_useCase = void 0;
-const EmployeeEntities_1 = require("../../../entities/EmployeeEntities");
+const mechanic_map_1 = require("../../../DTO/map/mechanic.map");
 class Admin_del_employee_useCase {
     constructor(employeerepositories) {
         this.employeerepositories = employeerepositories;
@@ -19,13 +19,13 @@ class Admin_del_employee_useCase {
         return __awaiter(this, void 0, void 0, function* () {
             const employee = yield this.employeerepositories.findById(id);
             if (!employee)
-                throw new Error('id is not matching ');
+                throw new Error("id is not matching ");
             employee.isActive = !employee.isActive;
             const update = yield this.employeerepositories.findByIdAndUpdate(employee);
             if (!update)
                 throw new Error("not updated");
             console.log(update);
-            return new EmployeeEntities_1.EmployeeEntities(update.id, update.username, update.email, update.phone, update.password, update.skills, update.experience, update.isValidated, update.proof, update.isActive, update.profilePic, update.location, update.authSource, update.role, update.revenue, update.onDuty, update.FCM_token, update.createdAt, update.updatedAt);
+            return mechanic_map_1.MechanicMap.toResponse(update);
         });
     }
 }

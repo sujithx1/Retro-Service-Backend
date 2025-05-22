@@ -94,7 +94,7 @@ const putwithrdrawamount = new Employee_putwithrdawamountuseCase(
 );
 
 const getwalletEmployee = new Employee_getWalletDetails(walletRepositories);
-const addFCM_token=new FCM_TOKEN_ADDuseCase(empRepositories)
+const addFCM_token=new FCM_TOKEN_ADDuseCase(empRepositories);
 export const employeeController = new EmployeeController(
   createEmployee,
   sendmailOtp,

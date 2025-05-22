@@ -8,7 +8,7 @@ export class Admin_get_feedbacks_useCase{
     }
 
     async execute():Promise<Report_feedBack_User_Entities[]>{
-        const feedbacks=await this.reportFeedbackrep.findAll()
-        return feedbacks
+        const feedbacks=await this.reportFeedbackrep.findAll();
+        return feedbacks;
     }
 }   

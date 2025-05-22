@@ -75,15 +75,14 @@ class StoreMongoRepositories {
             return R * c; // Distance in km
         });
     }
-    ;
     find20Km(location) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // Find stores that are active and have a valid location
                 const stores = yield Storemodel_1.StoreModel.find({
                     isActive: true,
-                    'location.lat': { $exists: true },
-                    'location.lng': { $exists: true },
+                    "location.lat": { $exists: true },
+                    "location.lng": { $exists: true },
                 });
                 // Map stores to include calculated distances
                 const storesWithDistances = yield Promise.all(stores.map((store) => __awaiter(this, void 0, void 0, function* () {

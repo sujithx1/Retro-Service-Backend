@@ -42,7 +42,7 @@ const Report_FeedBack_user_Schema = new mongoose_1.Schema({
     },
     type: {
         type: String,
-        enum: ['report', 'feedback'],
+        enum: ["report", "feedback"],
         required: true
     },
     rating: {
@@ -72,4 +72,4 @@ const Report_FeedBack_user_Schema = new mongoose_1.Schema({
 }, {
     timestamps: true
 });
-exports.Report_FeedBack_user_Model = mongoose_1.default.model('Report_FeedBack', Report_FeedBack_user_Schema);
+exports.Report_FeedBack_user_Model = mongoose_1.default.model("Report_FeedBack", Report_FeedBack_user_Schema);

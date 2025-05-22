@@ -10,6 +10,6 @@ export class CreateWishlistuseCase{
     }
 
     async execute(productId:string,userId:string):Promise<WishlistEntity>{
-        return await this.wishlistrepositories.addToWishlist(userId,productId)
+        return await this.wishlistrepositories.addToWishlist(userId,productId);
     }
 }

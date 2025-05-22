@@ -10,7 +10,7 @@ export class StoreEntities{
         public isActive:boolean=true,
         public password:string,
         public storeId:string,
-        public profile_pic:string='https://example.com/default-profile-pic.png',
+        public profile_pic:string="https://example.com/default-profile-pic.png",
         public location?:Locationuser_types,
         public createdAt?: Date,
         public updatedAt?: Date 

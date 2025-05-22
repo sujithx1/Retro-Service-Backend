@@ -38,17 +38,17 @@ const mongoose_1 = __importStar(require("mongoose"));
 const ServicePaymentSchema = new mongoose_1.Schema({
     userId: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
         required: true,
     },
     employeeId: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'employee',
+        ref: "employee",
         required: true,
     },
     serviceId: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'RequestMechanics',
+        ref: "RequestMechanics",
         required: true,
     },
     amount: {
@@ -74,4 +74,4 @@ const ServicePaymentSchema = new mongoose_1.Schema({
 }, {
     timestamps: true, // Automatically creates createdAt and updatedAt fields
 });
-exports.ServicePaymentModel = mongoose_1.default.model('ServicePayment', ServicePaymentSchema);
+exports.ServicePaymentModel = mongoose_1.default.model("ServicePayment", ServicePaymentSchema);

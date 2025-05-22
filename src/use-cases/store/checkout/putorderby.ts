@@ -35,7 +35,7 @@ export class User_orderputuseCase {
 const userIdString = JSON.stringify(findorder.userId);
 
 console.log(userIdString);
-const userIdObject=JSON.parse(userIdString)
+const userIdObject=JSON.parse(userIdString);
 console.log(userIdObject);
 console.log(userIdObject._id);
 
@@ -46,10 +46,10 @@ console.log(userIdObject._id);
 // console.log(userId);
 
         
-        const userwallet=await this.walletrepositories.findByuserId(userIdObject._id)
+        const userwallet=await this.walletrepositories.findByuserId(userIdObject._id);
         if (userwallet) {
             userwallet.balance =+ findorder.total;
-            const updateWallet=await this.walletrepositories.findByuserIdandUpdate(userwallet)
+            const updateWallet=await this.walletrepositories.findByuserIdandUpdate(userwallet);
             if(!updateWallet) throw new CustomError("wallet not updated", 500, AppError.ServerError);
 
             
@@ -62,9 +62,9 @@ console.log(userIdObject._id);
                                 "wallet",
                               "product"
                     
-                               )
+                               );
                     
-                               await this.transactionrepositoires.create(usertransaction)
+                               await this.transactionrepositoires.create(usertransaction);
           }
 
         } 

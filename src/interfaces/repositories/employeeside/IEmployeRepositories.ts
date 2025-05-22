@@ -1,5 +1,5 @@
 import { EmployeeEntities } from "../../../entities/EmployeeEntities";
-import { FinduserLocation, Locationuser_types } from "../../../types/user";
+import { Locationuser_types } from "../../../types/user";
 
 
 

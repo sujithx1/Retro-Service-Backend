@@ -7,6 +7,9 @@ import { JobsEntities } from "../../entities/JobsEntities";
 import { CategoryEntities } from "../../entities/CategoryEntities";
 import { CustomError } from "../../utils/errors/custom.errors";
 import { AppError } from "../../utils/errors/error.enum";
+import { MechanicResponesDto, UserResponsDto } from "../../DTO/dto";
+import { UserMap } from "../../DTO/map/user.map";
+import { MechanicMap } from "../../DTO/map/mechanic.map";
 
 
 
@@ -15,36 +18,39 @@ export class AdminLogin{
     
         
     ){}
-    async execute(email:string,password:string):Promise<AdminEntities>{
+    async execute(email:string,password:string):Promise<UserResponsDto>{
 
-            const admin=await this.adminrepositories.findByemail(email)
+            const admin=await this.adminrepositories.findByemail(email);
             console.log(admin);
             
             if (!admin || !admin.isAdmin) {
-              throw new CustomError("Your not Admin",401,AppError.InvalidCredentials)   
+              throw new CustomError("Your not Admin",401,AppError.InvalidCredentials);   
             }
 
-            const compare=await comparePassword(password,admin.password)
-            if(!compare) throw new CustomError("password not matching",401,AppError.InvalidCredentials)   
+            const compare=await comparePassword(password,admin.password);
+            if(!compare) throw new CustomError("password not matching",401,AppError.InvalidCredentials);   
 
-            return new AdminEntities(admin.id,admin.username,admin.email,admin.phone,admin.password,admin.isActive,admin.profilePic,admin.isAdmin,admin.authSource,admin.role,admin.createdAt,admin.updatedAt)
-
-    }
-    async getAlluser():Promise<UserIntities[]>{
-        return await this.adminrepositories.findAllUsers()
+            return UserMap.toResponse(admin)
 
     }
-    async getAllEmployees():Promise<EmployeeEntities[]>
+    async getAlluser():Promise<UserResponsDto[]>{
+
+            const users=await this.adminrepositories.findAllUsers();
+        return users.map((item)=>UserMap.toResponse(item)) 
+
+    }
+    async getAllEmployees():Promise<MechanicResponesDto[]>
     {
-        return await this.adminrepositories.findAllEmployees()
+       const mechaincs=  await this.adminrepositories.findAllEmployees();
+       return mechaincs.map((item)=>MechanicMap.toResponse(item))
 
     }
     async getAllJobs():Promise<JobsEntities[]>{
-        return await this.adminrepositories.findAllJobs()
+        return await this.adminrepositories.findAllJobs();
 
     }
     async getAllCategories():Promise<CategoryEntities[]>{
-        return await this.adminrepositories.findAllCategories()
+        return await this.adminrepositories.findAllCategories();
     }
     
   

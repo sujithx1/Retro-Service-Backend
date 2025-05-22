@@ -9,10 +9,10 @@ import { IReport_FeedBack_user_Repositories } from "./IFeedBack_user_repositorie
 export class Report_FeedBack_user_MongoRepositories implements IReport_FeedBack_user_Repositories{
     async findbyId(id: string): Promise<Report_feedBack_User_Entities | null> {
         const feedback=await Report_FeedBack_user_Model.findById(id)
-          .populate<{ user: IuserTypes }>({ path: 'user' })
-          .populate<{ employee: IEmployee_types }>({ path: 'employee'})
+          .populate<{ user: IuserTypes }>({ path: "user" })
+          .populate<{ employee: IEmployee_types }>({ path: "employee"});
                 
-        if(!feedback)return null
+        if(!feedback)return null;
         console.log("Feeeeeeed",feedback);
         
         return new Report_feedBack_User_Entities(
@@ -33,13 +33,13 @@ export class Report_FeedBack_user_MongoRepositories implements IReport_FeedBack_
             feedback.updatedAt,
             
 
-        )       
+        );       
     }
     async create(feedBack: Report_feedBack_User_Entities): Promise<Report_feedBack_User_Entities> {
         
-        const feedback= await Report_FeedBack_user_Model.create(feedBack) 
-        await feedback.populate<{ user: IuserTypes }>({ path: 'user' })
-        await feedback.populate<{ employee: IEmployee_types }>({ path: 'employee' })
+        const feedback= await Report_FeedBack_user_Model.create(feedBack); 
+        await feedback.populate<{ user: IuserTypes }>({ path: "user" });
+        await feedback.populate<{ employee: IEmployee_types }>({ path: "employee" });
 
         
         return new Report_feedBack_User_Entities(
@@ -58,13 +58,13 @@ export class Report_FeedBack_user_MongoRepositories implements IReport_FeedBack_
             feedback.bookingId,
             feedback.createdAt,
             feedback.updatedAt,
-        )
+        );
     }
     async findAll(): Promise<Report_feedBack_User_Entities[]> {
         
         const feedbacks=await Report_FeedBack_user_Model.find()
-        .populate<{ user: IuserTypes }>({ path: 'user' })
-        .populate<{ employee: IEmployee_types }>({ path: 'employee'})
+        .populate<{ user: IuserTypes }>({ path: "user" })
+        .populate<{ employee: IEmployee_types }>({ path: "employee"});
         console.log("Feeeeeeed",feedbacks);
 
        return feedbacks.map((report)=>
@@ -87,7 +87,7 @@ export class Report_FeedBack_user_MongoRepositories implements IReport_FeedBack_
                 report.updatedAt,
                 
             )
-        )
+        );
 
 
     }
@@ -95,8 +95,8 @@ export class Report_FeedBack_user_MongoRepositories implements IReport_FeedBack_
     async findByIdAndupdate(feedback: Report_feedBack_User_Entities): Promise<Report_feedBack_User_Entities|null> {
         const report=await Report_FeedBack_user_Model.findByIdAndUpdate(feedback.id,{
             refundProcessed:true
-        },{new:true,upsert:true})
-        if(!report)return null
+        },{new:true,upsert:true});
+        if(!report)return null;
 
         return new Report_feedBack_User_Entities(
             report.id,
@@ -116,7 +116,7 @@ export class Report_FeedBack_user_MongoRepositories implements IReport_FeedBack_
 
             report.createdAt,
             report.updatedAt,
-        )
+        );
     }
 
 

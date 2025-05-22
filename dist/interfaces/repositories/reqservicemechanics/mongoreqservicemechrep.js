@@ -18,9 +18,9 @@ class MongoReqServiceMechnics {
             const req = yield reqserviceMechanics_1.Request_Service_Mech_model.create(services);
             yield req
                 .populate([
-                { path: 'userId', select: 'username email id' },
-                { path: 'mechanics', select: 'username id' },
-                { path: 'jobId', select: 'name description' }
+                { path: "userId", select: "username email id" },
+                { path: "mechanics", select: "username id" },
+                { path: "jobId", select: "name description" }
             ]);
             return new reqserviceEntities_1.RequestserviceMechEntities(req.id, req.userId._id.toString(), req.userName, req.userEmail, req.userLocation, req.jobId._id.toString(), req.jobName, req.minWage, req.problem, req.mechanics, req.status, req.bookingDate);
         });
@@ -28,17 +28,17 @@ class MongoReqServiceMechnics {
     findbyempId(empid) {
         return __awaiter(this, void 0, void 0, function* () {
             const reqserviceEmpl = yield reqserviceMechanics_1.Request_Service_Mech_model.find({
-                'mechanics.employeeId': empid
+                "mechanics.employeeId": empid
             });
             if (!reqserviceEmpl || reqserviceEmpl.length === 0)
                 return [];
             // Populate each document individually
-            for (let service of reqserviceEmpl) {
+            for (const service of reqserviceEmpl) {
                 yield service.populate([
-                    { path: 'userId', select: 'username email _id' },
-                    { path: 'mechanics', select: 'name _id' },
-                    { path: 'jobId', select: 'name description _id' },
-                    { path: 'acceptEmployee.employeeId', select: 'name _id' }
+                    { path: "userId", select: "username email _id" },
+                    { path: "mechanics", select: "name _id" },
+                    { path: "jobId", select: "name description _id" },
+                    { path: "acceptEmployee.employeeId", select: "name _id" }
                 ]);
             }
             return reqserviceEmpl.map((service) => {
@@ -75,9 +75,9 @@ class MongoReqServiceMechnics {
                 return null;
             yield reqservice
                 .populate([
-                { path: 'userId', select: 'username email id' },
-                { path: 'mechanics', select: 'name id' },
-                { path: 'jobId', select: 'name description' }
+                { path: "userId", select: "username email id" },
+                { path: "mechanics", select: "name id" },
+                { path: "jobId", select: "name description" }
             ]);
             const acceptEmployee = reqservice.acceptEmployee && ((_a = reqservice.acceptEmployee.employeeId) === null || _a === void 0 ? void 0 : _a._id)
                 ? {
@@ -109,9 +109,9 @@ class MongoReqServiceMechnics {
                 return null;
             yield service
                 .populate([
-                { path: 'userId', select: 'username email id' },
-                { path: 'mechanics', select: 'name id' },
-                { path: 'jobId', select: 'name description' }
+                { path: "userId", select: "username email id" },
+                { path: "mechanics", select: "name id" },
+                { path: "jobId", select: "name description" }
             ]);
             const acceptEmployee = service.acceptEmployee && ((_a = service.acceptEmployee.employeeId) === null || _a === void 0 ? void 0 : _a._id)
                 ? {
@@ -132,9 +132,9 @@ class MongoReqServiceMechnics {
                 return null;
             yield service
                 .populate([
-                { path: 'userId', select: 'username email id' },
-                { path: 'mechanics', select: 'name id' },
-                { path: 'jobId', select: 'name description' }
+                { path: "userId", select: "username email id" },
+                { path: "mechanics", select: "name id" },
+                { path: "jobId", select: "name description" }
             ]);
             const acceptEmployee = service.acceptEmployee && ((_a = service.acceptEmployee.employeeId) === null || _a === void 0 ? void 0 : _a._id)
                 ? {
@@ -153,12 +153,12 @@ class MongoReqServiceMechnics {
             if (!reqservice || reqservice.length === 0)
                 return [];
             // Populate each document individually
-            for (let service of reqservice) {
+            for (const service of reqservice) {
                 yield service.populate([
-                    { path: 'userId', select: 'username email _id' },
-                    { path: 'mechanics', select: 'name _id' },
-                    { path: 'jobId', select: 'name description _id' },
-                    { path: 'acceptEmployee.employeeId', select: 'name _id' }
+                    { path: "userId", select: "username email _id" },
+                    { path: "mechanics", select: "name _id" },
+                    { path: "jobId", select: "name description _id" },
+                    { path: "acceptEmployee.employeeId", select: "name _id" }
                 ]);
             }
             return reqservice.map((service) => {
@@ -197,9 +197,9 @@ class MongoReqServiceMechnics {
                     return null;
                 yield updatedService
                     .populate([
-                    { path: 'userId', select: 'username email id' },
-                    { path: 'mechanics', select: 'name id' },
-                    { path: 'jobId', select: 'name description' }
+                    { path: "userId", select: "username email id" },
+                    { path: "mechanics", select: "name id" },
+                    { path: "jobId", select: "name description" }
                 ]);
                 const acceptEmployee = updatedService.acceptEmployee
                     ? {

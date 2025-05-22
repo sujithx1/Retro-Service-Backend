@@ -9,8 +9,8 @@ export class User_serchjobsuseCase{
     ){}
 
     async execute(name:string):Promise<JobsEntities[]>{
-        const job=await this.jobsrepositories.jobsfindbynameSearch(name)
-        if(!job)throw new CustomError("Job not Found",401,AppError.ResourceNotFound)
-        return job
+        const job=await this.jobsrepositories.jobsfindbynameSearch(name);
+        if(!job)throw new CustomError("Job not Found",401,AppError.ResourceNotFound);
+        return job;
     }
 }

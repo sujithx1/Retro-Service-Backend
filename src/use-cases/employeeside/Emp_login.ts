@@ -1,4 +1,6 @@
 
+import { MechanicResponesDto } from "../../DTO/dto";
+import { MechanicMap } from "../../DTO/map/mechanic.map";
 import { EmployeeEntities } from "../../entities/EmployeeEntities";
 import { IEmployeeRepositories } from "../../interfaces/repositories/employeeside/IEmployeRepositories";
 import { comparePassword } from "../../utils/hashPassword";
@@ -9,40 +11,17 @@ export class Emp_Login_useCase{
 
     ) {}
 
-    async execute(email:string,password:string):Promise<EmployeeEntities>{
-        const employee=await this.employeeRespositories.findByEmail(email)
-        if(!employee) throw new Error("Email not registerd")
-        if(employee.isValidated===false)throw new Error('Employee is not Verified')
+    async execute(email:string,password:string):Promise<MechanicResponesDto>{
+        const employee=await this.employeeRespositories.findByEmail(email);
+        if(!employee) throw new Error("Email not registerd");
+        if(employee.isValidated===false)throw new Error("Employee is not Verified");
         if(employee.isActive==false)
-        throw new Error("Employee is Blocked")
-        const compare=await comparePassword(password,employee.password)
-        if(!compare) throw  new Error("Password not matched")
+        throw new Error("Employee is Blocked");
+        const compare=await comparePassword(password,employee.password);
+        if(!compare) throw  new Error("Password not matched");
             
           
 
-        return  new EmployeeEntities(
-    employee.id,
-    employee.username,
-    employee.email,
-    employee.phone,
-    employee.password,
-    employee.skills,
-    employee.experience,
-    employee.isValidated,
-    employee.proof,
-    employee.isActive,
-    employee.profilePic,
-    employee.location,
-    employee.authSource,
-    employee.role,
-    employee.revenue,
-    employee.onDuty,
-    employee.FCM_token,
-    
-
-    employee.createdAt,
-    employee.updatedAt,
-    
-    )   
+        return  MechanicMap.toResponse(employee)
     }
 }

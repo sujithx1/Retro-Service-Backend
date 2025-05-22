@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User_getServiceBookingHistoryByUserId = void 0;
+const reqservice_map_1 = require("../../../DTO/map/reqservice.map");
 class User_getServiceBookingHistoryByUserId {
     constructor(reqServiceRepositories) {
         this.reqServiceRepositories = reqServiceRepositories;
@@ -19,7 +20,7 @@ class User_getServiceBookingHistoryByUserId {
             const services = yield this.reqServiceRepositories.findbyUserId(userId);
             if (services.length == 0)
                 return [];
-            return services;
+            return services.map((item) => reqservice_map_1.ReqServiceMap.toRespons(item));
         });
     }
 }

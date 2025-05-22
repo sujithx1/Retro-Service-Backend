@@ -11,8 +11,8 @@ export class GetCart_byIduseCase{
     }
 
     async execute(cartId:string):Promise<CartEntities>{
-        const cart=await this.cartrepositories.findById(cartId)
-        if(!cart) throw new CustomError('cart not found',404,AppError.ResourceNotFound)
-            return cart
+        const cart=await this.cartrepositories.findById(cartId);
+        if(!cart) throw new CustomError("cart not found",404,AppError.ResourceNotFound);
+            return cart;
     }
 }

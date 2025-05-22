@@ -10,15 +10,15 @@ export class SendOtp{
     {
         console.log(email);
             
-        const existUser=await this.userRepositores.findByemail(email)
+        const existUser=await this.userRepositores.findByemail(email);
 
         if(existUser) {
             console.log("user alreadu exist");
             
-            throw new Error("User Already Exist")}
+            throw new Error("User Already Exist");}
 
         
-        const sendotpmail=await sendOtp(email,username,otp)
+        const sendotpmail=await sendOtp(email,username,otp);
         console.log(sendotpmail);
 
 

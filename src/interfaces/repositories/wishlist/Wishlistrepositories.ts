@@ -10,12 +10,12 @@ const returnWishlist=(wishlist:IWishlist)=>{
         wishlist.productId,
         wishlist.createdAt,
         wishlist.updatedAt
-    )
-}
+    );
+};
 
 export class WishlistMongoRepository implements IWishlistRepository {
   async addToWishlist(userId: string, productId: string): Promise<WishlistEntity> {
-    const wishlistItem = await WishlistModel.create({ userId, productId })
+    const wishlistItem = await WishlistModel.create({ userId, productId });
     
     await wishlistItem.populate("userId", "username email phone");
     await wishlistItem.populate("productId", "name images price");
@@ -38,7 +38,7 @@ export class WishlistMongoRepository implements IWishlistRepository {
     const wishlist = await WishlistModel.find({ userId })
     .populate("userId", "username email phone") // Populating user details
     .populate("productId", "name images price") // Populating user details
-    .exec()
+    .exec();
     return wishlist.map(item => returnWishlist(item));
   }
 

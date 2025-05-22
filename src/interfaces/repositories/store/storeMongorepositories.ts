@@ -23,26 +23,26 @@ const returnstore = (store: IStore_types): StoreEntities => {
 
 export class StoreMongoRepositories implements IstoreRepositories {
   async findByowner_email(email: string): Promise<StoreEntities | null> {
-    const store = await StoreModel.findOne({ owner_email: email })
+    const store = await StoreModel.findOne({ owner_email: email });
     if (!store) return null;
 
-    return returnstore(store)    
+    return returnstore(store);    
   }
   async findbyId(id: string): Promise<StoreEntities | null> {
-    const store=await StoreModel.findById(id)
-    if(!store)return null
-    return returnstore(store )   
+    const store=await StoreModel.findById(id);
+    if(!store)return null;
+    return returnstore(store );   
   }
   async create(storeData: StoreEntities): Promise<StoreEntities> {
-      const store=await StoreModel.create(storeData)
-      return returnstore(store)   
+      const store=await StoreModel.create(storeData);
+      return returnstore(store);   
   }
 
 
   async findbystoreId(id: string): Promise<StoreEntities | null> {
-      const store=await StoreModel.findOne({storeId:id})
-      if(!store)return null
-      return returnstore(store)
+      const store=await StoreModel.findOne({storeId:id});
+      if(!store)return null;
+      return returnstore(store);
   }
 
 
@@ -50,11 +50,11 @@ export class StoreMongoRepositories implements IstoreRepositories {
   async findandlocationAndupdate(id: string, location: Locationuser_types): Promise<StoreEntities | null> {
     const storeData=await StoreModel.findByIdAndUpdate(id,{
       location:location
-    },{new:true, upsert: true})
+    },{new:true, upsert: true});
 
-    if(!storeData)return null
+    if(!storeData)return null;
 
-    return returnstore(storeData)
+    return returnstore(storeData);
       
   }
 
@@ -64,9 +64,9 @@ export class StoreMongoRepositories implements IstoreRepositories {
 
 
   async findAll(): Promise<StoreEntities[]> {
-      const stores=await StoreModel.find()
+      const stores=await StoreModel.find();
 
-      return stores.map((res)=>returnstore(res))
+      return stores.map((res)=>returnstore(res));
   }
 
 
@@ -82,15 +82,15 @@ export class StoreMongoRepositories implements IstoreRepositories {
       Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c; // Distance in km
-  };
+  }
   
   async find20Km(location:Locationuser_types): Promise<StoreEntities[]> {
       try {
         // Find stores that are active and have a valid location
         const stores = await StoreModel.find({
           isActive: true,
-          'location.lat': { $exists: true },
-          'location.lng': { $exists: true },
+          "location.lat": { $exists: true },
+          "location.lng": { $exists: true },
         });
     
         // Map stores to include calculated distances

@@ -8,7 +8,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const Product_schema = new mongoose_1.default.Schema({
     storeId: {
         type: mongoose_1.default.Types.ObjectId,
-        ref: 'Store',
+        ref: "Store",
         required: true
     },
     name: {
@@ -25,7 +25,7 @@ const Product_schema = new mongoose_1.default.Schema({
     },
     category: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'Category',
+        ref: "Category",
         required: true
     },
     price: {
@@ -44,4 +44,4 @@ const Product_schema = new mongoose_1.default.Schema({
 }, {
     timestamps: true
 });
-exports.Product_Model = mongoose_1.default.model('Product', Product_schema);
+exports.Product_Model = mongoose_1.default.model("Product", Product_schema);

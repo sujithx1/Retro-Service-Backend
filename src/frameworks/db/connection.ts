@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export const connectdb=() => {
-  const dbUrl=process.env.DB_ATLES
+  const dbUrl=process.env.DB_ATLES;
  
   
   
@@ -11,4 +11,4 @@ export const connectdb=() => {
   .catch((err) => console.log("mongodb not connected", err));
  
     
-} 
+}; 

@@ -1,7 +1,7 @@
 import { IEmployee_types } from "../frameworks/db/models/EmployeeModel";
 import { FinduserLocation } from "../types/user";
 
-interface AcceptEmployee_types{
+export interface AcceptEmployee_types{
     employeeId:string|null,
     acceptTime:Date|null
 

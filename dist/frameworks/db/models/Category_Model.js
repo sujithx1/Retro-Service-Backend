@@ -22,4 +22,4 @@ const categorySchema = new mongoose_1.default.Schema({
         default: false
     },
 }, { timestamps: true });
-exports.CategoryModel = mongoose_1.default.model('Category', categorySchema);
+exports.CategoryModel = mongoose_1.default.model("Category", categorySchema);

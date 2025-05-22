@@ -9,7 +9,7 @@ export class Get_alltrasactions{
     }
 
     async execute():Promise<TransactionEntities[]>{
-        const transactions=await this.trasnctions.findAll()
-        return transactions
+        const transactions=await this.trasnctions.findAll();
+        return transactions;
     }
 }

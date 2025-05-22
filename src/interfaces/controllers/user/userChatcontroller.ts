@@ -12,18 +12,18 @@ export class UserChatcontroller{
 
     async user_getChats(req:Request,res:Response,next:NextFunction){
         try {
-                const {id}=req.params
-                if(!id)return next(new CustomError("id not found",401,AppError.ValidationError))
+                const {id}=req.params;
+                if(!id)return next(new CustomError("id not found",401,AppError.ValidationError));
 
-                const chats=await this.getmessgesByuserSide.execute(id)
+                const chats=await this.getmessgesByuserSide.execute(id);
                 
-                return res.status(200).json({message:"success",success:true,chats})
+                return res.status(200).json({message:"success",success:true,chats});
         
                     
 
 
         } catch (error) {
-           return next(error)
+           return next(error);
             
         }
     }

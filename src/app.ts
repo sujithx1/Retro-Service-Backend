@@ -10,8 +10,8 @@ import http from "http";
 import { Server } from "socket.io";
 import morgan from "morgan";
 
-import storeRouter from "./frameworks/routes/storeRoutes"
-import "./utils/helper/db_helper/cronjobReject"
+import storeRouter from "./frameworks/routes/storeRoutes";
+import "./utils/helper/db_helper/cronjobReject";
 import { socket_Connection } from "./socket";
 const app = express();
 const server = http.createServer(app);
@@ -27,7 +27,7 @@ const corsOptions = {
 export const io = new Server(server, {
   cors: corsOptions,
 });
-socket_Connection ()
+socket_Connection ();
 
 app.use(cors(corsOptions)); 
 app.use(express.json({ limit: "20mb" }));

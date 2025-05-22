@@ -6,6 +6,6 @@ export class Admin_get_jobs_useCase{
         
     }
     async execute():Promise<JobsEntities[]>{
-        return await this.jobRepositories.findAll()
+        return await this.jobRepositories.findAll();
     }
 }

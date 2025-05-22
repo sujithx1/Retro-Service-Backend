@@ -1,7 +1,7 @@
-import { ServiceAccount } from 'firebase-admin';
+import { ServiceAccount } from "firebase-admin";
 
 // Import dotenv to load environment variables
-require('dotenv').config();
+// require("dotenv").config();
 
 // TypeScript interfaces for service account credentials
 interface FirebaseCredentials extends ServiceAccount {
@@ -23,7 +23,7 @@ export const firebaseCredentials: FirebaseCredentials = {
   type: process.env.FIREBASE_TYPE as string,
   project_id: process.env.FIREBASE_PROJECT_ID as string,
   private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID as string,
-  private_key: (process.env.FIREBASE_PRIVATE_KEY as string).replace(/\\n/g, '\n'),
+  private_key: (process.env.FIREBASE_PRIVATE_KEY as string).replace(/\\n/g, "\n"),
   client_email: process.env.FIREBASE_CLIENT_EMAIL as string,
   client_id: process.env.FIREBASE_CLIENT_ID as string,
   auth_uri: process.env.FIREBASE_AUTH_URI as string,

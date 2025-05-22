@@ -17,7 +17,7 @@ class ServicePaymentMongoRepositories {
         return __awaiter(this, void 0, void 0, function* () {
             var _a, _b, _c;
             const servicepayment = yield servicePayment_model_1.ServicePaymentModel.create(service);
-            return new servicePaymentEntities_1.ServicePaymentEntity(servicepayment.id, ((_a = servicepayment.userId) === null || _a === void 0 ? void 0 : _a.toString()) || '', ((_b = servicepayment.employeeId) === null || _b === void 0 ? void 0 : _b.toString()) || '', ((_c = servicepayment.serviceId) === null || _c === void 0 ? void 0 : _c.toString()) || '', servicepayment.amount, servicepayment.serviceDetails, servicepayment.status, servicepayment.paymentId, servicepayment.jobName, servicepayment.createdAt, servicepayment.updatedAt);
+            return new servicePaymentEntities_1.ServicePaymentEntity(servicepayment.id, ((_a = servicepayment.userId) === null || _a === void 0 ? void 0 : _a.toString()) || "", ((_b = servicepayment.employeeId) === null || _b === void 0 ? void 0 : _b.toString()) || "", ((_c = servicepayment.serviceId) === null || _c === void 0 ? void 0 : _c.toString()) || "", servicepayment.amount, servicepayment.serviceDetails, servicepayment.status, servicepayment.paymentId, servicepayment.jobName, servicepayment.createdAt, servicepayment.updatedAt);
         });
     }
     findByUserId(id) {
@@ -28,7 +28,7 @@ class ServicePaymentMongoRepositories {
                 return [];
             return bookings.map(service => {
                 var _a, _b, _c;
-                return new servicePaymentEntities_1.ServicePaymentEntity(service.id, ((_a = service.userId) === null || _a === void 0 ? void 0 : _a.toString()) || '', ((_b = service.employeeId) === null || _b === void 0 ? void 0 : _b.toString()) || '', ((_c = service.serviceId) === null || _c === void 0 ? void 0 : _c.toString()) || '', service.amount, service.serviceDetails, service.status, service.paymentId, service.jobName, service.createdAt, service.updatedAt);
+                return new servicePaymentEntities_1.ServicePaymentEntity(service.id, ((_a = service.userId) === null || _a === void 0 ? void 0 : _a.toString()) || "", ((_b = service.employeeId) === null || _b === void 0 ? void 0 : _b.toString()) || "", ((_c = service.serviceId) === null || _c === void 0 ? void 0 : _c.toString()) || "", service.amount, service.serviceDetails, service.status, service.paymentId, service.jobName, service.createdAt, service.updatedAt);
             });
         });
     }
@@ -38,7 +38,7 @@ class ServicePaymentMongoRepositories {
             const service = yield servicePayment_model_1.ServicePaymentModel.findById(id);
             if (!service)
                 return null;
-            return new servicePaymentEntities_1.ServicePaymentEntity(service.id, ((_a = service.userId) === null || _a === void 0 ? void 0 : _a.toString()) || '', ((_b = service.employeeId) === null || _b === void 0 ? void 0 : _b.toString()) || '', ((_c = service.serviceId) === null || _c === void 0 ? void 0 : _c.toString()) || '', service.amount, service.serviceDetails, service.status, service.paymentId, service.jobName, service.createdAt, service.updatedAt);
+            return new servicePaymentEntities_1.ServicePaymentEntity(service.id, ((_a = service.userId) === null || _a === void 0 ? void 0 : _a.toString()) || "", ((_b = service.employeeId) === null || _b === void 0 ? void 0 : _b.toString()) || "", ((_c = service.serviceId) === null || _c === void 0 ? void 0 : _c.toString()) || "", service.amount, service.serviceDetails, service.status, service.paymentId, service.jobName, service.createdAt, service.updatedAt);
         });
     }
     findByIdAndUpdate(payment) {
@@ -48,12 +48,12 @@ class ServicePaymentMongoRepositories {
                 status: payment.status,
                 paymentId: payment.paymentId,
                 amount: payment.amount,
-                'serviceDetails.phone': payment.serviceDetails.phone,
-                'serviceDetails.vehicleNumber': payment.serviceDetails.vehicleNumber
+                "serviceDetails.phone": payment.serviceDetails.phone,
+                "serviceDetails.vehicleNumber": payment.serviceDetails.vehicleNumber
             }, { new: true, upsert: true });
             if (!service)
                 return null;
-            return new servicePaymentEntities_1.ServicePaymentEntity(service.id, ((_a = service.userId) === null || _a === void 0 ? void 0 : _a.toString()) || '', ((_b = service.employeeId) === null || _b === void 0 ? void 0 : _b.toString()) || '', ((_c = service.serviceId) === null || _c === void 0 ? void 0 : _c.toString()) || '', service.amount, service.serviceDetails, service.status, service.paymentId, service.jobName, service.createdAt, service.updatedAt);
+            return new servicePaymentEntities_1.ServicePaymentEntity(service.id, ((_a = service.userId) === null || _a === void 0 ? void 0 : _a.toString()) || "", ((_b = service.employeeId) === null || _b === void 0 ? void 0 : _b.toString()) || "", ((_c = service.serviceId) === null || _c === void 0 ? void 0 : _c.toString()) || "", service.amount, service.serviceDetails, service.status, service.paymentId, service.jobName, service.createdAt, service.updatedAt);
         });
     }
 }

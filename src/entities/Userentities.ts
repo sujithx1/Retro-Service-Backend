@@ -11,8 +11,8 @@ export class UserIntities{
         public isActive: boolean = true,
         public profilePic: string = "https://example.com/default-profile-pic.png",
         public isAdmin: boolean = false,
-        public authSource?: 'self' | 'google',
-        public role:'user'|'admin'='user',
+        public authSource?: "self" | "google",
+        public role:"user"|"admin"="user",
         public location?:Locationuser_types,
         public createdAt?: Date,
         public updatedAt?: Date
@@ -21,7 +21,7 @@ export class UserIntities{
     ) {}
     validateEmail():boolean{
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(this.email)
+        return emailRegex.test(this.email);
 
   }
 

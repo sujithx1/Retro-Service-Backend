@@ -8,17 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -51,7 +40,7 @@ class Usercontroller {
         this.userlocationUsecase = userlocationUsecase;
         this.user_getemployeeDetails = user_getemployeeDetails;
     }
-    signUp(req, res) {
+    signUp(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { username, email, phone, password } = req.body;
@@ -65,12 +54,11 @@ class Usercontroller {
                 res.status(200).json({ message: "Enter Otp check your Email" });
             }
             catch (error) {
-                console.log("errpr", error.message);
-                res.status(400).json({ error: error.message });
+                return next(error);
             }
         });
     }
-    OtpChecking(req, res) {
+    OtpChecking(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { otp } = req.body;
@@ -93,18 +81,17 @@ class Usercontroller {
                     throw new Error("userData Not found ");
                 const userDetails = JSON.parse(userData);
                 const user = yield this.createUser.exicute(userDetails);
-                const { password: _ } = user, withoutPassword = __rest(user, ["password"]);
+                // const { password: _, ...withoutPassword } = user;
                 res
                     .status(201)
-                    .json({ mesage: "user registerd ", user: withoutPassword });
+                    .json({ mesage: "user registerd ", user });
             }
             catch (error) {
-                console.error("Error in OtpChecking:", error.message);
-                res.status(400).json({ error: error.message });
+                return next(error);
             }
         });
     }
-    userlogin(req, res) {
+    userlogin(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log("login render");
@@ -113,7 +100,7 @@ class Usercontroller {
                 const user = yield this.loginUser.execute(email, password);
                 const refresh_token = (0, jwt_auth_token_1.GenerateRefreshToken)(user.id, user.role);
                 const access_token = (0, jwt_auth_token_1.GenerateAccessToken)(user.id, user.role);
-                const { password: _, isAdmin } = user, withoutpassword = __rest(user, ["password", "isAdmin"]);
+                // const { password: _, isAdmin, ...withoutpassword } = user;
                 console.log("user log in success");
                 res
                     .cookie("user_refreshToken", refresh_token, {
@@ -123,12 +110,11 @@ class Usercontroller {
                     .json({
                     message: "login success",
                     token: access_token,
-                    user: withoutpassword,
+                    user,
                 });
             }
             catch (error) {
-                console.log("error from login user ", error.message);
-                res.status(400).json({ error: error.message });
+                return next(error);
             }
         });
     }
@@ -141,14 +127,14 @@ class Usercontroller {
                 const user = yield this.AuthService.execute(credential);
                 const refresh_token = (0, jwt_auth_token_1.GenerateRefreshToken)(user.id, user.role);
                 const access_token = (0, jwt_auth_token_1.GenerateAccessToken)(user.id, user.role);
-                const { password, isAdmin } = user, without = __rest(user, ["password", "isAdmin"]);
+                // const { password, isAdmin, ...without } = user;
                 console.log("tokenssss    " + access_token, refresh_token);
                 res
                     .cookie("user_refreshToken", refresh_token, {
                     httpOnly: true,
                 })
                     .status(200)
-                    .json({ message: "login success", user: without, token: access_token });
+                    .json({ message: "login success", user, token: access_token });
             }
             catch (error) {
                 console.log("error -> usercntrol - > googleSignin", error.message);
@@ -195,17 +181,16 @@ class Usercontroller {
                     console.log("Cloudinary upload successful:", cloudinaryUpload);
                     const user = yield this.putUser.execute(id, username, phone, cloudinaryUpload.secure_url);
                     console.log("Updated user:", user);
-                    const { password: _ } = user, withoutPassword = __rest(user, ["password"]);
+                    // const { password: _, ...withoutPassword } = user;
                     console.log("heyyyy");
                     // Send success response
                     return res.status(200).json({
                         message: "User updated successfully",
-                        user: withoutPassword,
+                        user,
                     });
                 }
             }
             catch (error) {
-                console.error("Unhandled error in User_Put_controll:", error.message);
                 return next(error);
             }
         });
@@ -226,14 +211,9 @@ class Usercontroller {
                 }
                 const localFilePath = req.file.filename; // File path from local upload
                 console.log("locaalpath", localFilePath);
-                // // Upload the file to Cloudinary
-                // cloudinary.uploader.upload("path/to/test-image.jpg", { folder: "test-folder" })
-                // .then((result) => console.log("Manual test successful:", result))
-                // .catch((error) => console.error("Manual test failed:", error));
                 const userProfile = yield this.putProfileImage.execute(id, localFilePath);
                 console.log(userProfile + "userrrrrrrrrrrrrrrrrrrrr");
-                const { password: _ } = userProfile, without = __rest(userProfile, ["password"]);
-                return res.status(200).json({ message: "image updated", user: without });
+                return res.status(200).json({ message: "image updated", user: userProfile });
             }
             catch (error) {
                 next(error);
@@ -255,11 +235,8 @@ class Usercontroller {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const employees = yield this.getAllEmployees.execute();
-                const withoutPassword = employees.map((_a) => {
-                    var { password } = _a, rest = __rest(_a, ["password"]);
-                    return rest;
-                });
-                res.status(200).json({ message: "success", employees: withoutPassword });
+                // const withoutPassword = employees.map(({ password, ...rest }) => rest);
+                res.status(200).json({ message: "success", employees });
             }
             catch (error) {
                 next(error);
@@ -398,8 +375,7 @@ class Usercontroller {
                 if (!id)
                     return next(new custom_errors_1.CustomError("id missing", 401, error_enum_1.AppError.ValidationError));
                 const user = yield this.user_getemployeeDetails.execute(id);
-                const { password: _ } = user, without = __rest(user, ["password"]);
-                return res.status(200).json({ message: "success", user: without });
+                return res.status(200).json({ message: "success", user });
             }
             catch (error) {
                 return next(error);

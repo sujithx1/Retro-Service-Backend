@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User_getdetails = void 0;
+const user_map_1 = require("../../../DTO/map/user.map");
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 class User_getdetails {
@@ -21,7 +22,7 @@ class User_getdetails {
             const user = yield this.userrepositories.findById(useId);
             if (!user)
                 throw new custom_errors_1.CustomError("user not found", 401, error_enum_1.AppError.UserNotFound);
-            return user;
+            return user_map_1.UserMap.toResponse(user);
         });
     }
 }

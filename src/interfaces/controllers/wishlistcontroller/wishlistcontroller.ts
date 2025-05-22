@@ -17,55 +17,55 @@ export class WishlistController{
 
     async _postcreateWislist(req:Request,res:Response,next:NextFunction){
         try {
-            const {productId,userId}=req.body
-            console.log(req.body)
+            const {productId,userId}=req.body;
+            console.log(req.body);
             
             if (!productId||!userId) {
-                return next(new CustomError("missing field",400,AppError.ValidationError))
+                return next(new CustomError("missing field",400,AppError.ValidationError));
                 
             }
 
 
-            const wishlist=await this.postwishlist.execute(productId,userId)
-            return res.status(201).json({success:true,wishlist})
+            const wishlist=await this.postwishlist.execute(productId,userId);
+            return res.status(201).json({success:true,wishlist});
         } catch (error) {
-            return next(error)
+            return next(error);
         }
 
     }
     async _getwishlistsbyUserId(req:Request,res:Response,next:NextFunction){
         try {
             // const {productId,userId}=req.body
-            const {id}=req.params
+            const {id}=req.params;
             
             if (!id) {
-                return next(new CustomError("missing userId",400,AppError.ValidationError))
+                return next(new CustomError("missing userId",400,AppError.ValidationError));
                 
             }
 
 
-            const wishlists=await this.getwishlist_byuserId.execute(id)
-            return res.status(200).json({success:true,wishlists})
+            const wishlists=await this.getwishlist_byuserId.execute(id);
+            return res.status(200).json({success:true,wishlists});
         } catch (error) {
-            return next(error)
+            return next(error);
         }
 
     }
     async _deletewishlistsbyId(req:Request,res:Response,next:NextFunction){
         try {
             // const {productId,userId}=req.body
-            const {id}=req.params
+            const {id}=req.params;
             
             if (!id) {
-                return next(new CustomError("missing id",400,AppError.ValidationError))
+                return next(new CustomError("missing id",400,AppError.ValidationError));
                 
             }
 
 
-            const wishlist=await this.deletewishlist.execute(id)
-            return res.status(200).json({success:true,wishlist})
+            const wishlist=await this.deletewishlist.execute(id);
+            return res.status(200).json({success:true,wishlist});
         } catch (error) {
-            return next(error)
+            return next(error);
         }
 
     }

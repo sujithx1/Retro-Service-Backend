@@ -1,7 +1,5 @@
 import { ObjectId } from "mongoose";
 import { IuserTypes } from "../frameworks/db/models/UserModel";
-import { IcartTypes } from "../frameworks/db/models/cartModel";
-import { CartEntities } from "./cartEntities";
 import { IStore_types } from "../frameworks/db/models/Storemodel";
 import { IProduct } from "../frameworks/db/models/ProductModel";
 

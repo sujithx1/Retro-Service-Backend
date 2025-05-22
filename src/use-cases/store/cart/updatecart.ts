@@ -33,7 +33,7 @@ export class Cart_updateuseCase {
     }
 
     const productIndex = findCart.products.findIndex(
-        (product) => typeof product.product === 'object' && '_id' in product.product && product.product._id.toString() === productId
+        (product) => typeof product.product === "object" && "_id" in product.product && product.product._id.toString() === productId
     );
 
     if (productIndex === -1) {
@@ -41,8 +41,8 @@ export class Cart_updateuseCase {
             product:productId,
       quantity,
       price
-        }
-        findCart.products.push(product)
+        };
+        findCart.products.push(product);
 
     //   throw new CustomError(
     //     "Product not found in cart",

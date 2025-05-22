@@ -44,13 +44,13 @@
 // const upload = multer({ storage });
 
 // export default upload;
-import multer from 'multer';
-import fs from 'fs';
-import path from 'path';
+import multer from "multer";
+import fs from "fs";
+import path from "path";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join( './uploads');
+    const uploadPath = path.join( "./uploads");
 
     // Check if directory exists, create it if not
     if (!fs.existsSync(uploadPath)) {

@@ -9,8 +9,8 @@ export class Accept_reqServiceEmployee{
 
     async execute(id:string,empId:string,status:"CONFIRMED" | "CANCELLED"):Promise<RequestserviceMechEntities>{
 
-        const reqservice=await this.reqseriveRepositories.findbyId(id)
-        if(!reqservice) throw new CustomError("Service not found",401,AppError.ResourceNotFound)
+        const reqservice=await this.reqseriveRepositories.findbyId(id);
+        if(!reqservice) throw new CustomError("Service not found",401,AppError.ResourceNotFound);
 
        
 console.log("Mechanics List:", reqservice.mechanics.map(mech => mech                            ));
@@ -28,11 +28,11 @@ const mechanic = reqservice.mechanics.find(mech => mech.employeeId == empId);
     
     console.log("✅ Mechanic found:", mechanic);
     
-        reqservice.status=status
-        const update =await this.reqseriveRepositories.findByIdAndUpdate(reqservice,empId)
+        reqservice.status=status;
+        const update =await this.reqseriveRepositories.findByIdAndUpdate(reqservice,empId);
         if(!update) throw new CustomError("Not updated",401,AppError.ServerError);
 
-        return update    
+        return update;    
         
         
         

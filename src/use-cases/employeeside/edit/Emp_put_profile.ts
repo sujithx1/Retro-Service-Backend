@@ -1,3 +1,5 @@
+import { MechanicResponesDto } from "../../../DTO/dto";
+import { MechanicMap } from "../../../DTO/map/mechanic.map";
 import { EmployeeEntities } from "../../../entities/EmployeeEntities";
 import { IEmployeeRepositories } from "../../../interfaces/repositories/employeeside/IEmployeRepositories";
 
@@ -7,27 +9,23 @@ export class Employee_put_Profile_useCase{
         
     }
 
-    async execute(id:string,username:string,phone:string,profilePic:string,experience:number):Promise<EmployeeEntities>{
+    async execute(id:string,username:string,phone:string,profilePic:string,experience:number):Promise<MechanicResponesDto>{
 
-        const employe=await this.employeeRep.findById(id)
+        const employe=await this.employeeRep.findById(id);
         if(!employe)throw new Error("no employee found");
 
      
-        employe.username=username
-        employe.phone=phone
-        employe.profilePic=profilePic
-        // skills.forEach((skill) => {
-        //     if (!employe.skills.includes(skill)) {
-        //       employe.skills.push(skill);
-        //     }
-        //   });
-          
-        employe.experience=experience
+        employe.username=username;
+        employe.phone=phone;
+        employe.profilePic=profilePic;
 
-        const update=await this.employeeRep.findByIdAndUpdate(employe)
+          
+        employe.experience=experience;
+
+        const update=await this.employeeRep.findByIdAndUpdate(employe);
         if(!update) throw new Error("employee not updated");
         
-        return update
+        return MechanicMap.toResponse(update);
     }
 }
  

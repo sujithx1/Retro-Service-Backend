@@ -18,14 +18,14 @@ export class Employee_putwithrdawamountuseCase{
     async execute(empId:string,amount:number):Promise<WalletEntities>
  {
 
-    const wallet=await this.walletrepositories.findByEmployeeId(empId)
-    if(!wallet)throw new CustomError("wallet not found",401,AppError.ResourceNotFound)
-    wallet.balance=amount
-const updateWallet=await this.walletrepositories.findByIdandUpdate(wallet)
-if(!updateWallet) throw new CustomError("wallet not updated",401,AppError.ServerError)
+    const wallet=await this.walletrepositories.findByEmployeeId(empId);
+    if(!wallet)throw new CustomError("wallet not found",401,AppError.ResourceNotFound);
+    wallet.balance=amount;
+const updateWallet=await this.walletrepositories.findByIdandUpdate(wallet);
+if(!updateWallet) throw new CustomError("wallet not updated",401,AppError.ServerError);
 
-const updateemployeerevenu=await this.employeerepositories.findIdAndDecrementRevenue(empId,amount)
-if(!updateemployeerevenu) throw new CustomError("employee not updated",401,AppError.ServerError)
+const updateemployeerevenu=await this.employeerepositories.findIdAndDecrementRevenue(empId,amount);
+if(!updateemployeerevenu) throw new CustomError("employee not updated",401,AppError.ServerError);
 
     const transaction=new TransactionEntities(
         "",
@@ -38,10 +38,10 @@ if(!updateemployeerevenu) throw new CustomError("employee not updated",401,AppEr
 
 
     
-    )
-    await this.transactionrepositoires.create(transaction)
+    );
+    await this.transactionrepositoires.create(transaction);
 
-    return updateWallet
+    return updateWallet;
 
     
 

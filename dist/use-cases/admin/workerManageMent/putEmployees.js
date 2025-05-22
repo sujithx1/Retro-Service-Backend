@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Admin_put_employee_useCase = void 0;
-const EmployeeEntities_1 = require("../../../entities/EmployeeEntities");
+const mechanic_map_1 = require("../../../DTO/map/mechanic.map");
 class Admin_put_employee_useCase {
     constructor(employeeRepositories) {
         this.employeeRepositories = employeeRepositories;
@@ -27,7 +27,7 @@ class Admin_put_employee_useCase {
             const update = yield this.employeeRepositories.findByIdAndUpdate(employe);
             if (!update)
                 throw new Error("Not updateded");
-            return new EmployeeEntities_1.EmployeeEntities(update.id, update.username, update.email, update.phone, update.password, update.skills, update.experience, update.isValidated, update.proof, update.isActive, update.profilePic, update.location, update.authSource, update.role, update.revenue, update.onDuty, update.FCM_token, update.createdAt, update.updatedAt);
+            return mechanic_map_1.MechanicMap.toResponse(update);
         });
     }
 }

@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SendOtp = void 0;
+const store_map_1 = require("../../../DTO/map/store.map");
 const StoreEntities_1 = require("../../../entities/StoreEntities");
 const walletEntities_1 = require("../../../entities/walletEntities");
 const hashPassword_1 = require("../../../utils/hashPassword");
@@ -38,7 +39,7 @@ class SendOtp {
                 yield (0, otp_1.sendOtp)(storeDetails.owner_email, username, storeId, true);
                 const wallet = new walletEntities_1.WalletEntities("", store.id, "store", 0);
                 this.walletrepositories.create(wallet);
-                return store;
+                return store_map_1.StoreMap.toResponse(store);
             }
             try {
                 const sendOtpMail = yield (0, otp_1.sendOtp)(storeDetails.owner_email, username, otp);

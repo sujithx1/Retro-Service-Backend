@@ -13,7 +13,7 @@ export class Admin_Del_Category_useCase {
         throw new Error("isBlock field is missing or invalid");
     }
     
-    category.isBlock =!category.isBlock
+    category.isBlock =!category.isBlock;
     console.log(category);
     
     const updatecategory =

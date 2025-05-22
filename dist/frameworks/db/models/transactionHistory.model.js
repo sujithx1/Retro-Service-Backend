@@ -38,7 +38,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const transactionSchema = new mongoose_1.Schema({
     userId: {
         type: mongoose_1.default.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
         required: true
     },
     type: {
@@ -53,19 +53,19 @@ const transactionSchema = new mongoose_1.Schema({
     status: {
         type: String,
         enum: ["complete", "pending", "failed"],
-        default: 'pending'
+        default: "pending"
     },
     paymentMethod: {
         type: String,
         enum: ["razorpay", "wallet", "cod"],
-        default: 'razorpay'
+        default: "razorpay"
     },
     serviceType: {
         type: String,
-        enum: ['service', 'product', "add"],
+        enum: ["service", "product", "add"],
         required: true
     }
 }, {
     timestamps: true
 });
-exports.TransactionModel = mongoose_1.default.model('Transaction', transactionSchema);
+exports.TransactionModel = mongoose_1.default.model("Transaction", transactionSchema);

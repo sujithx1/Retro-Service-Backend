@@ -67,7 +67,7 @@ class WalletMongoRepositories {
     }
     findByAdmin() {
         return __awaiter(this, void 0, void 0, function* () {
-            const walletData = yield WalletModel_1.WalletModel.findOne({ userType: 'admin' });
+            const walletData = yield WalletModel_1.WalletModel.findOne({ userType: "admin" });
             if (!walletData)
                 return null;
             return new walletEntities_1.WalletEntities(walletData.id, walletData.userId.toString(), walletData.userType, walletData.balance, walletData.createdAt, walletData.updatedAt);

@@ -9,7 +9,7 @@ export class AddtoCartuseCase {
       product:productId,
       quantity,
       price
-    }]
+    }];
     const cart=new CartEntities(
       "",
       userId,
@@ -17,7 +17,7 @@ export class AddtoCartuseCase {
       products,
 
 
-          )
+          );
 
             
     return await this.cartrepositories.create(cart);

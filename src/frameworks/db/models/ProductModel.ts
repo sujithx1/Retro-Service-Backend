@@ -19,7 +19,7 @@ export interface IProduct extends Document {
 const Product_schema=new mongoose.Schema<IProduct>({
     storeId:{
         type:mongoose.Types.ObjectId,
-        ref:'Store',
+        ref:"Store",
         required:true
 
     },
@@ -42,7 +42,7 @@ const Product_schema=new mongoose.Schema<IProduct>({
     },
     category:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Category',
+        ref:"Category",
         required:true
     },
     price:{
@@ -65,7 +65,7 @@ const Product_schema=new mongoose.Schema<IProduct>({
 },{
     timestamps:true
 
-})
+});
 
 
-export const Product_Model=mongoose.model('Product',Product_schema)
+export const Product_Model=mongoose.model("Product",Product_schema);

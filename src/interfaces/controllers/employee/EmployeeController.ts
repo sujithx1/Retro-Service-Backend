@@ -46,7 +46,7 @@ export class EmployeeController {
     private empAddFCM_token: FCM_TOKEN_ADDuseCase
   ) {}
 
-  async Signup(req: Request, res: Response) {
+  async Signup(req: Request, res: Response,next:NextFunction) {
     try {
       const { username, email, phone, password, skills, experience, proof } =
         req.body;
@@ -67,13 +67,12 @@ export class EmployeeController {
       await redisClient.setEx("empotp", 60, JSON.stringify(otp));
       await redisClient.setEx("empData", 60, JSON.stringify(employeData));
       res.status(200).json({ message: "check your Mail" });
-    } catch (error: any) {
-      console.log("error employe Signup cntroll", error.message);
-      res.status(400).json({ error: error.message });
+    } catch (error) {
+    return next(error)
     }
   }
 
-  async OtpChecking_Employee(req: Request, res: Response) {
+  async OtpChecking_Employee(req: Request, res: Response,next:NextFunction) {
     const { otp } = req.body;
     console.log("otp checking", otp);
     try {
@@ -99,17 +98,19 @@ export class EmployeeController {
 
       if (!employeData) throw new Error("employeData Not found ");
       const employeDetail = JSON.parse(employeData);
-      const employee = await this.createEmploye.execute(employeDetail);
-      const { password: _, ...withoutpassword } = employee;
+      const employe = await this.createEmploye.execute(employeDetail);
       res
         .status(201)
-        .json({ message: "Employee Created", employe: withoutpassword });
-    } catch (error: any) {
-      console.log("otp checking controller emp", error.message);
-      res.status(400).json({ error: error.message });
+        .json({ message: "Employee Created", employe });
+    } catch (error) {
+      return next(error)
+     
     }
   }
-  async Emp_logiConroll(req: Request, res: Response) {
+
+
+
+  async Emp_logiConroll(req: Request, res: Response,next:NextFunction) {
     const { email, password } = req.body;
     console.log("emp_login controller call");
 
@@ -117,7 +118,6 @@ export class EmployeeController {
       const employee = await this.loginemp.execute(email, password);
       const refresh_token = GenerateRefreshToken(employee.id, employee.role);
       const access_token = GenerateAccessToken(employee.id, employee.role);
-      const { password: _, ...withoutpassword } = employee;
       res
         .cookie("employee_refreshToken", refresh_token, {
           httpOnly: true,
@@ -125,15 +125,19 @@ export class EmployeeController {
         .status(200)
         .json({
           message: "Employee login success",
-          employee: withoutpassword,
+          employee,
           token: access_token,
         });
-    } catch (error: any) {
-      console.log("login controller err", error.message);
-
-      res.status(400).json({ error: error.message });
+    } catch (error) {
+      return next(error)
     }
   }
+
+
+
+
+
+
 
   async Employee_Put_Profile_Controll(
     req: Request,
@@ -176,12 +180,10 @@ export class EmployeeController {
       );
       console.log("Updated user:", user);
 
-      const { password: _, ...withoutPassword } = user;
-      console.log("heyyyy");
       // Send success response
       return res.status(200).json({
         message: "employee updated successfully",
-        employee: withoutPassword,
+        employee: user,
       });
     } catch (error) {
       return next(error);
@@ -248,8 +250,7 @@ export class EmployeeController {
       // console.log(services);
 
       res.status(200).json({ message: "success", services });
-    } catch (error: any) {
-      console.log("error userlogout", error.message);
+    } catch (error) {
       return next(error);
     }
   }
@@ -286,9 +287,8 @@ export class EmployeeController {
     try {
       const { id } = req.params;
       if (!id) return next(new Error("id missing"));
-      const employe = await this.getEmployee.execute(id);
-      const { password: _, ...without } = employe;
-      return res.status(200).json({ message: "success", employee: without });
+      const employee= await this.getEmployee.execute(id);
+      return res.status(200).json({ message: "success", employee });
     } catch (error) {
       return next(error);
     }
@@ -322,8 +322,8 @@ export class EmployeeController {
           new CustomError("id missing", 401, AppError.ValidationError)
         );
       const user = await this.getuserDetails.execute(id);
-      const { password: _, ...without } = user;
-      return res.status(200).json({ message: "success", user: without });
+      // const { password: _, ...without } = user;
+      return res.status(200).json({ message: "success", user });
     } catch (error) {
       return next(error);
     }

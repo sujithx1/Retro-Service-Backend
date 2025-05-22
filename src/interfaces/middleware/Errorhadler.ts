@@ -17,9 +17,9 @@
 // };
 
 // middlewares/error-handler.ts
-import { Request, Response, NextFunction } from 'express';
-import { AppError } from '../../utils/errors/error.enum';
-import { CustomError } from '../../utils/errors/custom.errors';
+import { Request, Response, NextFunction } from "express";
+import { AppError } from "../../utils/errors/error.enum";
+import { CustomError } from "../../utils/errors/custom.errors";
 
 export const errorHandler = (
   err: any,
@@ -27,8 +27,8 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.error('Error stack:', err.stack);
-  console.error('Error message:', err.message);
+  console.error("Error stack:", err.stack);
+  console.error("Error message:", err.message);
 
   if (err instanceof CustomError) {
     return res.status(err.statusCode).json({
@@ -42,7 +42,7 @@ export const errorHandler = (
   res.status(500).json({
     success: false,
    
-      error: 'Internal Server Error',
+      error: "Internal Server Error",
       code: AppError.ServerError,
     
   });

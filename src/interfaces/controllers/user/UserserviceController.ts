@@ -150,7 +150,7 @@ export class UserServiceController {
     next: NextFunction
   ) {
     try {
-const{id}=req.params
+const{id}=req.params;
       const {
        
         vehicleNumber,
@@ -169,7 +169,7 @@ const{id}=req.params
           new CustomError("Missing fields", 401, AppError.ValidationError)
         );
 
-        if(!id)return next(new CustomError("Missing Id",401,AppError.ValidationError))
+        if(!id)return next(new CustomError("Missing Id",401,AppError.ValidationError));
       console.log(req.body);
 
       const servicepayment = await this.putServicepaymentComplete.execute(
@@ -326,14 +326,14 @@ const{id}=req.params
     try {
       console.log("putservice send on specific emp");
       
-      const {id}=req.params
-      const {emplId}=req.body
+      const {id}=req.params;
+      const {emplId}=req.body;
       console.log(id,emplId);
       
-      if(!id)return next(new CustomError("missing id",401,AppError.ValidationError))
-      if(!emplId)return next(new CustomError("missing field",401,AppError.ValidationError))
-        startBookingCronJob3min()
-      const service= await this.putserviceSpecificemp.execute(id,emplId)
+      if(!id)return next(new CustomError("missing id",401,AppError.ValidationError));
+      if(!emplId)return next(new CustomError("missing field",401,AppError.ValidationError));
+        startBookingCronJob3min();
+      const service= await this.putserviceSpecificemp.execute(id,emplId);
 
 
       return res
@@ -414,13 +414,13 @@ const{id}=req.params
       
      console.log("transactions");
      
-     const{id}=req.params
-     if(!id) return next(new CustomError("missing field",401,AppError.ValidationError))
+     const{id}=req.params;
+     if(!id) return next(new CustomError("missing field",401,AppError.ValidationError));
 
-      const transactions=await this.gettranasactionByuser.execute(id)
-      console.log('transactions ',transactions);
+      const transactions=await this.gettranasactionByuser.execute(id);
+      console.log("transactions ",transactions);
       
-      res.status(200).json({message:'success',success:true,transactions})
+      res.status(200).json({message:"success",success:true,transactions});
     
 
       
@@ -447,7 +447,7 @@ const{id}=req.params
         return next(new CustomError("Missing id", 401, AppError.ValidationError));
       
 
-        const service_booking=await this.getserviceBookingDetails.execute(id)
+        const service_booking=await this.getserviceBookingDetails.execute(id);
       return res
         .status(200)
         .json({ message: "succes", success: true, booking:service_booking});

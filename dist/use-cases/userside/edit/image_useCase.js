@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User_Put_Image_UseCase = void 0;
+const user_map_1 = require("../../../DTO/map/user.map");
 class User_Put_Image_UseCase {
     constructor(userrrpositorise) {
         this.userrrpositorise = userrrpositorise;
@@ -25,7 +26,7 @@ class User_Put_Image_UseCase {
             const update = yield this.userrrpositorise.findByIdAndUpdate(user);
             if (!update)
                 throw new Error("not updated");
-            return update;
+            return user_map_1.UserMap.toResponse(update);
         });
     }
 }

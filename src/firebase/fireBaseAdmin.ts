@@ -1,6 +1,6 @@
 // src/config/firebase.ts
-import admin from 'firebase-admin';
-import { firebaseCredentials } from './firebase.config';
+import admin from "firebase-admin";
+import { firebaseCredentials } from "./firebase.config";
 
 admin.initializeApp({
   credential: admin.credential.cert(firebaseCredentials),

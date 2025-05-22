@@ -1,3 +1,5 @@
+import { UserMap } from "../../../DTO/map/user.map";
+import { UserResponsDto } from "../../../DTO/dto";
 import { UserIntities } from "../../../entities/Userentities";
 import { WalletEntities } from "../../../entities/walletEntities";
 import { IUserRepositories } from "../../../interfaces/repositories/userSide/IUserrRepositories";
@@ -11,21 +13,21 @@ export class CreateUser{
 
     ) {}
 
-    async exicute(data:{username:string,email:string,phone:string,password:string}):Promise<UserIntities>
+    async exicute(data:{username:string,email:string,phone:string,password:string}):Promise<UserResponsDto>
     {
-        const {username,email,phone,password}=data
+        const {username,email,phone,password}=data;
        
-        const hashPassword=await hashpass(password)
+        const hashPassword=await hashpass(password);
         const user=new UserIntities(
             "",
             username,
             email,
             phone,
             hashPassword
-        )
+        );
 
         
-       const newUser=await this.userRepositores.save(user)
+       const newUser=await this.userRepositores.save(user);
 
        const wallet=new WalletEntities(
         "",
@@ -34,11 +36,11 @@ export class CreateUser{
         0,
     
         
-    )
+    );
         
-    this.walletrepositories.create(wallet)
+    this.walletrepositories.create(wallet);
         
-        return newUser
+        return UserMap.toResponse(newUser);
 
 
     }

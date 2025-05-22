@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { Address_Types, FinduserLocation, Locationuser_types } from "../../../types/user";
+import { Address_Types, Locationuser_types } from "../../../types/user";
 
 
 
@@ -88,7 +88,7 @@ const EmployeSchema=new Schema<IEmployee_types>({
     authSource:{
         type:String,
         enum:["self","google"],
-        default:'self'
+        default:"self"
     },
     role:{
         type:String,
@@ -121,7 +121,7 @@ const EmployeSchema=new Schema<IEmployee_types>({
 {
     timestamps:true
 
-})
+});
 
 
-export const EmployeeModel=mongoose.model('employee',EmployeSchema)
+export const EmployeeModel=mongoose.model("employee",EmployeSchema);

@@ -25,7 +25,7 @@ class UserwalletController {
                     return next(new custom_errors_1.CustomError("id missing ", 401, error_enum_1.AppError.ValidationError));
                 const wallet = yield this.getuserWallet.execute(id);
                 return res.status(200).json({
-                    message: 'success', success: true, wallet
+                    message: "success", success: true, wallet
                 });
             }
             catch (error) {
@@ -38,7 +38,7 @@ class UserwalletController {
             try {
                 const wallet = yield this.getadminWallet.execute();
                 return res.status(200).json({
-                    message: 'success', success: true, wallet
+                    message: "success", success: true, wallet
                 });
             }
             catch (error) {

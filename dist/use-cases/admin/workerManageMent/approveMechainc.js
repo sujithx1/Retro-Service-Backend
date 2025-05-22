@@ -20,10 +20,10 @@ class Approve_MechanicadminuseCase {
         return __awaiter(this, void 0, void 0, function* () {
             const mechanic = yield this.mechanicrepositories.findById(mechId);
             if (!mechanic)
-                throw new custom_errors_1.CustomError('Mechanic not found', 404, error_enum_1.AppError.UserNotFound);
+                throw new custom_errors_1.CustomError("Mechanic not found", 404, error_enum_1.AppError.UserNotFound);
             const update = yield this.mechanicrepositories.setValidate(mechId);
             if (!update)
-                throw new custom_errors_1.CustomError('Not updated', 500, error_enum_1.AppError.ServerError);
+                throw new custom_errors_1.CustomError("Not updated", 500, error_enum_1.AppError.ServerError);
         });
     }
 }

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminEntities = void 0;
 class AdminEntities {
-    constructor(id, username, email, phone, password, isActive = false, profilePic = "https://example.com/default-profile-pic.png", isAdmin = false, authSource, role = 'admin', createdAt, updatedAt) {
+    constructor(id, username, email, phone, password, isActive = false, profilePic = "https://example.com/default-profile-pic.png", isAdmin = false, authSource, role = "admin", createdAt, updatedAt) {
         this.id = id;
         this.username = username;
         this.email = email;

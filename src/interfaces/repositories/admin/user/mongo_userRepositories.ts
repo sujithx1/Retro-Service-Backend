@@ -25,12 +25,12 @@ export class Mongo_admin_user_Repositories implements IUser_Admin_repositories{
                           item.createdAt,
                           item.updatedAt
                         )
-                    ):[]
+                    ):[];
         
     }
     async findById(id: string): Promise<UserIntities | null> {
-         const user=await UserModel.findById(id)
-                if(!user)return null
+         const user=await UserModel.findById(id);
+                if(!user)return null;
                 return new UserIntities(
                     user.id,
                     user.username,
@@ -47,7 +47,7 @@ export class Mongo_admin_user_Repositories implements IUser_Admin_repositories{
 
                     user.createdAt,
                     user.updatedAt
-                )
+                );
         
     }
     async findByIdAndUpdate(user: UserIntities): Promise<UserIntities | null> {
@@ -60,9 +60,9 @@ export class Mongo_admin_user_Repositories implements IUser_Admin_repositories{
                     profilePic:user.profilePic,
                     isActive:user.isActive
                 },{new:true}
-            )
+            );
         
-            if(!userData) return null
+            if(!userData) return null;
             return new UserIntities(
                 userData.id,
                 userData.username,
@@ -79,7 +79,7 @@ export class Mongo_admin_user_Repositories implements IUser_Admin_repositories{
                 userData.createdAt,
                 userData.updatedAt
                 
-            )
+            );
         
     }
 }

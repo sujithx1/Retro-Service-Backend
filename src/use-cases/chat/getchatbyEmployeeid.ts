@@ -6,8 +6,8 @@ export class Get_chatbyEmployeeId{
     constructor(private chatrepositories:IMessageRepositories){}
     async execute(employeeId:string):Promise<MessageEntites[]|null>{
 
-        const chats=await  this.chatrepositories.getMessagesByEmployee(employeeId)
-        return chats
+        const chats=await  this.chatrepositories.getMessagesByEmployee(employeeId);
+        return chats;
 
         
     }

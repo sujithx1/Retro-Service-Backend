@@ -51,7 +51,7 @@ export class Mongo_Job_admin_Repositories implements IJobs_adminRepositories{
           },
           { new: true }
         );
-        if(!job) return null
+        if(!job) return null;
     
         
     
@@ -61,21 +61,21 @@ export class Mongo_Job_admin_Repositories implements IJobs_adminRepositories{
           job.description,
           job.minimum_wage,
           job.isBlock
-        )
+        );
       }
      async findAll(): Promise<JobsEntities[]> {
-          const jobs=await JobModel.find()
+          const jobs=await JobModel.find();
           console.log(jobs);
           
-          return jobs.map((item)=>new JobsEntities(item.id,item.name,item.description,item.minimum_wage,item.isBlock,item.image))
+          return jobs.map((item)=>new JobsEntities(item.id,item.name,item.description,item.minimum_wage,item.isBlock,item.image));
       }
 
       async jobsfindbynameSearch(name: string): Promise<JobsEntities[] | null> {
         const job = await JobModel.find({
           name: { $regex: name, $options: "i" }, // Case-insensitive search
         });
-        if(!job)return null
-       return job.map((item)=>new JobsEntities(item.id,item.name,item.description,item.minimum_wage,item.isBlock,item.image))
+        if(!job)return null;
+       return job.map((item)=>new JobsEntities(item.id,item.name,item.description,item.minimum_wage,item.isBlock,item.image));
       }
       
       

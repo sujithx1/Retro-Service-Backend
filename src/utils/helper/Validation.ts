@@ -11,7 +11,7 @@ export const UserValidation = (data: {
 }): boolean => {
   const { username, email, phone, password } = data;
   if (!username || !email || !phone || !password) {
-    throw new Error("All field Required")
+    throw new Error("All field Required");
   
   }
   return true;
@@ -27,7 +27,7 @@ export const StoreSignupValidation = (data: {
 }): boolean => {
   const { name, owner_email, owner_phone,owner_name, password } = data;
   if (!name || !owner_email || !owner_phone || !password||!owner_name) {
-    throw new CustomError("All field Required",401,AppError.ValidationError)
+    throw new CustomError("All field Required",401,AppError.ValidationError);
   
   }
   return true;
@@ -41,11 +41,11 @@ export const StoreSignupValidation = (data: {
 
 export  const loginValidates=(email:string,password:string):boolean=>{
   if(!email || !password){
-throw new Error("Missing Login field ")
+throw new Error("Missing Login field ");
    
   }
-  return true
-}
+  return true;
+};
 
 
 export const EmployeeSignupValidate=(data: {
@@ -69,10 +69,10 @@ export const EmployeeSignupValidate=(data: {
 
 export const category_Validation=(name:string,description:string,next:NextFunction):boolean=>{
   if(!name||!description){
-    next(new Error('All field is required'))
-    return false
+    next(new Error("All field is required"));
+    return false;
   }
-  return true
+  return true;
 
-}
+};
 

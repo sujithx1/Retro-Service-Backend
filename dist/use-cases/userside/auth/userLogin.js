@@ -10,7 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserLogin = void 0;
-const Userentities_1 = require("../../../entities/Userentities");
+const user_map_1 = require("../../../DTO/map/user.map");
+// import { IwalletRepositories } from "../../../interfaces/repositories/wallet/Iwalletrepositories";
 const hashPassword_1 = require("../../../utils/hashPassword");
 class UserLogin {
     constructor(userRepositories) {
@@ -20,15 +21,18 @@ class UserLogin {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.userRepositories.findByemail(email);
             if (!user)
-                throw new Error('Email not Valid');
+                throw new Error("Email not Valid");
             console.log(user.password);
             if (user.isActive == false)
-                throw new Error('user is Blocked');
+                throw new Error("user is Blocked");
             const compare = yield (0, hashPassword_1.comparePassword)(password, user.password);
             if (!compare)
                 throw new Error("password not matched");
             console.log("login success");
-            return new Userentities_1.UserIntities(user.id, user.username, user.email, user.phone, user.password, user.isActive, user.profilePic, user.isAdmin, user.authSource, user.role);
+            // return new UserIntities(user.id,user.username,user.email,user.phone,user.password,user.isActive,user.profilePic,
+            //     user.isAdmin,user.authSource,user.role
+            // )
+            return user_map_1.UserMap.toResponse(user);
         });
     }
 }

@@ -27,7 +27,7 @@ class CartController {
                 console.log(req.body);
                 const { storeId, productId, quantity, price, userId } = req.body;
                 if (!storeId || !productId || !price || !quantity || !userId)
-                    return next(new custom_errors_1.CustomError('missing field', 401, error_enum_1.AppError.ValidationError));
+                    return next(new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError));
                 const cart = yield this.newCart.execute(userId, storeId, productId, quantity, price);
                 return res.status(201).json({ success: true, cart });
             }
@@ -42,7 +42,7 @@ class CartController {
                 console.log(req.body);
                 const { id, storeId, productId, quantity, price, userId } = req.body;
                 if (!id || !storeId || !productId || !price || !quantity || !userId)
-                    return next(new custom_errors_1.CustomError('missing field', 401, error_enum_1.AppError.ValidationError));
+                    return next(new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError));
                 const cart = yield this.updatedcart.execute(id, userId, storeId, productId, quantity, price);
                 return res.status(200).json({ success: true, cart });
             }
@@ -56,7 +56,7 @@ class CartController {
             try {
                 const { userId } = req.params;
                 if (!userId)
-                    return next(new custom_errors_1.CustomError('missing field', 401, error_enum_1.AppError.ValidationError));
+                    return next(new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError));
                 const cart = yield this.cartbyUserId.execute(userId);
                 return res.status(200).json({ success: true, cart });
             }
@@ -71,7 +71,7 @@ class CartController {
                 console.log(req.body);
                 const { productId } = req.params;
                 if (!productId)
-                    return next(new custom_errors_1.CustomError('missing field', 401, error_enum_1.AppError.ValidationError));
+                    return next(new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError));
                 const cart = yield this.getcartbyProductId.execute(productId);
                 return res.status(200).json({ success: true, cart });
             }
@@ -87,9 +87,9 @@ class CartController {
                 const { productId } = req.body;
                 const { id } = req.params;
                 if (!id)
-                    return next(new custom_errors_1.CustomError('missing id', 401, error_enum_1.AppError.ValidationError));
+                    return next(new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError));
                 if (!productId)
-                    return next(new custom_errors_1.CustomError('missing productId', 401, error_enum_1.AppError.ValidationError));
+                    return next(new custom_errors_1.CustomError("missing productId", 401, error_enum_1.AppError.ValidationError));
                 const cart = yield this.deletecartuseingId.execute(id, productId);
                 return res.status(200).json({ success: true, cart });
             }
@@ -103,7 +103,7 @@ class CartController {
             try {
                 const { id } = req.params;
                 if (!id)
-                    return next(new custom_errors_1.CustomError('missing id', 401, error_enum_1.AppError.ValidationError));
+                    return next(new custom_errors_1.CustomError("missing id", 401, error_enum_1.AppError.ValidationError));
                 const cart = yield this.getBIcartId.execute(id);
                 return res.status(200).json({ success: true, cart });
             }

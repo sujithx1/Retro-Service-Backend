@@ -17,9 +17,9 @@ const returnChekout=(checkout:ICheckout)=>{
    checkout.concern,  
    checkout.createdAt,
     checkout.updatedAt
-    )
+    );
 
-}
+};
 
 
 
@@ -38,9 +38,9 @@ export class CheckoutMongoRepositories implements IcheckoutRepositories{
     model: "Product",
     select: "name images price",
   })
-    .exec()
-    if(!checkout)return null
-    return returnChekout(checkout)  
+    .exec();
+    if(!checkout)return null;
+    return returnChekout(checkout);  
         
     }
 
@@ -60,9 +60,9 @@ export class CheckoutMongoRepositories implements IcheckoutRepositories{
           })
         .populate("storeId", "name location") // Populating store details
 
-        .exec()
-        if (!checkout)return null
-        return returnChekout(checkout)  
+        .exec();
+        if (!checkout)return null;
+        return returnChekout(checkout);  
 
 
         
@@ -77,16 +77,16 @@ export class CheckoutMongoRepositories implements IcheckoutRepositories{
       })
     .populate("storeId", "name location") // Populating store details
 
-    .exec()
-    if(!checkout)return null
-    return returnChekout(checkout)  
+    .exec();
+    if(!checkout)return null;
+    return returnChekout(checkout);  
 
         
     }
  async findByuserId(userId: string): Promise<CheckoutEntities []> {
     let checkouts=await CheckoutModel.find({userId:userId})
     .populate("userId", "username email phone") // Populating user details
-    .populate("storeId", "name location") // Populating store details
+    .populate("storeId", "name location"); // Populating store details
    
   checkouts = await Promise.all(
     checkouts.map(async (checkout) => {
@@ -98,14 +98,14 @@ export class CheckoutMongoRepositories implements IcheckoutRepositories{
     })
   );
 
-    return checkouts.map((item)=>returnChekout(item))  
+    return checkouts.map((item)=>returnChekout(item));  
         
     }
 
  async findByStoreId(storeId: string): Promise<CheckoutEntities []> {
     let checkouts=await CheckoutModel.find({storeId:storeId})
     .populate("userId", "username email phone") // Populating user details
-    .populate("storeId", "name location") // Populating store details
+    .populate("storeId", "name location"); // Populating store details
    
   checkouts = await Promise.all(
     checkouts.map(async (checkout) => {
@@ -117,16 +117,16 @@ export class CheckoutMongoRepositories implements IcheckoutRepositories{
     })
   );
 
-    return checkouts.map((item)=>returnChekout(item))  
+    return checkouts.map((item)=>returnChekout(item));  
         
     }
 
 
 
     async create(checkoutData: CheckoutEntities): Promise<CheckoutEntities> {
-        const checkout=await CheckoutModel.create(checkoutData)
+        const checkout=await CheckoutModel.create(checkoutData);
         
-        return returnChekout(checkout)
+        return returnChekout(checkout);
         
     }
 }

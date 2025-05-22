@@ -59,22 +59,22 @@ router.put("/job/:id", (req, res, next) => {
 router.delete("/job/:id", userAuthentication_1.Authentication, (req, res, next) => {
     admin_di_1.admincontroller.Admin_del_jobs_controll(req, res, next);
 });
-router.get('/report-feedback', userAuthentication_1.Authentication, (req, res, next) => {
+router.get("/report-feedback", userAuthentication_1.Authentication, (req, res, next) => {
     admin_di_1.admincontroller.Admin_get_Feedbacks_controll(req, res, next);
 });
-router.put('/report-feedback/:id', userAuthentication_1.Authentication, (req, res, next) => {
+router.put("/report-feedback/:id", userAuthentication_1.Authentication, (req, res, next) => {
     admin_di_1.admincontroller.Admin_put_FeedbacksRefund_controll(req, res, next);
 });
-router.put('/approve-mechanic/:id', userAuthentication_1.Authentication, (req, res, next) => {
+router.put("/approve-mechanic/:id", userAuthentication_1.Authentication, (req, res, next) => {
     admin_di_1.admincontroller.Admin_put_approvedMechancic_controll(req, res, next);
 });
-router.get('/service-booking/:id', userAuthentication_1.Authentication, (req, res, next) => {
+router.get("/service-booking/:id", userAuthentication_1.Authentication, (req, res, next) => {
     user_di_1.serviceController._admingetBookingDetail(req, res, next);
 });
-router.get('/wallet', userAuthentication_1.Authentication, (req, res, next) => {
+router.get("/wallet", userAuthentication_1.Authentication, (req, res, next) => {
     user_di_1.userWalletController.admin_getwalletbyAdminId_controller(req, res, next);
 });
-router.get('/transactions', userAuthentication_1.Authentication, (req, res, next) => {
+router.get("/transactions", userAuthentication_1.Authentication, (req, res, next) => {
     admin_di_1.admincontroller._admingetallTransactions(req, res, next);
 });
 exports.default = router;

@@ -12,15 +12,15 @@ const returnCart=(cart:IcartTypes)=>{
         cart.createdAt,
         cart.updatedAt 
 
-    )
-}
+    );
+};
 
 
 export class CartMongoRepositories implements Icartrepositories{
     
 
    async create(cartData: CartEntities): Promise<CartEntities> {
-    const cart =await CartModel.create(cartData)
+    const cart =await CartModel.create(cartData);
 
 
    const populatedCart = await CartModel.findById(cart._id)
@@ -33,9 +33,9 @@ export class CartMongoRepositories implements Icartrepositories{
         
     }
    async findById(id: string): Promise<CartEntities|null> {
-    const cart=await CartModel.findById(id)
-    if(!cart)return null
-    return returnCart(cart)
+    const cart=await CartModel.findById(id);
+    if(!cart)return null;
+    return returnCart(cart);
 
         
     }
@@ -49,8 +49,8 @@ export class CartMongoRepositories implements Icartrepositories{
     .populate("userId", "username email phone") // Only fetch required fields
     .exec();
         
-if(!cart)return null
-return returnCart(cart)
+if(!cart)return null;
+return returnCart(cart);
 
     }
 
@@ -62,8 +62,8 @@ return returnCart(cart)
     .populate("products.product", "name images price stock") // Fixed typo
     .populate("userId", "username email phone") // Fetch required fields
     .exec();
-    if(!cart)return null
-    return returnCart(cart)
+    if(!cart)return null;
+    return returnCart(cart);
         
     }
    async findByuserId(userId: string): Promise<CartEntities|null> {
@@ -71,22 +71,22 @@ return returnCart(cart)
         .populate("products.product", "name images price stock") // Only fetch required fields
         .populate("userId", "username email phone") // Only fetch required fields
         .exec();
-        if(!cart)return null
-        return returnCart(cart)
+        if(!cart)return null;
+        return returnCart(cart);
         
     }
 
     async findByIdAndDelete(id: string): Promise<boolean> {
-        const cart=await CartModel.findByIdAndDelete(id)
-        if(!cart)return false
-        return true
+        const cart=await CartModel.findByIdAndDelete(id);
+        if(!cart)return false;
+        return true;
         
     }
 
 
 
    async findByIdDelete(id: string): Promise<void> {
-    await CartModel.findByIdAndDelete(id)
+    await CartModel.findByIdAndDelete(id);
         
     }
 }

@@ -12,9 +12,9 @@ export class Store_getiduseCase{
 
 
     async execute(id:string):Promise<StoreEntities>{
-        const store=await this.storerepositories.findbyId(id)
-        if(!store) throw new CustomError('Store not Found',404,AppError.ResourceNotFound)
+        const store=await this.storerepositories.findbyId(id);
+        if(!store) throw new CustomError("Store not Found",404,AppError.ResourceNotFound);
 
-        return store
+        return store;
     }
 }

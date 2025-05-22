@@ -15,7 +15,7 @@ export class FCM_TOKEN_ADDuseCase {
 
     async execute(id:string,token:string):Promise<void>{
         
-      await this.employeeRepositories.findByIdAndUpdate_FCMToken(id,token)
+      await this.employeeRepositories.findByIdAndUpdate_FCMToken(id,token);
       
     
 

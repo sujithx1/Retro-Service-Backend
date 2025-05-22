@@ -12,7 +12,7 @@ export class Store_getproductsbystoreId{
     }
 
     async execute(storeId:string):Promise<Product_Entities[]>{
-        const products=await this.productrepositories.findBystoreId(storeId)
-        return products
+        const products=await this.productrepositories.findBystoreId(storeId);
+        return products;
     }
 }

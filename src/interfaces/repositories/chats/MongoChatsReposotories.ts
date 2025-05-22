@@ -7,8 +7,8 @@ export class Message_mongoRepositories implements IMessageRepositories{
 
 async findById(id: string): Promise<MessageEntites|null> {
     
-   const chat=await MessageModel.findById(id)
-   if(!chat) return  null
+   const chat=await MessageModel.findById(id);
+   if(!chat) return  null;
    return new MessageEntites(
     chat.id,
     chat.sender,
@@ -18,7 +18,7 @@ async findById(id: string): Promise<MessageEntites|null> {
     chat.timestamp,
     chat.isRead,
     chat.attachment
-   )
+   );
     
     
 }   
@@ -35,7 +35,7 @@ async getMessages(sender: string, receiver: string): Promise<MessageEntites[]> {
         item.isRead,
         item.attachment
         
-    ))
+    ));
     
 } 
 async markMessagesAsRead(sender: string, receiver: string): Promise<void> {
@@ -63,7 +63,7 @@ async getMessagesByUser(userId: string): Promise<MessageEntites[]> {
         item.isRead,
         item.attachment
         
-    ))
+    ));
 }
 async getMessagesByEmployee(employeeId: string): Promise<MessageEntites[]> {
 
@@ -85,7 +85,7 @@ async getMessagesByEmployee(employeeId: string): Promise<MessageEntites[]> {
         item.isRead,
         item.attachment
         
-    ))
+    ));
 }
 
 }

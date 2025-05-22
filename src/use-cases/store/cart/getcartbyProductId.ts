@@ -11,8 +11,8 @@ export class Cart_getProductIduseCase{
 
     async execute(productId:string):Promise<CartEntities|boolean>{
 
-    const cart=await this.cartrepositories.findByProductId(productId)
-    if(!cart)return false
-    return cart
+    const cart=await this.cartrepositories.findByProductId(productId);
+    if(!cart)return false;
+    return cart;
     }
 }

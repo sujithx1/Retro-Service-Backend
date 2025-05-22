@@ -1,4 +1,4 @@
-import { IProduct } from "../../../frameworks/db/models/ProductModel";
+// import { IProduct } from "../../../frameworks/db/models/ProductModel";
 import { Icartrepositories } from "../../../interfaces/repositories/cart/Icartrepositories";
 import { CustomError } from "../../../utils/errors/custom.errors";
 import { AppError } from "../../../utils/errors/error.enum";
@@ -11,13 +11,13 @@ export class Cart_deleteCartid{
 
     async execute(cartId:string,productId:string):Promise<boolean>{
 
-        const cart=await this.cartrepositories.findById(cartId)
+        const cart=await this.cartrepositories.findById(cartId);
         if(!cart)throw new CustomError("cart not found ",404,AppError.ServerError);
 
 
            // Check if the product exists in the cart
            const productIndex = cart.products.findIndex(
-            (product) => typeof product.product === 'object' && '_id' in product.product && product.product._id.toString() === productId
+            (product) => typeof product.product === "object" && "_id" in product.product && product.product._id.toString() === productId
         );
 
         if (productIndex === -1) {
@@ -34,13 +34,13 @@ export class Cart_deleteCartid{
 
 
         if (cart.products.length==0) {
-            await this.cartrepositories.findByIdAndDelete(cart.id)
+            await this.cartrepositories.findByIdAndDelete(cart.id);
         }
 
 
 
 
-        return true
+        return true;
          
 
     }

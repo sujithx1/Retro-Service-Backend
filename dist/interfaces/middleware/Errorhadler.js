@@ -5,8 +5,8 @@ exports.errorHandler = void 0;
 const error_enum_1 = require("../../utils/errors/error.enum");
 const custom_errors_1 = require("../../utils/errors/custom.errors");
 const errorHandler = (err, req, res, next) => {
-    console.error('Error stack:', err.stack);
-    console.error('Error message:', err.message);
+    console.error("Error stack:", err.stack);
+    console.error("Error message:", err.message);
     if (err instanceof custom_errors_1.CustomError) {
         return res.status(err.statusCode).json({
             success: false,
@@ -16,7 +16,7 @@ const errorHandler = (err, req, res, next) => {
     }
     res.status(500).json({
         success: false,
-        error: 'Internal Server Error',
+        error: "Internal Server Error",
         code: error_enum_1.AppError.ServerError,
     });
 };

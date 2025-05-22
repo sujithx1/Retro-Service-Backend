@@ -35,7 +35,7 @@ export interface IReviewRating_Types extends Document {
    
    },{
        timestamps:true
-   })
+   });
    
-   export const ReviewRatingModal=mongoose.model('ReviewRating',ReviewRatingSchema)
+   export const ReviewRatingModal=mongoose.model("ReviewRating",ReviewRatingSchema);
    

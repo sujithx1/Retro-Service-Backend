@@ -12,24 +12,24 @@ export class Store_putproductuseCase{
     }
 
     async execute(id:string,name:string,quantity:number,price:number,description:string,images:string[],category:string):Promise<Product_Entities>{
-        const product=await this.productRepositories.findById(id)
-                if(!product)throw new CustomError("product not found",401,AppError.ResourceNotFound)
+        const product=await this.productRepositories.findById(id);
+                if(!product)throw new CustomError("product not found",401,AppError.ResourceNotFound);
         
         if(product.name!==name)
         {
-            const existproduct=await this.productRepositories.findByname(name)
-            if(existproduct) throw new CustomError("product already exist ",401,AppError.DuplicateError)
+            const existproduct=await this.productRepositories.findByname(name);
+            if(existproduct) throw new CustomError("product already exist ",401,AppError.DuplicateError);
         }
         
         product.stock=quantity,
         product.price=price,
         product.description=description,
         product.images=images,
-        product.category=category
-        const update=await this.productRepositories.findByIdandUpdate(product)
-        if(!update)throw new CustomError("product not updated ",401,AppError.ServerError)
+        product.category=category;
+        const update=await this.productRepositories.findByIdandUpdate(product);
+        if(!update)throw new CustomError("product not updated ",401,AppError.ServerError);
 
-        return update 
+        return update; 
 
     
  

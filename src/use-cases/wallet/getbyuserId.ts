@@ -9,9 +9,9 @@ export class Wallet_getuserIduseCase{
     }
     async execute(userId:string):Promise<WalletEntities>{
 
-        const wallet =await this.walletRepositories.findByuserId(userId)
-        if(!wallet) throw new CustomError("not found",401,AppError.ResourceNotFound)
-            return wallet
+        const wallet =await this.walletRepositories.findByuserId(userId);
+        if(!wallet) throw new CustomError("not found",401,AppError.ResourceNotFound);
+            return wallet;
 
 
     }

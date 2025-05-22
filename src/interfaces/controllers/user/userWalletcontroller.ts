@@ -13,30 +13,30 @@ export class UserwalletController{
 
     async user_getwalletbyuserId_controller(req:Request,res:Response,next:NextFunction){
         try {
-            const {id}=req.params
-            if(!id)return next(new CustomError("id missing ",401,AppError.ValidationError))
-            const wallet=await this.getuserWallet.execute(id)
+            const {id}=req.params;
+            if(!id)return next(new CustomError("id missing ",401,AppError.ValidationError));
+            const wallet=await this.getuserWallet.execute(id);
             return res.status(200).json({
-                message:'success',success:true,wallet
-            })
+                message:"success",success:true,wallet
+            });
              
             
         } catch (error) {
-            return next(error)
+            return next(error);
         }
 
     }
     async admin_getwalletbyAdminId_controller(req:Request,res:Response,next:NextFunction){
         try {
            
-            const wallet=await this.getadminWallet.execute()
+            const wallet=await this.getadminWallet.execute();
             return res.status(200).json({
-                message:'success',success:true,wallet
-            })
+                message:"success",success:true,wallet
+            });
              
             
         } catch (error) {
-            return next(error)
+            return next(error);
         }
 
     }

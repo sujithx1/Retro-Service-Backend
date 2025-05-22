@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Store_otpcheck = void 0;
+const store_map_1 = require("../../../DTO/map/store.map");
 const walletEntities_1 = require("../../../entities/walletEntities");
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
@@ -47,7 +48,7 @@ class Store_otpcheck {
             const store = yield this.storeRepositories.create(storeDetails);
             const wallet = new walletEntities_1.WalletEntities("", store.id, "store", 0);
             this.walletrepositories.create(wallet);
-            return store;
+            return store_map_1.StoreMap.toResponse(store);
         });
     }
 }

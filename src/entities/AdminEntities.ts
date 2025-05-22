@@ -10,8 +10,8 @@ export class AdminEntities{
         public isActive: boolean = false,
         public profilePic: string = "https://example.com/default-profile-pic.png",
         public isAdmin: boolean = false,
-        public authSource?: 'self' | 'google',
-        public role:'user'|'admin'='admin',
+        public authSource?: "self" | "google",
+        public role:"user"|"admin"="admin",
         public createdAt?: Date,
         public updatedAt?: Date
 

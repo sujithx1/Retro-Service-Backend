@@ -5,7 +5,7 @@ import { ItransactionRepositories } from "./ItransactionRepositories";
 
 export class TransactionMongoRepositories implements ItransactionRepositories{
   async  create(transaction: TransactionEntities): Promise<TransactionEntities> {
-    const service=await TransactionModel.create(transaction)
+    const service=await TransactionModel.create(transaction);
      return new TransactionEntities(
         service.id,
         service.userId._id.toString(),
@@ -16,12 +16,12 @@ export class TransactionMongoRepositories implements ItransactionRepositories{
         service.serviceType,
         service.createdAt,
         service.updatedAt
-     )
+     );
         
     }
 async findById(id: string): Promise<TransactionEntities | null> {
-    const service=await TransactionModel.findById(id)
-    if(!service) return null
+    const service=await TransactionModel.findById(id);
+    if(!service) return null;
 
     return new TransactionEntities(
         service.id,
@@ -33,7 +33,7 @@ async findById(id: string): Promise<TransactionEntities | null> {
         service.serviceType,
         service.createdAt,
         service.updatedAt
-     )
+     );
     
 }
 async findByidAndUpdate(transaction: TransactionEntities): Promise<TransactionEntities | null> {
@@ -43,9 +43,9 @@ async findByidAndUpdate(transaction: TransactionEntities): Promise<TransactionEn
         status:transaction.status,
         paymentMethod:transaction.paymentMethod,
         serviceType:transaction.serviceType,
-    },{new:true,upsert:true})
+    },{new:true,upsert:true});
 
-    if(!service) return null
+    if(!service) return null;
 
     return new TransactionEntities(
         service.id,
@@ -57,7 +57,7 @@ async findByidAndUpdate(transaction: TransactionEntities): Promise<TransactionEn
         service.serviceType,
         service.createdAt,
         service.updatedAt
-     )
+     );
 
 
     
@@ -67,7 +67,7 @@ async findByidAndUpdate(transaction: TransactionEntities): Promise<TransactionEn
 
 
 async findbyUserId(userId: string): Promise<TransactionEntities[]> {
-    const servcie=await TransactionModel.find({userId:userId})
+    const servcie=await TransactionModel.find({userId:userId});
     return servcie.map((item)=>new TransactionEntities(
         item.id,
         item.userId._id.toString(),
@@ -80,7 +80,7 @@ async findbyUserId(userId: string): Promise<TransactionEntities[]> {
         item.updatedAt
 
 
-    ))    
+    ));    
 
 
 
@@ -89,7 +89,7 @@ async findbyUserId(userId: string): Promise<TransactionEntities[]> {
 
 async findAll(): Promise<TransactionEntities[]> {
 
-    const trasnctions=await TransactionModel.find()
+    const trasnctions=await TransactionModel.find();
     return   trasnctions.map((item)=>new TransactionEntities(
         item.id,
         item.userId._id.toString(),
@@ -102,7 +102,7 @@ async findAll(): Promise<TransactionEntities[]> {
         item.updatedAt
 
 
-    )) 
+    )); 
     
 }
 }

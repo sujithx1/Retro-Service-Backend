@@ -11,10 +11,10 @@ export class Approve_MechanicadminuseCase{
 
      async execute(mechId:string):Promise<void>{
 
-        const mechanic=await this.mechanicrepositories.findById(mechId)
-        if(!mechanic)throw new CustomError('Mechanic not found',404,AppError.UserNotFound)
-       const update= await this.mechanicrepositories.setValidate(mechId)
-    if (!update)  throw new CustomError('Not updated',500,AppError.ServerError)
+        const mechanic=await this.mechanicrepositories.findById(mechId);
+        if(!mechanic)throw new CustomError("Mechanic not found",404,AppError.UserNotFound);
+       const update= await this.mechanicrepositories.setValidate(mechId);
+    if (!update)  throw new CustomError("Not updated",500,AppError.ServerError);
      
 
      }

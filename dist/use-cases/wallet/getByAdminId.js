@@ -20,7 +20,7 @@ class AdminGetWalletuseCase {
         return __awaiter(this, void 0, void 0, function* () {
             const wallet = yield this.walletrepositories.findByAdmin();
             if (!wallet)
-                throw new custom_errors_1.CustomError('not found', 404, error_enum_1.AppError.ResourceNotFound);
+                throw new custom_errors_1.CustomError("not found", 404, error_enum_1.AppError.ResourceNotFound);
             return wallet;
         });
     }

@@ -77,7 +77,7 @@ const userSchema = new Schema<IuserTypes>(
   },
   role:{
     type:String,
-    enum:['user','admin'],
+    enum:["user","admin"],
     default:"user"  
   },
   location:{
@@ -90,4 +90,4 @@ const userSchema = new Schema<IuserTypes>(
     timestamps: true,
   }
 );
- export const UserModel=mongoose.model('User',userSchema)
+ export const UserModel=mongoose.model("User",userSchema);

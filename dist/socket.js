@@ -42,14 +42,14 @@ const socket_Connection = () => {
                 console.error("Error marking messages as read:", error);
             }
         }));
-        socket.on('callData', ({ senderId, receiverId, callType }) => {
+        socket.on("callData", ({ senderId, receiverId, callType }) => {
             console.log(senderId, receiverId, callType);
             const usersideId = activeUsers.get(senderId);
             console.log("userSocket ID", usersideId);
             console.log("Active users:", [...activeUsers.entries()]);
             console.log("All rooms:", app_1.io.sockets.adapter.rooms);
             if (usersideId) {
-                app_1.io.to(usersideId).emit('callDetails', { senderId, receiverId, callType });
+                app_1.io.to(usersideId).emit("callDetails", { senderId, receiverId, callType });
                 console.log("sended call data", usersideId);
             }
         });
@@ -71,9 +71,9 @@ const socket_Connection = () => {
                 app_1.io.to(roomId).emit("callAccepted", { roomId, employeeId });
             }, 100);
         });
-        socket.on('rejectCall', ({ roomId, senderId }) => {
+        socket.on("rejectCall", ({ roomId, senderId }) => {
             console.log(senderId, roomId);
-            app_1.io.to(roomId).emit('rejected', { roomId, senderId });
+            app_1.io.to(roomId).emit("rejected", { roomId, senderId });
         });
         socket.on("sendMessage", (_a) => __awaiter(void 0, [_a], void 0, function* ({ sender, receiver, message, userType, timestamp, status, attachment }) {
             console.log(`Message from ${sender} to ${receiver}: ${message}`);
@@ -105,7 +105,7 @@ const socket_Connection = () => {
             console.log("New Booking Request:", booking);
             app_1.io.emit("bookingNotification", booking);
         });
-        socket.on("disconnect", (reason) => __awaiter(void 0, void 0, void 0, function* () {
+        socket.on("disconnect", () => __awaiter(void 0, void 0, void 0, function* () {
             var _a;
             const userId = (_a = [...activeUsers.entries()].find(([_, sid]) => sid === socket.id)) === null || _a === void 0 ? void 0 : _a[0];
             if (userId) {

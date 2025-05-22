@@ -10,9 +10,9 @@ export class Wallet_getstoreIduseCase{
     }
     async execute(storeId:string):Promise<WalletEntities>{
 
-        const wallet =await this.walletRepositories.findByStoreId(storeId)
-        if(!wallet) throw new CustomError("not found",401,AppError.ResourceNotFound)
-            return wallet
+        const wallet =await this.walletRepositories.findByStoreId(storeId);
+        if(!wallet) throw new CustomError("not found",401,AppError.ResourceNotFound);
+            return wallet;
 
 
     }

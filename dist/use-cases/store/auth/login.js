@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StoreLoginuseCase = void 0;
+const store_map_1 = require("../../../DTO/map/store.map");
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 const hashPassword_1 = require("../../../utils/hashPassword");
@@ -21,13 +22,13 @@ class StoreLoginuseCase {
         return __awaiter(this, void 0, void 0, function* () {
             const findstore = yield this.storeRepositories.findbystoreId(storeId);
             if (!findstore)
-                throw new custom_errors_1.CustomError('store not found', 401, error_enum_1.AppError.ResourceNotFound);
+                throw new custom_errors_1.CustomError("store not found", 401, error_enum_1.AppError.ResourceNotFound);
             if (findstore.isActive == false)
-                throw new custom_errors_1.CustomError('store is Blocked', 401, error_enum_1.AppError.UnauthorizedAccess);
+                throw new custom_errors_1.CustomError("store is Blocked", 401, error_enum_1.AppError.UnauthorizedAccess);
             const compare = yield (0, hashPassword_1.comparePassword)(password, findstore.password);
             if (!compare)
                 throw new custom_errors_1.CustomError("password not match", 401, error_enum_1.AppError.PasswordNotmatch);
-            return findstore;
+            return store_map_1.StoreMap.toResponse(findstore);
         });
     }
 }

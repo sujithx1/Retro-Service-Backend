@@ -27,7 +27,7 @@ class Cart_updateuseCase {
             if (!findProduct) {
                 throw new custom_errors_1.CustomError("Product not found", 404, error_enum_1.AppError.ResourceNotFound);
             }
-            const productIndex = findCart.products.findIndex((product) => typeof product.product === 'object' && '_id' in product.product && product.product._id.toString() === productId);
+            const productIndex = findCart.products.findIndex((product) => typeof product.product === "object" && "_id" in product.product && product.product._id.toString() === productId);
             if (productIndex === -1) {
                 const product = {
                     product: productId,

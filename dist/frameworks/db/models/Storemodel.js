@@ -75,9 +75,9 @@ const storeSchema = new mongoose_1.Schema({
     },
     profile_pic: {
         type: String,
-        default: 'https://example.com/default-profile-pic.png'
+        default: "https://example.com/default-profile-pic.png"
     }
 }, {
     timestamps: true
 });
-exports.StoreModel = mongoose_1.default.model('Store', storeSchema);
+exports.StoreModel = mongoose_1.default.model("Store", storeSchema);

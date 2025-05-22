@@ -9,11 +9,11 @@ export  class Emp_putonDutyuseCase {
     constructor(private employeeRepositories:IEmployeeRepositories) {}
 
     async execute(id:string,duty:boolean):Promise<boolean>{
-        const employee=await this.employeeRepositories.findById(id)
-        if(!employee)  throw new CustomError("employee not found",401,AppError.UserNotFound)
-        const update=await this.employeeRepositories.findByIdAndonDutyupdate(id,duty)
-    if(!update)throw new CustomError("not updated",401,AppError.ServerError)
-    return update.onDuty
+        const employee=await this.employeeRepositories.findById(id);
+        if(!employee)  throw new CustomError("employee not found",401,AppError.UserNotFound);
+        const update=await this.employeeRepositories.findByIdAndonDutyupdate(id,duty);
+    if(!update)throw new CustomError("not updated",401,AppError.ServerError);
+    return update.onDuty;
     }
     
-};
+}

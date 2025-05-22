@@ -9,7 +9,7 @@ export class Orders_getstoriduseCase{
     }
 
     async execute(storeId:string):Promise<CheckoutEntities[]>{
-        const orders=await this.ordersrepositories.findByStoreId(storeId)
-        return orders
+        const orders=await this.ordersrepositories.findByStoreId(storeId);
+        return orders;
     }
 }

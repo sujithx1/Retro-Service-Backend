@@ -1,14 +1,14 @@
 
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import {  RequestHandler,  } from "express";
 import  Jwt,{ JwtPayload}  from "jsonwebtoken";
 import { UserModel } from "../../../frameworks/db/models/UserModel";
-import { UserIntities } from "../../../entities/Userentities";
+// import { UserIntities } from "../../../entities/Userentities";
 import { EmployeeModel } from "../../../frameworks/db/models/EmployeeModel";
-import { EmployeeEntities } from "../../../entities/EmployeeEntities";
+// import { EmployeeEntities } from "../../../entities/EmployeeEntities";
 import { StoreModel } from "../../../frameworks/db/models/Storemodel";
 
 
-const jwtSecret=process.env.ACCESS_TOKEN||"sujithaccesstoken"
+const jwtSecret=process.env.ACCESS_TOKEN||"sujithaccesstoken";
 
 
 
@@ -125,10 +125,10 @@ export const Authentication: RequestHandler = async (req, res, next) => {
     
     
     try {
-        const token = req.header('Authorization')?.replace('Bearer ', "").trim();
+        const token = req.header("Authorization")?.replace("Bearer ", "").trim();
 
         if (!token) {
-            res.status(401).json({ error: 'Access denied' });
+            res.status(401).json({ error: "Access denied" });
             return;
         }
 

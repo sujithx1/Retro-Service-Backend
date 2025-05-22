@@ -32,12 +32,12 @@ export const GenerateRefreshToken = (id: string, role: string): string => {
 export const createAccessToken = (req: Request, res: Response,role:string):void => {
     console.log(role);
     
-    const roleToken=`${role}_refreshToken`
+    const roleToken=`${role}_refreshToken`;
     console.log(roleToken);
     
 
     
-    const refreshtoken:string = req.cookies[roleToken]
+    const refreshtoken:string = req.cookies[roleToken];
     
     
     console.log("tokennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",refreshtoken);
@@ -52,7 +52,7 @@ export const createAccessToken = (req: Request, res: Response,role:string):void 
     // Check if the refresh token exists and is valid
     if (!refreshtoken ) {
         res.status(403).json({ error: "Refresh token is invalid or missing" });
-        return
+        return;
     }
 
     // Verify the refresh token
@@ -63,10 +63,10 @@ export const createAccessToken = (req: Request, res: Response,role:string):void 
             if (err) {
                 if ((err as any).name === "TokenExpiredError") {
                     res.status(403).json({ error: "Refresh token expired" });
-                    return
+                    return;
                 }
                 res.status(403).json({ error: "Token verification failed" });
-                return
+                return;
             }
 
             if (typeof decoded === "object" && decoded !== null) {
@@ -74,7 +74,7 @@ export const createAccessToken = (req: Request, res: Response,role:string):void 
 
                 if (!id || !role) {
                     res.status(403).json({ error: "Invalid payload in token" });
-                    return 
+                    return; 
                 }
 
                 // Generate a new access token
@@ -82,11 +82,11 @@ export const createAccessToken = (req: Request, res: Response,role:string):void 
                 console.log("accesssssssssssssssssssssss",newAccessToken);
                 
                 res.status(200).json({ accessToken: newAccessToken });
-                return
+                return;
             }
 
             res.status(403).json({ error: "Invalid token" });
-            return
+            return;
         }
     );
 };

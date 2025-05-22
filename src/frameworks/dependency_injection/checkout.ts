@@ -9,16 +9,16 @@ import { CheckOut_useCase } from "../../use-cases/store/checkout/postcheckout";
 import { User_orderputuseCase } from "../../use-cases/store/checkout/putorderby";
 
 
-const checkoutrepositories=new CheckoutMongoRepositories()
-const cartrepositoires=new CartMongoRepositories()
-const transactionrepositories=new TransactionMongoRepositories()
-const walletrepositories=new WalletMongoRepositories()
+const checkoutrepositories=new CheckoutMongoRepositories();
+const cartrepositoires=new CartMongoRepositories();
+const transactionrepositories=new TransactionMongoRepositories();
+const walletrepositories=new WalletMongoRepositories();
 
 
 
-const postcheckout=new CheckOut_useCase(checkoutrepositories,cartrepositoires,transactionrepositories,walletrepositories)
-const getordersByuserId=new Orders_getuserIduseCase(checkoutrepositories)
-const getorderbyId=new User_getOrderbyIduseCase(checkoutrepositories)
-const putchekcoutorder=new User_orderputuseCase(checkoutrepositories,walletrepositories,transactionrepositories)
+const postcheckout=new CheckOut_useCase(checkoutrepositories,cartrepositoires,transactionrepositories,walletrepositories);
+const getordersByuserId=new Orders_getuserIduseCase(checkoutrepositories);
+const getorderbyId=new User_getOrderbyIduseCase(checkoutrepositories);
+const putchekcoutorder=new User_orderputuseCase(checkoutrepositories,walletrepositories,transactionrepositories);
 
-export const checkoutController=new CheckoutController(postcheckout,getordersByuserId,getorderbyId,putchekcoutorder)
+export const checkoutController=new CheckoutController(postcheckout,getordersByuserId,getorderbyId,putchekcoutorder);

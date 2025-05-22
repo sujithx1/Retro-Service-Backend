@@ -49,16 +49,16 @@ import { ActiveConnection } from "./frameworks/db/models/ActivateModel";
   
   
  
-  socket.on('callData',({ senderId, receiverId,  callType })=>{
+  socket.on("callData",({ senderId, receiverId,  callType })=>{
     console.log(senderId,receiverId,callType);
-    const usersideId=activeUsers.get(senderId)
+    const usersideId=activeUsers.get(senderId);
     console.log("userSocket ID",usersideId);
     console.log("Active users:", [...activeUsers.entries()]);
     console.log("All rooms:", io.sockets.adapter.rooms);
     
     
     if (usersideId) {
-      io.to(usersideId).emit('callDetails',{senderId,receiverId,callType})
+      io.to(usersideId).emit("callDetails",{senderId,receiverId,callType});
       console.log("sended call data",usersideId);
       
       
@@ -66,10 +66,10 @@ import { ActiveConnection } from "./frameworks/db/models/ActivateModel";
     
     
     
-})
+});
   socket.on("call", ({ senderId,senderName, receiverId, roomId, callType ,senderProfilePic}) => {
     console.log("📞 Incoming Call Request:", { senderId,senderName, receiverId, callType });
-socket.join(roomId)
+socket.join(roomId);
     const receiverSocketId = activeUsers.get(receiverId);
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("callIncoming", { callType, senderId, roomId,senderName ,senderProfilePic});
@@ -89,11 +89,11 @@ socket.join(roomId)
       io.to(roomId).emit("callAccepted", { roomId, employeeId });
     }, 100); 
   });
-socket.on('rejectCall',({roomId,senderId})=>{
+socket.on("rejectCall",({roomId,senderId})=>{
   console.log(senderId,roomId);
-  io.to(roomId).emit('rejected',{roomId,senderId})
+  io.to(roomId).emit("rejected",{roomId,senderId});
   
-})
+});
 
 
   socket.on(
@@ -143,7 +143,7 @@ socket.on("newBooking", (booking) => {
     io.emit("bookingNotification", booking);
 });
 
-  socket.on("disconnect", async (reason) => {
+  socket.on("disconnect", async () => {
     const userId = [...activeUsers.entries()].find(([_, sid]) => sid === socket.id)?.[0];
     if (userId) {
       activeUsers.delete(userId);
@@ -152,4 +152,4 @@ socket.on("newBooking", (booking) => {
       });
 });
 
-}
+};

@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User_Edit_useCase = void 0;
+const user_map_1 = require("../../../DTO/map/user.map");
 class User_Edit_useCase {
     constructor(userRepositories) {
         this.userRepositories = userRepositories;
@@ -28,7 +29,7 @@ class User_Edit_useCase {
             console.log("lassssssssssssssttttttttttttttttttt");
             if (!updateUser)
                 throw new Error("User Not Updated");
-            return updateUser;
+            return user_map_1.UserMap.toResponse(updateUser);
         });
     }
 }

@@ -12,10 +12,10 @@ export class Transaction_getbyuserId{
     }
     async execute(userId:string):Promise<TransactionEntities[]>
     {
-        const transaction=await this.transactionrepositories.findbyUserId(userId)
-        if(transaction.length==0) throw new CustomError("Transaction not found",401,AppError.ResourceNotFound)
+        const transaction=await this.transactionrepositories.findbyUserId(userId);
+        if(transaction.length==0) throw new CustomError("Transaction not found",401,AppError.ResourceNotFound);
 
-            return  transaction
+            return  transaction;
         
     }
 }

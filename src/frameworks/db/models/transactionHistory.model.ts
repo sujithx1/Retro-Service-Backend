@@ -16,7 +16,7 @@ interface  ItransactionHistory extends Document{
 const transactionSchema=new Schema<ItransactionHistory>({
     userId:{
         type:mongoose.Types.ObjectId,
-        ref:'User',
+        ref:"User",
         required:true
     },
     type:{
@@ -32,20 +32,20 @@ const transactionSchema=new Schema<ItransactionHistory>({
     status:{
         type:String,
         enum:["complete","pending","failed"],
-        default:'pending'
+        default:"pending"
     },
     paymentMethod:{
         type:String,
         enum:["razorpay","wallet","cod"],
-        default:'razorpay'
+        default:"razorpay"
     },
     serviceType:{
         type:String,
-        enum:['service','product',"add"],
+        enum:["service","product","add"],
         required:true
     }
 
 },{
     timestamps:true
-})
-export const TransactionModel=mongoose.model('Transaction',transactionSchema)
+});
+export const TransactionModel=mongoose.model("Transaction",transactionSchema);

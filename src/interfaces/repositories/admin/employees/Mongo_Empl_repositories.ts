@@ -1,4 +1,4 @@
-import { isTemplateExpression } from "typescript";
+// import { isTemplateExpression } from "typescript";
 import { EmployeeEntities } from "../../../../entities/EmployeeEntities";
 import { EmployeeModel } from "../../../../frameworks/db/models/EmployeeModel";
 import { IEmployee_admin_Repositories } from "./admin_emplRepositories";
@@ -33,12 +33,12 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
                   item.createdAt,
                   item.updatedAt
                 )
-            ):[]
+            ):[];
     }
 
    async findById(id: string): Promise<EmployeeEntities | null> {
-        const employee=await EmployeeModel.findById(id)
-        if(!employee)return null
+        const employee=await EmployeeModel.findById(id);
+        if(!employee)return null;
         return new EmployeeEntities(
             employee.id,
             employee.username,
@@ -60,7 +60,7 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
 
             employee.createdAt,
             employee.updatedAt
-        )
+        );
     }
 
     async findByIdAndUpdate(employe: EmployeeEntities): Promise<EmployeeEntities|null> {
@@ -73,9 +73,9 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
             profilePic:employe.profilePic,
             isActive:employe.isActive
         },{new:true}
-    )
+    );
 
-    if(!employedata) return null
+    if(!employedata) return null;
     return new EmployeeEntities(
         employedata.id,
         employedata.username,
@@ -99,7 +99,7 @@ export class Mongo_Admin_Employees_Repositories implements IEmployee_admin_Repos
         employedata.createdAt,
         employedata.updatedAt
         
-    )
+    );
     }
 
 } 

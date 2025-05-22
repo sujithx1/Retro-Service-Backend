@@ -15,8 +15,8 @@ export class Store_addproductuseCase{
     async execute(storeId:string,name:string,quantity:number,price:number,description:string,images:string[],category:string):Promise<Product_Entities>{
 
 
-         const existProduct=await this.productRepositories.findByname(name)
-         if(existProduct) throw new CustomError("product already exisist",401,AppError.DuplicateError)
+         const existProduct=await this.productRepositories.findByname(name);
+         if(existProduct) throw new CustomError("product already exisist",401,AppError.DuplicateError);
             
         const product= new Product_Entities(
             "",
@@ -29,8 +29,8 @@ export class Store_addproductuseCase{
             images
 
 
-        )
-       return await this.productRepositories.create(product)
+        );
+       return await this.productRepositories.create(product);
 
     }
 }

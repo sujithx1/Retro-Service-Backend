@@ -12,7 +12,7 @@ router.post("/refresh-token", (req, res) => {
 });
 
 router.post("/login", (req, res, next) =>{ 
-  admincontroller.login(req, res, next)}
+  admincontroller.login(req, res, next);}
 );
 router.get("/categories", 
   Authentication,
@@ -23,114 +23,114 @@ router.post("/category",
   Authentication,
   (req, res, next) =>{
   
-  admincontroller.admin_Add_Category_controller(req, res, next)}
+  admincontroller.admin_Add_Category_controller(req, res, next);}
 );
 router.put("/category/:id", 
   Authentication,
   (req, res, next) =>{
 
-  admincontroller.Admin_edit_category_controll(req, res, next)}
+  admincontroller.Admin_edit_category_controll(req, res, next);}
 );
 router.delete("/category/:id", 
   Authentication,
   (req, res, next) =>{
 
-  admincontroller.admin_delete_category_controller(req, res, next)}
+  admincontroller.admin_delete_category_controller(req, res, next);}
 );
 
 router.get("/users", 
   Authentication,
   (req, res, next) =>{
 
-  admincontroller.Admin_get_users_controll(req, res, next)}
+  admincontroller.Admin_get_users_controll(req, res, next);}
 );
 router.put("/user", 
   Authentication,
   (req, res, next) =>{
 
-  admincontroller.admin_put_users_controll(req, res, next)}
+  admincontroller.admin_put_users_controll(req, res, next);}
 );
 router.delete("/user/:id", 
   Authentication,
   (req, res, next) =>{
 
-  admincontroller.admin_Del_User_controll(req, res, next)}
+  admincontroller.admin_Del_User_controll(req, res, next);}
 );
 
 router.get("/employees",
   Authentication,
    (req, res, next) =>{  
 
-  admincontroller.Admin_get_Employees_controll(req, res, next)}
+  admincontroller.Admin_get_Employees_controll(req, res, next);}
 );
 router.put("/employee", 
   Authentication,
   (req, res, next) =>{
 
-  admincontroller.admin_put_employee_controll(req, res, next)}
+  admincontroller.admin_put_employee_controll(req, res, next);}
 );
 router.delete("/employee/:id", 
   Authentication,
   (req, res, next) =>{
 
-  admincontroller.admin_Del_employee_controll(req, res, next)}
+  admincontroller.admin_Del_employee_controll(req, res, next);}
 );
 
 router.get("/jobs", 
   Authentication,
   (req, res, next) =>{
 
-  admincontroller.admin_get_Jobs_controll(req, res, next)}
+  admincontroller.admin_get_Jobs_controll(req, res, next);}
 );
 router.post("/job", (req, res, next) =>{
   Authentication(req, res, next);
 
-  admincontroller.admin_add_Jobs_controll(req, res, next)}
+  admincontroller.admin_add_Jobs_controll(req, res, next);}
 );
 router.put("/job/:id", (req, res, next) =>{
   Authentication(req, res, next);
 
-  admincontroller.Admin_edit_jobs_controll(req, res, next)}
+  admincontroller.Admin_edit_jobs_controll(req, res, next);}
 );
 router.delete("/job/:id",
   Authentication,
    (req, res, next) =>{
 
-  admincontroller.Admin_del_jobs_controll(req, res, next)}
+  admincontroller.Admin_del_jobs_controll(req, res, next);}
 );
 
 
-router.get('/report-feedback',
+router.get("/report-feedback",
   Authentication,
   (req,res,next)=>{    
-  admincontroller.Admin_get_Feedbacks_controll(req,res,next)
-})
+  admincontroller.Admin_get_Feedbacks_controll(req,res,next);
+});
 
-router.put('/report-feedback/:id',
+router.put("/report-feedback/:id",
   Authentication,
   (req,res,next)=>{    
-  admincontroller.Admin_put_FeedbacksRefund_controll(req,res,next)
-})
+  admincontroller.Admin_put_FeedbacksRefund_controll(req,res,next);
+});
 
-router.put('/approve-mechanic/:id',
+router.put("/approve-mechanic/:id",
   Authentication,
   (req,res,next)=>{    
-  admincontroller.Admin_put_approvedMechancic_controll(req,res,next)
-})
-router.get('/service-booking/:id',
+  admincontroller.Admin_put_approvedMechancic_controll(req,res,next);
+});
+router.get("/service-booking/:id",
   Authentication,
   (req,res,next)=>{    
-    serviceController._admingetBookingDetail(req,res,next)
-})
-router.get('/wallet',
+    serviceController._admingetBookingDetail(req,res,next);
+});
+router.get("/wallet",
   Authentication,
   (req,res,next)=>{    
-   userWalletController.admin_getwalletbyAdminId_controller(req,res,next)
-})
-router.get('/transactions',
+   userWalletController.admin_getwalletbyAdminId_controller(req,res,next);
+});
+router.get("/transactions",
   Authentication,
   (req,res,next)=>{    
-   admincontroller._admingetallTransactions(req,res,next)
-})
+   admincontroller._admingetallTransactions(req,res,next);
+});
 
 export default router;

@@ -12,8 +12,8 @@ export class ProductgetbyIduseCase{
     }
 
     async execute(id:string):Promise<Product_Entities>{
-        const product=await this.productrepositories.findById(id)
-        if(!product)throw new CustomError("product not found",401,AppError.ResourceNotFound)
-            return product
+        const product=await this.productrepositories.findById(id);
+        if(!product)throw new CustomError("product not found",401,AppError.ResourceNotFound);
+            return product;
     }
 }

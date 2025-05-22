@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User_Google_Auth_useCase = void 0;
 const google_auth_library_1 = require("google-auth-library");
 const Userentities_1 = require("../../../entities/Userentities");
+const user_map_1 = require("../../../DTO/map/user.map");
 const client = new google_auth_library_1.OAuth2Client(process.env.google_Client_ID);
 class User_Google_Auth_useCase {
     constructor(userrepositories) {
@@ -31,7 +32,7 @@ class User_Google_Auth_useCase {
                 const userData = new Userentities_1.UserIntities("", payload.name, payload.email, "", "", true, payload.picture, false, "google");
                 user = yield this.userrepositories.save(userData);
             }
-            return user;
+            return user_map_1.UserMap.toResponse(user);
         });
     }
 }

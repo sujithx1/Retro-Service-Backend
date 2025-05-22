@@ -54,7 +54,7 @@ class EmpServiceController {
                 }
                 console.log("emp id", id);
                 const reqService = yield this.putEmployeeReqservice.execute(id, employeeId, status);
-                app_1.io.emit('confirmBooking', { id });
+                app_1.io.emit("confirmBooking", { id });
                 return res.status(200).json({ message: "success", reqService, succes: true });
             }
             catch (error) {
@@ -89,7 +89,7 @@ class EmpServiceController {
                 if (!id)
                     return next(new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError));
                 const transactions = yield this.gettranasactionByuser.execute(id);
-                console.log('transactions ', transactions);
+                console.log("transactions ", transactions);
                 return res.status(200).json({ message: "success", succes: true, transactions });
             }
             catch (error) {
@@ -109,7 +109,7 @@ class EmpServiceController {
                 if (!amount)
                     return next(new custom_errors_1.CustomError("missing amount", 401, error_enum_1.AppError.ValidationError));
                 const wallet = yield this.putwithrdrawamount.execute(id, amount);
-                console.log('transactions ');
+                console.log("transactions ");
                 return res.status(200).json({ message: "success", succes: true, wallet });
             }
             catch (error) {

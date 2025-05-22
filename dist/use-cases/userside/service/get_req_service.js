@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User_getReqServiceuseCase = void 0;
+const reqservice_map_1 = require("../../../DTO/map/reqservice.map");
 const custom_errors_1 = require("../../../utils/errors/custom.errors");
 const error_enum_1 = require("../../../utils/errors/error.enum");
 class User_getReqServiceuseCase {
@@ -21,7 +22,7 @@ class User_getReqServiceuseCase {
             const reqService = yield this.reqServiceRepositories.findbyId(id);
             if (!reqService)
                 throw new custom_errors_1.CustomError("Service Not found", 401, error_enum_1.AppError.ResourceNotFound);
-            return reqService;
+            return reqservice_map_1.ReqServiceMap.toRespons(reqService);
         });
     }
 }

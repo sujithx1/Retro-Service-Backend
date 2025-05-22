@@ -10,13 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Admin_get_allEmployees_useCase = void 0;
+const mechanic_map_1 = require("../../../DTO/map/mechanic.map");
 class Admin_get_allEmployees_useCase {
     constructor(emplrepositories) {
         this.emplrepositories = emplrepositories;
     }
     execute() {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.emplrepositories.findAll();
+            const employees = yield this.emplrepositories.findAll();
+            return employees.map((item) => mechanic_map_1.MechanicMap.toResponse(item));
         });
     }
 }

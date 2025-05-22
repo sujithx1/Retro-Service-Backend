@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { AdminLogin } from "../../../use-cases/admin/adminLogin";
 import {
   category_Validation,
-  loginValidates,
 } from "../../../utils/helper/Validation";
 import {
   GenerateAccessToken,
@@ -70,13 +69,7 @@ export class AdminController {
       const getEmployees = await this.admiside.getAllEmployees();
       const getJobs = await this.admiside.getAllJobs();
       const getCategories = await this.admiside.getAllCategories();
-      const { password: _, ...withoutPassword } = adminData;
-      const usersWithoutPassword = getusers.map(
-        ({ password, ...rest }) => rest
-      );
-      const employeeWithoutPassword = getEmployees.map(
-        ({ password, ...rest }) => rest
-      );
+     
 
       res
         .cookie("admin_refreshToken", refresh_token, {
@@ -86,10 +79,10 @@ export class AdminController {
         .status(200)
         .json({
           message: "admin logined",
-          admin: withoutPassword,
+          admin: adminData,
           admintoken: access_token,
-          users: usersWithoutPassword,
-          employees: employeeWithoutPassword,
+          users: getusers,
+          employees: getEmployees,
           jobs: getJobs,
           categories: getCategories,
         });
@@ -98,32 +91,6 @@ export class AdminController {
       return next(error);
     }
   }
-
-  // async Admin_AddProduct_controller(req: Request, res: Response,next:NextFunction) {
-  //   const { name, description, stock, categoryName, price } = req.body;
-  //   try {
-  //     const images = req.files ? (req.files as Express.Multer.File[]).map(file => file.path) : [];
-  //     console.log(images);
-
-  //     const product = await this.newProduct.execute(
-  //       name,
-  //       description,
-  //       stock,
-  //       price,
-  //       categoryName,
-  //       images
-  //     );
-
-  //      res.status(201).json({message:'product cretaed',product})
-  //      return
-
-  //   } catch (error) {
-  //     console.log("error -> admin_product",error.message);
-  //     res.status(400).json({error:error.message})
-  //     return
-
-  //   }
-  // }
 
   async admin_Add_Category_controller(
     req: Request,
@@ -278,9 +245,9 @@ export class AdminController {
       const employees = await this.getEmployees.execute();
       console.log(req.cookies.admin_refreshToken);
 
-      const withoutPassword = employees.map(({ password, ...rest }) => rest);
+      // const withoutPassword = employees.map(({ password, ...rest }) => rest);
 
-      res.status(200).json({ message: "success", employees: withoutPassword });
+      res.status(200).json({ message: "success", employees });
     } catch (error) {
       // console.log("error->adminget_Employees controll", error.message);
       next(error);
@@ -305,8 +272,8 @@ export class AdminController {
         Number(experience)
       );
 
-      const { password: _, ...withoutpassword } = employee;
-      res.status(200).json({ message: "success ", employee: withoutpassword });
+      // const { password: _, ...withoutpassword } = employee;
+      res.status(200).json({ message: "success ", employee });
     } catch (error) {
       // console.log("error-> admin put employee controller", error.message);
 
@@ -321,8 +288,8 @@ export class AdminController {
     const { id } = req.params;
     try {
       const employee = await this.delEmployee.execute(id);
-      const { password: _, ...withoutPassword } = employee;
-      res.status(200).json({ message: "success", employee: withoutPassword });
+      // const { password: _, ...withoutPassword } = employee;
+      res.status(200).json({ message: "success", employee });
     } catch (error) {
       console.log("error -> admin employee del controller", error);
       next(error);
@@ -336,8 +303,8 @@ export class AdminController {
   ) {
     try {
       const users = await this.getUserss.execute();
-      const withoutPassword = users.map(({ password, ...rest }) => rest);
-      res.status(200).json({ message: "success", users: withoutPassword });
+      // const withoutPassword = users.map(({ password, ...rest }) => rest);
+      res.status(200).json({ message: "success", users });
     } catch (error) {
       // console.log("error->adminget_Employees controll", error.message);
       next(error);
@@ -355,8 +322,8 @@ export class AdminController {
     }
     try {
       const user = await this.putUser.execute(id, username, phone);
-      const { password: _, ...withoutpassword } = user;
-      res.status(200).json({ message: "success ", user: withoutpassword });
+      // const { password: _, ...withoutpassword } = user;
+      res.status(200).json({ message: "success ", user });
     } catch (error) {
       // console.log("error->admin -> putuser ",error.message);
       next(error);
@@ -370,8 +337,8 @@ export class AdminController {
     const { id } = req.params;
     try {
       const user = await this.delUser.execute(id);
-      const { password: _, ...withoutPassword } = user;
-      res.status(200).json({ message: "success", user: withoutPassword });
+      // const { password: _, ...withoutPassword } = user;
+      res.status(200).json({ message: "success", user });
     } catch (error) {
       // console.log("error -> admin user del controller", error.message);
       next(error);

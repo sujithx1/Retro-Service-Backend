@@ -82,15 +82,15 @@ export class Admin_putfeedBackrefunduseCase {
     if (!update)
       throw new CustomError("Feedback Not updated", 401, AppError.ServerError);
 
-    const service=await this.serviceRepositories.findbyId(feedback.bookingId)
+    const service=await this.serviceRepositories.findbyId(feedback.bookingId);
     if(!service)throw new CustomError(
         "servive Not Found",
         401,
         AppError.ResourceNotFound
       );
-      service.status="CANCELLED"
+      service.status="CANCELLED";
 
-      const updateservice=await this.serviceRepositories.findByIdAndUpdateCancellBooking(service)
+      const updateservice=await this.serviceRepositories.findByIdAndUpdateCancellBooking(service);
       if(!updateservice) throw new CustomError(
         "service Not updated",
         401,
@@ -106,13 +106,13 @@ export class Admin_putfeedBackrefunduseCase {
         "razorpay",
         "service"
 
-      )
+      );
 
-await  this.transactionRepositories.create(usertranasaction)
+await  this.transactionRepositories.create(usertranasaction);
 
 
 
-    return update
+    return update;
   }
   
 }

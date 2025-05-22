@@ -43,11 +43,11 @@ const WalletSchema = new mongoose_1.Schema({
     userType: {
         type: String,
         required: true,
-        enum: ['user', 'employee', 'admin', "store"],
+        enum: ["user", "employee", "admin", "store"],
     },
     balance: {
         type: Number,
         default: 0,
     },
 }, { timestamps: true });
-exports.WalletModel = mongoose_1.default.model('Wallet', WalletSchema);
+exports.WalletModel = mongoose_1.default.model("Wallet", WalletSchema);

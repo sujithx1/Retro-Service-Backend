@@ -1,4 +1,4 @@
-import { CategoryEntities } from "../../../../entities/CategoryEntities"
+import { CategoryEntities } from "../../../../entities/CategoryEntities";
 
 
 export interface ICategories_admin_Repositories{

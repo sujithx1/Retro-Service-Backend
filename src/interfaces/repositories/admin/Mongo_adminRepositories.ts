@@ -48,7 +48,7 @@ export class MongoAdminRepositories implements IAdminRepositories {
     return categories.length?categories.map(
       (item) =>
         new CategoryEntities(item.id, item.name, item.description, item.isBlock)
-    ):[]
+    ):[];
   }
   async findAllEmployees(): Promise<EmployeeEntities[]> {
     const employees = await EmployeeModel.find();
@@ -77,7 +77,7 @@ export class MongoAdminRepositories implements IAdminRepositories {
           item.createdAt,
           item.updatedAt
         )
-    ):[]
+    ):[];
   }
   async findAllJobs(): Promise<JobsEntities[]> {
     const jobs = await JobModel.find();
@@ -90,7 +90,7 @@ export class MongoAdminRepositories implements IAdminRepositories {
           item.minimum_wage,
           item.isBlock
         )
-    ):[]
+    ):[];
   }
   async findAllUsers(): Promise<UserIntities[]> {
     const users = await UserModel.find();
@@ -107,6 +107,6 @@ export class MongoAdminRepositories implements IAdminRepositories {
           item.isAdmin,
           item.authSource
         )
-    ):[]
+    ):[];
   }
 }

@@ -1,4 +1,6 @@
-import { RequestserviceMechEntities } from "../../../entities/reqserviceEntities";
+import { RequsetServiceResponseDto } from "../../../DTO/dto";
+import {  ReqServiceMap } from "../../../DTO/map/reqservice.map";
+// import { RequestserviceMechEntities } from "../../../entities/reqserviceEntities";
 import { IreqservicemechanicsRepositories } from "../../../interfaces/repositories/reqservicemechanics/Ireqservicesmechrepositories";
 
 export class User_getServiceBookingHistoryByUserId{
@@ -7,11 +9,11 @@ export class User_getServiceBookingHistoryByUserId{
     ) {}
 
 
-    async execute(userId:string):Promise<RequestserviceMechEntities[]>
+    async execute(userId:string):Promise<RequsetServiceResponseDto[]>
     {
-        const services=await this.reqServiceRepositories.findbyUserId(userId)
-        if(services.length==0) return []
-        return services
+        const services=await this.reqServiceRepositories.findbyUserId(userId);
+        if(services.length==0) return [];
+        return services.map((item)=>ReqServiceMap.toRespons(item));
         
     }
 }

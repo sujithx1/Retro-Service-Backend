@@ -5,7 +5,7 @@ import { IMessageRepositories } from "../../interfaces/repositories/chats/Ichats
 export class Get_MessagesByuseId{
     constructor(private messageRespositories:IMessageRepositories) {}
     async execute(userId:string):Promise<MessageEntites[]>{
-      const messages=this.messageRespositories.getMessagesByUser(userId)
-        return messages
+      const messages=this.messageRespositories.getMessagesByUser(userId);
+        return messages;
     }
 }

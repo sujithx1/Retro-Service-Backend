@@ -47,24 +47,24 @@ serviceId:string){
            
 
 
-        )
+        );
 
-        const adminwallet=await this.walletrepositories.findByAdmin()
+        const adminwallet=await this.walletrepositories.findByAdmin();
         if(!adminwallet) throw new CustomError("adminwallet not Found",401,AppError.ResourceNotFound);
-        adminwallet.balance+=100
-        const updateadminwallet=await this.walletrepositories.findByIdandUpdate(adminwallet)
+        adminwallet.balance+=100;
+        const updateadminwallet=await this.walletrepositories.findByIdandUpdate(adminwallet);
         if(!updateadminwallet) throw new CustomError("wallet not update",401,AppError.ServerError);
 
-        const Servicepayment=await this.paymentRepositories.create(newPayment)
-        const employee=await this.employeeRepositories.findById(employeeId)
+        const Servicepayment=await this.paymentRepositories.create(newPayment);
+        const employee=await this.employeeRepositories.findById(employeeId);
         if(!employee)throw new CustomError("employee not Found",401,AppError.UserNotFound);
-        const service=await this.serviceRepositories.findbyId(serviceId)
+        const service=await this.serviceRepositories.findbyId(serviceId);
         if (!service) throw new CustomError("Service Not Found",401,AppError.ResourceNotFound);
-        service.status="CONFIRMED"
-        service.paymentId=Servicepayment.id
-        await this.serviceRepositories.findByIdAndUpdate(service,employeeId)
+        service.status="CONFIRMED";
+        service.paymentId=Servicepayment.id;
+        await this.serviceRepositories.findByIdAndUpdate(service,employeeId);
         
-        await this.employeeRepositories.findIdAndUpdateRevenue(employee.id,Servicepayment.amount)
+        await this.employeeRepositories.findIdAndUpdateRevenue(employee.id,Servicepayment.amount);
         const transaction=new TransactionEntities(
             "",
             Servicepayment.userId,
@@ -74,11 +74,11 @@ serviceId:string){
             "razorpay",
             "service"
 
-        )
-        await this.transactionrepositories.create(transaction)
+        );
+        await this.transactionrepositories.create(transaction);
     
 
-        return Servicepayment
+        return Servicepayment;
 
 
           

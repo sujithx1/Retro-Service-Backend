@@ -89,4 +89,4 @@ const requestSchema = new mongoose_1.default.Schema({
 });
 requestSchema.set("toObject", { virtuals: true, versionKey: false, transform: (_, ret) => { delete ret._id; return ret; } });
 requestSchema.set("toJSON", { virtuals: true, versionKey: false, transform: (_, ret) => { delete ret._id; return ret; } });
-exports.Request_Service_Mech_model = mongoose_1.default.model('RequestMechanics', requestSchema);
+exports.Request_Service_Mech_model = mongoose_1.default.model("RequestMechanics", requestSchema);

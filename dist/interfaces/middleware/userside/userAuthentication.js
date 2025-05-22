@@ -15,7 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Authentication = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const UserModel_1 = require("../../../frameworks/db/models/UserModel");
+// import { UserIntities } from "../../../entities/Userentities";
 const EmployeeModel_1 = require("../../../frameworks/db/models/EmployeeModel");
+// import { EmployeeEntities } from "../../../entities/EmployeeEntities";
 const Storemodel_1 = require("../../../frameworks/db/models/Storemodel");
 const jwtSecret = process.env.ACCESS_TOKEN || "sujithaccesstoken";
 // declare global{
@@ -116,9 +118,9 @@ const Authentication = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     console.log("jwt -secret ", jwtSecret);
     console.log("process.env.ACCESS_TOKEN", process.env.ACCESS_TOKEN);
     try {
-        const token = (_a = req.header('Authorization')) === null || _a === void 0 ? void 0 : _a.replace('Bearer ', "").trim();
+        const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.replace("Bearer ", "").trim();
         if (!token) {
-            res.status(401).json({ error: 'Access denied' });
+            res.status(401).json({ error: "Access denied" });
             return;
         }
         const decoded = jsonwebtoken_1.default.verify(token, jwtSecret);

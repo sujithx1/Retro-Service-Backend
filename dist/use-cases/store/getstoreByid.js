@@ -20,7 +20,7 @@ class Store_getiduseCase {
         return __awaiter(this, void 0, void 0, function* () {
             const store = yield this.storerepositories.findbyId(id);
             if (!store)
-                throw new custom_errors_1.CustomError('Store not Found', 404, error_enum_1.AppError.ResourceNotFound);
+                throw new custom_errors_1.CustomError("Store not Found", 404, error_enum_1.AppError.ResourceNotFound);
             return store;
         });
     }

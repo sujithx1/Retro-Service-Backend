@@ -11,9 +11,9 @@ export class Emp_getPaymentDetails{
 
 
         async execute(paymentId:string):Promise<ServicePaymentEntity>{
-            const servicepayment=await this.paymentRepositoires.findById(paymentId)
+            const servicepayment=await this.paymentRepositoires.findById(paymentId);
             if(!servicepayment) throw new CustomError("PaymentId not valid",401,AppError.ResourceNotFound);
-            return servicepayment
+            return servicepayment;
             
         }
 }

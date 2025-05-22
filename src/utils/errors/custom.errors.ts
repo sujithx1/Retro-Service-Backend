@@ -1,5 +1,5 @@
 // common/errors/custom-error.ts
-import { AppError } from './error.enum'; // assuming the enum is in app-error.ts
+import { AppError } from "./error.enum"; // assuming the enum is in app-error.ts
 
 export class CustomError extends Error {
     statusCode: number;

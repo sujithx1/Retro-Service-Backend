@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Employee_get_details_useCase = void 0;
+const mechanic_map_1 = require("../../DTO/map/mechanic.map");
 class Employee_get_details_useCase {
     constructor(employeeRep) {
         this.employeeRep = employeeRep;
@@ -19,7 +20,7 @@ class Employee_get_details_useCase {
             const employee = yield this.employeeRep.findById(id);
             if (!employee)
                 throw new Error("No employee");
-            return employee;
+            return mechanic_map_1.MechanicMap.toResponse(employee);
         });
     }
 }

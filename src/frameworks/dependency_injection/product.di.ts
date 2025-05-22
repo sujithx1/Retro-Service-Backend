@@ -4,12 +4,12 @@ import { Store_getproductsbystoreId } from "../../use-cases/store/getproductsbys
 import { ProductgetbyIduseCase } from "../../use-cases/store/product/getproductbyid";
 import { GetProductSearchuseCase } from "../../use-cases/store/product/SearchProduct";
 
-const productrepositories=new ProductMongoRepositories()
+const productrepositories=new ProductMongoRepositories();
 
 
 
-const getproductsbyStoreId=new Store_getproductsbystoreId(productrepositories)
-const getproductByid=new ProductgetbyIduseCase(productrepositories)
-const search_productByname=new GetProductSearchuseCase(productrepositories)
+const getproductsbyStoreId=new Store_getproductsbystoreId(productrepositories);
+const getproductByid=new ProductgetbyIduseCase(productrepositories);
+const search_productByname=new GetProductSearchuseCase(productrepositories);
 
-export const productcontroller=new ProductController(getproductsbyStoreId,getproductByid,search_productByname)
+export const productcontroller=new ProductController(getproductsbyStoreId,getproductByid,search_productByname);

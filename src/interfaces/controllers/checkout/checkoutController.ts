@@ -77,7 +77,7 @@ export class CheckoutController {
       const { id } = req.params;
       console.log(req.body);
       
-      const {status,concern}=req.body
+      const {status,concern}=req.body;
 
       if (!id)
         return next(

@@ -10,8 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReqEmployeeServices_useCase = void 0;
+// import { io } from "../../../app";
 const reqserviceEntities_1 = require("../../../entities/reqserviceEntities");
 const pushNotification_1 = require("../../../firebase/pushNotification");
+// import { CustomError } from "../../../utils/errors/custom.errors";
+// import { AppError } from "../../../utils/errors/error.enum";
 class ReqEmployeeServices_useCase {
     constructor(userRepositories, employeeRepositoires, reqServicesRepositories) {
         this.userRepositories = userRepositories;
@@ -30,7 +33,7 @@ class ReqEmployeeServices_useCase {
             const newReqs = new reqserviceEntities_1.RequestserviceMechEntities("", userId, userName, userEmail, userLocation, jobId, jobName, Min_wage, problem, mechanics, "PENDING", new Date());
             const tokens = employees
                 .map(emp => emp.FCM_token)
-                .filter((token) => typeof token === 'string');
+                .filter((token) => typeof token === "string");
             const uniqueTokens = Array.from(new Set(tokens));
             yield (0, pushNotification_1.notifyMechanics)(uniqueTokens);
             return yield this.reqServicesRepositories.create(newReqs);

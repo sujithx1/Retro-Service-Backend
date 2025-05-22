@@ -1,10 +1,10 @@
-import admin from './fireBaseAdmin';
+import admin from "./fireBaseAdmin";
 
 export const notifyMechanics = async (tokens: string[]) => {
   const message = {
     notification: {
-      title: 'New Booking',
-      body: 'A new service has been booked!',
+      title: "New Booking",
+      body: "A new service has been booked!",
     },
     tokens,
   };
@@ -19,6 +19,6 @@ export const notifyMechanics = async (tokens: string[]) => {
       }
     });
   } catch (err) {
-    console.error('🔥 Error sending push notification:', err);
+    console.error("🔥 Error sending push notification:", err);
   }
 };

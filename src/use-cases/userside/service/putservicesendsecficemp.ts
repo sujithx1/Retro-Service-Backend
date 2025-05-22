@@ -32,7 +32,7 @@ export class User_putserviceSpecificEmp {
         bookingDate:new Date(),
         // status:"PENDING"
     
-    }
+    };
      // Ensure mechanics array exists before pushing
      if (!Array.isArray(service.mechanics)) {
         service.mechanics = [];
@@ -56,9 +56,9 @@ export class User_putserviceSpecificEmp {
 
     console.log("Service updated successfully");
 
-      const token=employee.FCM_token
+      const token=employee.FCM_token;
       if (token) {
-        notifySingleUser(token)
+        notifySingleUser(token);
       }
 
     return updatedService;

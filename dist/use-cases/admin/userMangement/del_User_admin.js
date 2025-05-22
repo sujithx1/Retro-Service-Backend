@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.admin_Block_UnBlock_User_useCase = void 0;
-const Userentities_1 = require("../../../entities/Userentities");
+const user_map_1 = require("../../../DTO/map/user.map");
 class admin_Block_UnBlock_User_useCase {
     constructor(userRepositories) {
         this.userRepositories = userRepositories;
@@ -19,13 +19,13 @@ class admin_Block_UnBlock_User_useCase {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.userRepositories.findById(id);
             if (!user)
-                throw new Error('id is not matching ');
+                throw new Error("id is not matching ");
             user.isActive = !user.isActive;
             const update = yield this.userRepositories.findByIdAndUpdate(user);
             if (!update)
                 throw new Error("not updated");
             console.log(update);
-            return new Userentities_1.UserIntities(update.id, update.username, update.email, update.phone, update.password, update.isActive, update.profilePic, update.isAdmin, update.authSource, update.role, update.location, update.createdAt, update.updatedAt);
+            return user_map_1.UserMap.toResponse(update);
         });
     }
 }

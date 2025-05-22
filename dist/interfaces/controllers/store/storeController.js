@@ -8,17 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StoreController = void 0;
 const Validation_1 = require("../../../utils/helper/Validation");
@@ -93,13 +82,13 @@ class StoreController {
                 const store = yield this.storelogin.execute(storeId, password);
                 const access_token = yield (0, jwt_auth_token_1.GenerateAccessToken)(store.id, "store");
                 const refresh_token = yield (0, jwt_auth_token_1.GenerateRefreshToken)(store.id, "store");
-                const { password: _ } = store, withoutPassword = __rest(store, ["password"]);
+                // const { password: _, ...withoutPassword } = store;
                 return res
                     .cookie("store_refreshToken", refresh_token, {
                     httpOnly: true,
                 })
                     .status(200)
-                    .json({ success: true, store: withoutPassword, token: access_token });
+                    .json({ success: true, store, token: access_token });
             }
             catch (error) {
                 return next(error);
@@ -282,7 +271,6 @@ class StoreController {
                 const { id } = req.params;
                 if (!id)
                     return next(new custom_errors_1.CustomError("missing id", 400, error_enum_1.AppError.ValidationError));
-                ;
                 const order = yield this.getorderById.execute(id);
                 return res.status(200).json({ success: true, order });
             }
@@ -297,7 +285,6 @@ class StoreController {
                 const { id } = req.params;
                 if (!id)
                     return next(new custom_errors_1.CustomError("missing id", 400, error_enum_1.AppError.ValidationError));
-                ;
                 const wallet = yield this.getWalletbyStoreId.execute(id);
                 return res.status(200).json({ success: true, wallet });
             }

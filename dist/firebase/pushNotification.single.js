@@ -18,8 +18,8 @@ const notifySingleUser = (token) => __awaiter(void 0, void 0, void 0, function* 
     const message = {
         token, // single recipient token
         notification: {
-            title: 'New Booking',
-            body: 'A new service has been booked!',
+            title: "New Booking",
+            body: "A new service has been booked!",
         },
         // Optional: include custom data payload
         // data: {
@@ -31,7 +31,7 @@ const notifySingleUser = (token) => __awaiter(void 0, void 0, void 0, function* 
         console.log(`✅ Notification sent successfully: ${response}`);
     }
     catch (error) {
-        console.error('❌ Error sending notification:', error);
+        console.error("❌ Error sending notification:", error);
     }
 });
 exports.notifySingleUser = notifySingleUser;

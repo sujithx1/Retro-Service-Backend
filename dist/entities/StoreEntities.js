@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StoreEntities = void 0;
 class StoreEntities {
-    constructor(id, name, owner_name, owner_email, owner_phone, isActive = true, password, storeId, profile_pic = 'https://example.com/default-profile-pic.png', location, createdAt, updatedAt) {
+    constructor(id, name, owner_name, owner_email, owner_phone, isActive = true, password, storeId, profile_pic = "https://example.com/default-profile-pic.png", location, createdAt, updatedAt) {
         this.id = id;
         this.name = name;
         this.owner_name = owner_name;

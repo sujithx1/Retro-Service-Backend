@@ -22,7 +22,7 @@ class Cart_deleteCartid {
             if (!cart)
                 throw new custom_errors_1.CustomError("cart not found ", 404, error_enum_1.AppError.ServerError);
             // Check if the product exists in the cart
-            const productIndex = cart.products.findIndex((product) => typeof product.product === 'object' && '_id' in product.product && product.product._id.toString() === productId);
+            const productIndex = cart.products.findIndex((product) => typeof product.product === "object" && "_id" in product.product && product.product._id.toString() === productId);
             if (productIndex === -1) {
                 throw new custom_errors_1.CustomError("Product not found in cart", 404, error_enum_1.AppError.ResourceNotFound);
             }

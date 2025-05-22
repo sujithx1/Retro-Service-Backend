@@ -50,7 +50,7 @@ class EmployeeController {
         this.empladdlocation = empladdlocation;
         this.empAddFCM_token = empAddFCM_token;
     }
-    Signup(req, res) {
+    Signup(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { username, email, phone, password, skills, experience, proof } = req.body;
@@ -72,12 +72,11 @@ class EmployeeController {
                 res.status(200).json({ message: "check your Mail" });
             }
             catch (error) {
-                console.log("error employe Signup cntroll", error.message);
-                res.status(400).json({ error: error.message });
+                return next(error);
             }
         });
     }
-    OtpChecking_Employee(req, res) {
+    OtpChecking_Employee(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const { otp } = req.body;
             console.log("otp checking", otp);
@@ -100,19 +99,17 @@ class EmployeeController {
                 if (!employeData)
                     throw new Error("employeData Not found ");
                 const employeDetail = JSON.parse(employeData);
-                const employee = yield this.createEmploye.execute(employeDetail);
-                const { password: _ } = employee, withoutpassword = __rest(employee, ["password"]);
+                const employe = yield this.createEmploye.execute(employeDetail);
                 res
                     .status(201)
-                    .json({ message: "Employee Created", employe: withoutpassword });
+                    .json({ message: "Employee Created", employe });
             }
             catch (error) {
-                console.log("otp checking controller emp", error.message);
-                res.status(400).json({ error: error.message });
+                return next(error);
             }
         });
     }
-    Emp_logiConroll(req, res) {
+    Emp_logiConroll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const { email, password } = req.body;
             console.log("emp_login controller call");
@@ -120,7 +117,6 @@ class EmployeeController {
                 const employee = yield this.loginemp.execute(email, password);
                 const refresh_token = (0, jwt_auth_token_1.GenerateRefreshToken)(employee.id, employee.role);
                 const access_token = (0, jwt_auth_token_1.GenerateAccessToken)(employee.id, employee.role);
-                const { password: _ } = employee, withoutpassword = __rest(employee, ["password"]);
                 res
                     .cookie("employee_refreshToken", refresh_token, {
                     httpOnly: true,
@@ -128,13 +124,12 @@ class EmployeeController {
                     .status(200)
                     .json({
                     message: "Employee login success",
-                    employee: withoutpassword,
+                    employee,
                     token: access_token,
                 });
             }
             catch (error) {
-                console.log("login controller err", error.message);
-                res.status(400).json({ error: error.message });
+                return next(error);
             }
         });
     }
@@ -162,12 +157,10 @@ class EmployeeController {
                 console.log("Cloudinary upload successful:", cloudinaryUpload);
                 const user = yield this.putProfile.execute(id, username, phone, cloudinaryUpload.secure_url, Number(experience));
                 console.log("Updated user:", user);
-                const { password: _ } = user, withoutPassword = __rest(user, ["password"]);
-                console.log("heyyyy");
                 // Send success response
                 return res.status(200).json({
                     message: "employee updated successfully",
-                    employee: withoutPassword,
+                    employee: user,
                 });
             }
             catch (error) {
@@ -226,7 +219,6 @@ class EmployeeController {
                 res.status(200).json({ message: "success", services });
             }
             catch (error) {
-                console.log("error userlogout", error.message);
                 return next(error);
             }
         });
@@ -256,9 +248,8 @@ class EmployeeController {
                 const { id } = req.params;
                 if (!id)
                     return next(new Error("id missing"));
-                const employe = yield this.getEmployee.execute(id);
-                const { password: _ } = employe, without = __rest(employe, ["password"]);
-                return res.status(200).json({ message: "success", employee: without });
+                const employee = yield this.getEmployee.execute(id);
+                return res.status(200).json({ message: "success", employee });
             }
             catch (error) {
                 return next(error);
@@ -285,8 +276,8 @@ class EmployeeController {
                 if (!id)
                     return next(new custom_errors_1.CustomError("id missing", 401, error_enum_1.AppError.ValidationError));
                 const user = yield this.getuserDetails.execute(id);
-                const { password: _ } = user, without = __rest(user, ["password"]);
-                return res.status(200).json({ message: "success", user: without });
+                // const { password: _, ...without } = user;
+                return res.status(200).json({ message: "success", user });
             }
             catch (error) {
                 return next(error);

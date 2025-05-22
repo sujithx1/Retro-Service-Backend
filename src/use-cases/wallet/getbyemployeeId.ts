@@ -11,9 +11,9 @@ export class Employee_getWalletDetails{
     }
 
     async execute(empId:string):Promise<WalletEntities>{
-        const wallet=await this.walletrepositories.findByEmployeeId(empId)
-        if(!wallet)throw new CustomError("wallet not found",401,AppError.ResourceNotFound)
+        const wallet=await this.walletrepositories.findByEmployeeId(empId);
+        if(!wallet)throw new CustomError("wallet not found",401,AppError.ResourceNotFound);
 
-        return wallet
+        return wallet;
     }
 }

@@ -8,9 +8,9 @@ export class EmpgetReqservice_useCase{
     async execute(empId:string):Promise<RequestserviceMechEntities[]|[]>{
 console.log(empId,"usecase");
 
-        const reqservice=await this.reqServiceRep.findbyempId(empId)
-        if(reqservice.length==0) throw new CustomError("No services found for this employee",401,AppError.ResourceNotFound)
-        return reqservice
+        const reqservice=await this.reqServiceRep.findbyempId(empId);
+        if(reqservice.length==0) throw new CustomError("No services found for this employee",401,AppError.ResourceNotFound);
+        return reqservice;
  
 
     } 

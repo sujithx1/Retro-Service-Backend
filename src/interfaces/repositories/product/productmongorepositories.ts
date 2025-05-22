@@ -18,41 +18,41 @@ const returnproduct = (product: IProduct): Product_Entities => {
     product.isBlock,
     product.createdAt,
     product.updatedAt
-  )
+  );
 };
 export class ProductMongoRepositories implements IproductRepositories{
 
 
   async create(product: Product_Entities): Promise<Product_Entities> {
-    const addproduct=await Product_Model.create(product)
-    return returnproduct(addproduct)
+    const addproduct=await Product_Model.create(product);
+    return returnproduct(addproduct);
 
     
       
   }
   async findByname(name: string): Promise<Product_Entities | null> {
-      const product=await Product_Model.findOne({name:name})
-      if(!product)return null
-      return returnproduct(product)
+      const product=await Product_Model.findOne({name:name});
+      if(!product)return null;
+      return returnproduct(product);
   }
 
  async getAll(): Promise<Product_Entities[]> {
 
-    const products= await Product_Model.find({isBlock:false})
-    return products.map((item)=>returnproduct(item))
+    const products= await Product_Model.find({isBlock:false});
+    return products.map((item)=>returnproduct(item));
 
       
   }
 
   async findById(id: string): Promise<Product_Entities|null> {
       const product=await Product_Model.findById(id)
-      .populate('category','name description')
-.exec()
-      if(!product)return null
+      .populate("category","name description")
+.exec();
+      if(!product)return null;
 
       // await product.populate("storeId", "name ownername")
 
-      return  returnproduct(product)
+      return  returnproduct(product);
   }
 
 
@@ -62,7 +62,7 @@ export class ProductMongoRepositories implements IproductRepositories{
         { ...productData },
         { new: true, runValidators: true,upsert:true } // `new: true` returns the updated document
     );
-    if(!updatedProduct)return null
+    if(!updatedProduct)return null;
 
     // await updatedProduct.populate({
     //   path: "category",
@@ -72,15 +72,15 @@ export class ProductMongoRepositories implements IproductRepositories{
     //   path:'storeId',
     //   select:'name owner_name'
     // })
-    return returnproduct(updatedProduct)
+    return returnproduct(updatedProduct);
 
   }
 
   async findBystoreId(storeId: string): Promise<Product_Entities[] > {
-      const products=await Product_Model.find({storeId:storeId})
+      const products=await Product_Model.find({storeId:storeId});
 
     
-      return products.map((item)=>returnproduct(item))
+      return products.map((item)=>returnproduct(item));
   }
 
 
@@ -88,9 +88,9 @@ export class ProductMongoRepositories implements IproductRepositories{
     
     const products=await Product_Model.find({
       name: { $regex: quary, $options: "i" }, // Case-insensitive search
-    })
+    });
 
-return products.map((item)=>returnproduct(item))      
+return products.map((item)=>returnproduct(item));      
    }
 
   

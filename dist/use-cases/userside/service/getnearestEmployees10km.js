@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User_getNearestEmployees = void 0;
+// import { CustomError } from "../../../utils/errors/custom.errors";
 class User_getNearestEmployees {
     constructor(employeeRepositories) {
         this.employeeRepositories = employeeRepositories;

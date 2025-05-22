@@ -9,11 +9,11 @@ import { Iservice_bookingRepositories } from "./serviceBooking";
 export class Mongo_Service_Booking_Repositories implements Iservice_bookingRepositories{
         async findbyId(id: string): Promise<ServiceEntities | null> {
             const service=await Service_BookingModel.findById(id)
-            .populate({ path: 'user', select: 'username email' }) 
-            .populate({ path: 'employee', select: 'location role' }) 
-            .populate({ path: 'job', select: 'title description' }) 
+            .populate({ path: "user", select: "username email" }) 
+            .populate({ path: "employee", select: "location role" }) 
+            .populate({ path: "job", select: "title description" }); 
 
-            if(!service) return null
+            if(!service) return null;
             return new ServiceEntities(
                 service.id,
                 service.user.id.toString(),
@@ -25,7 +25,7 @@ export class Mongo_Service_Booking_Repositories implements Iservice_bookingRepos
                 service.service_minWage,
                 service.problem
 
-            )
+            );
          
     }
 
@@ -41,10 +41,10 @@ export class Mongo_Service_Booking_Repositories implements Iservice_bookingRepos
 
 
 
-        })
-        await services.populate({ path: 'user', select: 'username email' }) 
-       await services.populate({ path: 'employee', select: 'name role' }) 
-       await services.populate({ path: 'job', select: 'name description' }) 
+        });
+        await services.populate({ path: "user", select: "username email" }); 
+       await services.populate({ path: "employee", select: "name role" }); 
+       await services.populate({ path: "job", select: "name description" }); 
 
         return new ServiceEntities(
             services.id,
@@ -64,7 +64,7 @@ export class Mongo_Service_Booking_Repositories implements Iservice_bookingRepos
             services.user.phone,
 
 
-        )
+        );
         
 
 
@@ -73,9 +73,9 @@ export class Mongo_Service_Booking_Repositories implements Iservice_bookingRepos
 
 
         const services = await Service_BookingModel.find({ employee: empid })
-        .populate<{ user: IuserTypes }>({ path: 'user' })
-        .populate<{ employee: IEmployee_types }>({ path: 'employee'})
-        .populate<{ job: IJobTypes }>({ path: 'job' });
+        .populate<{ user: IuserTypes }>({ path: "user" })
+        .populate<{ employee: IEmployee_types }>({ path: "employee"})
+        .populate<{ job: IJobTypes }>({ path: "job" });
       
     
         return services.map((service)=>new ServiceEntities(
@@ -98,16 +98,16 @@ export class Mongo_Service_Booking_Repositories implements Iservice_bookingRepos
 
 
 
-        ))
+        ));
         
     }
     async findbyIdAndUpdate(service: ServiceEntities): Promise<ServiceEntities | null> {
         
         const update=await Service_BookingModel.findByIdAndUpdate(service.id,{...service},{new:true})
-        .populate<{ user: IuserTypes }>({ path: 'user' })
-        .populate<{ employee: IEmployee_types }>({ path: 'employee'})
-        .populate<{ job: IJobTypes }>({ path: 'job' });
-        if(!update) return null
+        .populate<{ user: IuserTypes }>({ path: "user" })
+        .populate<{ employee: IEmployee_types }>({ path: "employee"})
+        .populate<{ job: IJobTypes }>({ path: "job" });
+        if(!update) return null;
 
         return new ServiceEntities(
             update.id,
@@ -127,6 +127,6 @@ export class Mongo_Service_Booking_Repositories implements Iservice_bookingRepos
             update.user.phone,
 
 
-        )
+        );
     }
 }

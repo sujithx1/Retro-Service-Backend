@@ -63,11 +63,11 @@ const storeSchema=new Schema<IStore_types>({
     }
 ,profile_pic:{
     type:String,
-    default:'https://example.com/default-profile-pic.png'
+    default:"https://example.com/default-profile-pic.png"
 }
     
 },{
     timestamps:true
-})
+});
 
-export const StoreModel=mongoose.model('Store',storeSchema)
+export const StoreModel=mongoose.model("Store",storeSchema);

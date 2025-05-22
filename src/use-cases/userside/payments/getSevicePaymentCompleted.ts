@@ -3,8 +3,8 @@ import { IPaymentRepositories } from "../../../interfaces/repositories/payments/
 export class UserServiceBookingHistoryusecase{
     constructor(private paymentRepositories:IPaymentRepositories){}
     async execute(id:string){
-        const service=await this.paymentRepositories.findByUserId(id)
-        return service
+        const service=await this.paymentRepositories.findByUserId(id);
+        return service;
 
 
 

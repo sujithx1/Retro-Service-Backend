@@ -1,3 +1,5 @@
+import { StoreResponseDto } from "../../../DTO/dto";
+import { StoreMap } from "../../../DTO/map/store.map";
 import { StoreEntities } from "../../../entities/StoreEntities";
 import { WalletEntities } from "../../../entities/walletEntities";
 import { IstoreRepositories } from "../../../interfaces/repositories/store/Istorerepositories";
@@ -20,27 +22,27 @@ export class Store_otpcheck{
         
     }
 
-    async execute(otp:number):Promise<StoreEntities>{
+    async execute(otp:number):Promise<StoreResponseDto>{
 
         const storedOtp = await redisClient.get("storeotp");
       if (!storedOtp) throw new CustomError("OTP expired ",401,AppError.OtpExpired);
-      const checkotp=await this.otpchecking.execute(Number(otp),Number(storedOtp))
+      const checkotp=await this.otpchecking.execute(Number(otp),Number(storedOtp));
       if (!checkotp) throw new CustomError("Invalid OTP",401,AppError.OtpMismatch);
       const storeData = await redisClient.get("storeData");
     if (!storeData) throw new CustomError("storeData Not found ",401,AppError.ResourceNotFound);
 
       const storeDetails:StoreEntities = JSON.parse(storeData);
 
-      const storeId=await generateStoreID(storeDetails.name)
-storeDetails.storeId=storeId
+      const storeId=await generateStoreID(storeDetails.name);
+storeDetails.storeId=storeId;
 console.log(storeId);
 await sendOtp(storeDetails.owner_email, storeDetails.name, storeId,true);
 
-const hashPassword=await hashpass(storeDetails.password)
-storeDetails.password=hashPassword
+const hashPassword=await hashpass(storeDetails.password);
+storeDetails.password=hashPassword;
 
       
-      const store= await this.storeRepositories.create(storeDetails)
+      const store= await this.storeRepositories.create(storeDetails);
 
        const wallet=new WalletEntities(
                           "",
@@ -49,11 +51,11 @@ storeDetails.password=hashPassword
                           0,
                       
                           
-                      )
+                      );
                           
-                      this.walletrepositories.create(wallet)
+                      this.walletrepositories.create(wallet);
 
-     return store
+     return StoreMap.toResponse(store);
 
 
 

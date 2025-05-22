@@ -20,7 +20,7 @@ interface IWallet extends Document {
       userType: {
         type: String,
         required: true,
-        enum: ['user', 'employee','admin',"store"], 
+        enum: ["user", "employee","admin","store"], 
       },
       balance: {
         type: Number,
@@ -31,4 +31,4 @@ interface IWallet extends Document {
     { timestamps: true } 
   );
 
-  export const WalletModel=mongoose.model('Wallet',WalletSchema)
+  export const WalletModel=mongoose.model("Wallet",WalletSchema);

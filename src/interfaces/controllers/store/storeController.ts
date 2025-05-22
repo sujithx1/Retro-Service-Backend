@@ -101,13 +101,13 @@ export class StoreController {
       const access_token = await GenerateAccessToken(store.id, "store");
       const refresh_token = await GenerateRefreshToken(store.id, "store");
 
-      const { password: _, ...withoutPassword } = store;
+      // const { password: _, ...withoutPassword } = store;
       return res
         .cookie("store_refreshToken", refresh_token, {
           httpOnly: true,
         })
         .status(200)
-        .json({ success: true, store: withoutPassword, token: access_token });
+        .json({ success: true, store, token: access_token });
     } catch (error) {
       return next(error);
     }
@@ -341,10 +341,10 @@ export class StoreController {
         return next(
           new CustomError("missing id", 400, AppError.ValidationError)
         );
-     ;
+     
        
 
-      const order = await this.getorderById.execute(id)
+      const order = await this.getorderById.execute(id);
       return res.status(200).json({ success: true, order });
     } catch (error) {
       return next(error);
@@ -363,10 +363,10 @@ export class StoreController {
         return next(
           new CustomError("missing id", 400, AppError.ValidationError)
         );
-     ;
+     
        
 
-      const wallet = await this.getWalletbyStoreId.execute(id)
+      const wallet = await this.getWalletbyStoreId.execute(id);
       return res.status(200).json({ success: true, wallet });
     } catch (error) {
       return next(error);

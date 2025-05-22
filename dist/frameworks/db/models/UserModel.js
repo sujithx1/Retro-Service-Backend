@@ -89,7 +89,7 @@ const userSchema = new mongoose_1.Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'admin'],
+        enum: ["user", "admin"],
         default: "user"
     },
     location: {
@@ -99,4 +99,4 @@ const userSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-exports.UserModel = mongoose_1.default.model('User', userSchema);
+exports.UserModel = mongoose_1.default.model("User", userSchema);

@@ -1,4 +1,4 @@
-import { ReqService_MechanicTypes, RequestserviceMechEntities } from "../../../entities/reqserviceEntities";
+import {  RequestserviceMechEntities } from "../../../entities/reqserviceEntities";
 import { Request_Service_Mech_model } from "../../../frameworks/db/models/reqserviceMechanics";
 import { IreqservicemechanicsRepositories } from "./Ireqservicesmechrepositories";
 
@@ -6,13 +6,13 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
    async  create(services: RequestserviceMechEntities): Promise<RequestserviceMechEntities> {
          
      
-        const req= await Request_Service_Mech_model.create(services)
+        const req= await Request_Service_Mech_model.create(services);
 
         await req
         .populate([
-          { path: 'userId', select: 'username email id' },
-          { path: 'mechanics', select: 'username id' },
-          { path: 'jobId', select: 'name description' }
+          { path: "userId", select: "username email id" },
+          { path: "mechanics", select: "username id" },
+          { path: "jobId", select: "name description" }
         ]);
 
        
@@ -36,11 +36,11 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
 
 
 
-        )
+        );
      }
      async findbyempId(empid: string): Promise<RequestserviceMechEntities[] | []> {
       const reqserviceEmpl = await Request_Service_Mech_model.find({
-        'mechanics.employeeId': empid
+        "mechanics.employeeId": empid
       });
       
        
@@ -49,12 +49,12 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
         if (!reqserviceEmpl || reqserviceEmpl.length === 0) return [];
       
         // Populate each document individually
-        for (let service of reqserviceEmpl) {
+        for (const service of reqserviceEmpl) {
           await service.populate([
-            { path: 'userId', select: 'username email _id' },
-            { path: 'mechanics', select: 'name _id' },
-            { path: 'jobId', select: 'name description _id' },
-            { path: 'acceptEmployee.employeeId', select: 'name _id' }
+            { path: "userId", select: "username email _id" },
+            { path: "mechanics", select: "name _id" },
+            { path: "jobId", select: "name description _id" },
+            { path: "acceptEmployee.employeeId", select: "name _id" }
           ]);
         }
       
@@ -104,14 +104,14 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
         });
       }
       async findbyId(id: string): Promise<RequestserviceMechEntities | null> {
-       const reqservice=await Request_Service_Mech_model.findById(id)
-       if(!reqservice) return null
+       const reqservice=await Request_Service_Mech_model.findById(id);
+       if(!reqservice) return null;
         
        await reqservice
        .populate([
-         { path: 'userId', select: 'username email id' },
-         { path: 'mechanics', select: 'name id' },
-         { path: 'jobId', select: 'name description' }
+         { path: "userId", select: "username email id" },
+         { path: "mechanics", select: "name id" },
+         { path: "jobId", select: "name description" }
        ]);
      
        const acceptEmployee = reqservice.acceptEmployee && reqservice.acceptEmployee.employeeId?._id
@@ -137,7 +137,7 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
         acceptEmployee,
         reqservice.paymentId?reqservice.paymentId:"",
 
-        )
+        );
        
       }
 
@@ -163,13 +163,13 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
           }
         );
 
-        if(!service) return null
+        if(!service) return null;
         
         await service
         .populate([
-          { path: 'userId', select: 'username email id' },
-          { path: 'mechanics', select: 'name id' },
-          { path: 'jobId', select: 'name description' }
+          { path: "userId", select: "username email id" },
+          { path: "mechanics", select: "name id" },
+          { path: "jobId", select: "name description" }
         ]);
        
  
@@ -197,7 +197,7 @@ export class MongoReqServiceMechnics implements IreqservicemechanicsRepositories
          service.bookingDate,
          acceptEmployee,
          service.paymentId?service.paymentId:"",
-         )
+         );
 
         
       }
@@ -209,14 +209,14 @@ reqService.id,
   status:reqService.status
 }
 ,{new:true}
-        )
+        );
 
-        if(!service) return null
+        if(!service) return null;
         await service
         .populate([
-          { path: 'userId', select: 'username email id' },
-          { path: 'mechanics', select: 'name id' },
-          { path: 'jobId', select: 'name description' }
+          { path: "userId", select: "username email id" },
+          { path: "mechanics", select: "name id" },
+          { path: "jobId", select: "name description" }
         ]);
         
         const acceptEmployee = service.acceptEmployee && service.acceptEmployee.employeeId?._id
@@ -243,7 +243,7 @@ reqService.id,
          service.bookingDate,
          acceptEmployee,
          service.paymentId?service.paymentId:"",
-         )}
+         );}
 
 
        async findbyUserId(userId: string): Promise<RequestserviceMechEntities[] | []> {
@@ -257,12 +257,12 @@ reqService.id,
             if (!reqservice || reqservice.length === 0) return [];
           
             // Populate each document individually
-            for (let service of reqservice) {
+            for (const service of reqservice) {
               await service.populate([
-                { path: 'userId', select: 'username email _id' },
-                { path: 'mechanics', select: 'name _id' },
-                { path: 'jobId', select: 'name description _id' },
-                { path: 'acceptEmployee.employeeId', select: 'name _id' }
+                { path: "userId", select: "username email _id" },
+                { path: "mechanics", select: "name _id" },
+                { path: "jobId", select: "name description _id" },
+                { path: "acceptEmployee.employeeId", select: "name _id" }
               ]);
             }
           
@@ -323,13 +323,13 @@ reqService.id,
               { new: true } 
            
 
-            )
-        if(!updatedService) return null
+            );
+        if(!updatedService) return null;
         await updatedService
         .populate([
-          { path: 'userId', select: 'username email id' },
-          { path: 'mechanics', select: 'name id' },
-          { path: 'jobId', select: 'name description' }
+          { path: "userId", select: "username email id" },
+          { path: "mechanics", select: "name id" },
+          { path: "jobId", select: "name description" }
         ]);
         
  
@@ -358,7 +358,7 @@ reqService.id,
          updatedService.bookingDate,
          acceptEmployee,
          updatedService.paymentId?service.paymentId:"",
-         )
+         );
           } catch (error) {
             console.error("Error updating service:", error);
             throw new Error("Failed to update service");

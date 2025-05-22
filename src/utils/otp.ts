@@ -1,32 +1,32 @@
 
 
-import nodemailer from "nodemailer"
+import nodemailer from "nodemailer";
 
 
 export const generate_otp=()=>{
     const min=1000;
-    const max=9999
+    const max=9999;
     
-   return  Math.floor(Math.random()*(max-min+1))+min
-}
+   return  Math.floor(Math.random()*(max-min+1))+min;
+};
 
 export const sendOtp=(email:string,username:string,otp:string|number,storeValid?:boolean)=>{
     return new Promise((resolve,reject)=>{
         let mailOption;
         const transpailer=nodemailer.createTransport({
-            service:'gmail',
+            service:"gmail",
             auth:{
                 user:process.env.Email,
                 pass:process.env.Password
 
             }
-        })
+        });
         if (storeValid) {
             
             mailOption={
                 from:process.env.Email,
                 to:email,
-                subject:'Welcome! Retro Service ',
+                subject:"Welcome! Retro Service ",
                 html:
                 `<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
                 <h2>Hi${username},</h2>
@@ -39,13 +39,13 @@ export const sendOtp=(email:string,username:string,otp:string|number,storeValid?
               </div>
             `,
     
-            }
+            };
         }else
         {
             mailOption={
                 from:process.env.Email,
                 to:email,
-                subject:'Welcome! Verify Your Email with This OTP Code',
+                subject:"Welcome! Verify Your Email with This OTP Code",
                 html:
                 `<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
                 <h2>Hi${username},</h2>
@@ -58,26 +58,26 @@ export const sendOtp=(email:string,username:string,otp:string|number,storeValid?
               </div>
             `,
 
-        }
+        };
 
        
 
         }
         transpailer.sendMail(mailOption,(err,info)=>{
             if (err) {
-                console.log('error from sending mail ',err);
-                reject(err)
-                return 
+                console.log("error from sending mail ",err);
+                reject(err);
+                return; 
                 
                 
             }
-            console.log('mail sended',info.response);
-            resolve(info)
+            console.log("mail sended",info.response);
+            resolve(info);
 
-        })
+        });
 
-    })
-}
+    });
+};
 
  
 

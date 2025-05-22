@@ -295,8 +295,8 @@ class UserServiceController {
                 if (!id)
                     return next(new custom_errors_1.CustomError("missing field", 401, error_enum_1.AppError.ValidationError));
                 const transactions = yield this.gettranasactionByuser.execute(id);
-                console.log('transactions ', transactions);
-                res.status(200).json({ message: 'success', success: true, transactions });
+                console.log("transactions ", transactions);
+                res.status(200).json({ message: "success", success: true, transactions });
             }
             catch (error) {
                 console.log("error user put contrroll", error);

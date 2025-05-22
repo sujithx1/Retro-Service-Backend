@@ -11,10 +11,10 @@ const router = express_1.default.Router();
 router.post("/refresh-token", (req, res) => {
     (0, jwt_auth_token_1.createAccessToken)(req, res, "employee");
 });
-router.post("/signup", (req, res) => mechanic_di_1.employeeController.Signup(req, res));
-router.post("/signup/otp", (req, res) => mechanic_di_1.employeeController.OtpChecking_Employee(req, res));
-router.post("/signup/resendotp", (req, res) => mechanic_di_1.employeeController.Signup(req, res));
-router.post("/login", (req, res) => mechanic_di_1.employeeController.Emp_logiConroll(req, res));
+router.post("/signup", (req, res, next) => mechanic_di_1.employeeController.Signup(req, res, next));
+router.post("/signup/otp", (req, res, next) => mechanic_di_1.employeeController.OtpChecking_Employee(req, res, next));
+router.post("/signup/resendotp", (req, res, next) => mechanic_di_1.employeeController.Signup(req, res, next));
+router.post("/login", (req, res, next) => mechanic_di_1.employeeController.Emp_logiConroll(req, res, next));
 router.get("/logout", (req, res, next) => mechanic_di_1.employeeController.Employee_get_Logout_controll(req, res, next));
 router.post("/forgot-password/otp", (req, res, next) => {
     mechanic_di_1.employeeController.Employee_Post_forgot_password_controll(req, res, next);

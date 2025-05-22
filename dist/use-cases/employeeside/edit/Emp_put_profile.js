@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Employee_put_Profile_useCase = void 0;
+const mechanic_map_1 = require("../../../DTO/map/mechanic.map");
 class Employee_put_Profile_useCase {
     constructor(employeeRep) {
         this.employeeRep = employeeRep;
@@ -22,16 +23,11 @@ class Employee_put_Profile_useCase {
             employe.username = username;
             employe.phone = phone;
             employe.profilePic = profilePic;
-            // skills.forEach((skill) => {
-            //     if (!employe.skills.includes(skill)) {
-            //       employe.skills.push(skill);
-            //     }
-            //   });
             employe.experience = experience;
             const update = yield this.employeeRep.findByIdAndUpdate(employe);
             if (!update)
                 throw new Error("employee not updated");
-            return update;
+            return mechanic_map_1.MechanicMap.toResponse(update);
         });
     }
 }

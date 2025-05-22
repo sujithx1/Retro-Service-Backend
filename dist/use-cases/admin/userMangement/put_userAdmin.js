@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Admin_put_user_useCase = void 0;
-const Userentities_1 = require("../../../entities/Userentities");
+const user_map_1 = require("../../../DTO/map/user.map");
 class Admin_put_user_useCase {
     constructor(userRepositories) {
         this.userRepositories = userRepositories;
@@ -25,7 +25,7 @@ class Admin_put_user_useCase {
             const update = yield this.userRepositories.findByIdAndUpdate(user);
             if (!update)
                 throw new Error("Not updateded");
-            return new Userentities_1.UserIntities(update.id, update.username, update.email, update.phone, update.password, update.isActive, update.profilePic, update.isAdmin, update.authSource, update.role, update.location, update.createdAt, update.updatedAt);
+            return user_map_1.UserMap.toResponse(update);
         });
     }
 }

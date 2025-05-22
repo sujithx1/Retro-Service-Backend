@@ -19,7 +19,7 @@ class Admin_add_Category_useCase {
         return __awaiter(this, void 0, void 0, function* () {
             const existCategory = yield this.categoryRepositoris.categoryFindbyName(name);
             if (existCategory)
-                throw new Error('Category Already Exists');
+                throw new Error("Category Already Exists");
             const categoryData = new CategoryEntities_1.CategoryEntities("", name, description);
             const category = yield this.categoryRepositoris.categoryCreate(categoryData);
             return new CategoryEntities_1.CategoryEntities(category.id, category.name, category.description, category.isBlock);

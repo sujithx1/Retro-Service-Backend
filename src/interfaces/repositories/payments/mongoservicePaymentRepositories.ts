@@ -7,9 +7,9 @@ export class ServicePaymentMongoRepositories implements IPaymentRepositories {
         const servicepayment = await ServicePaymentModel.create(service);
         return new ServicePaymentEntity(
             servicepayment.id,
-            servicepayment.userId?.toString() || '',
-            servicepayment.employeeId?.toString() || '',
-            servicepayment.serviceId?.toString() || '',
+            servicepayment.userId?.toString() || "",
+            servicepayment.employeeId?.toString() || "",
+            servicepayment.serviceId?.toString() || "",
             servicepayment.amount,
             servicepayment.serviceDetails,
             servicepayment.status,
@@ -28,9 +28,9 @@ export class ServicePaymentMongoRepositories implements IPaymentRepositories {
 
         return bookings.map(service => new ServicePaymentEntity(
             service.id,
-            service.userId?.toString() || '',
-            service.employeeId?.toString() || '',
-            service.serviceId?.toString() || '',
+            service.userId?.toString() || "",
+            service.employeeId?.toString() || "",
+            service.serviceId?.toString() || "",
             service.amount,
             service.serviceDetails,
             service.status,
@@ -42,13 +42,13 @@ export class ServicePaymentMongoRepositories implements IPaymentRepositories {
     }
 
     async findById(id: string): Promise<ServicePaymentEntity | null> {
-        const service=await ServicePaymentModel.findById(id)
-        if(!service) return null
+        const service=await ServicePaymentModel.findById(id);
+        if(!service) return null;
         return new ServicePaymentEntity(
             service.id,
-            service.userId?.toString() || '',
-            service.employeeId?.toString() || '',
-            service.serviceId?.toString() || '',
+            service.userId?.toString() || "",
+            service.employeeId?.toString() || "",
+            service.serviceId?.toString() || "",
             service.amount,
             service.serviceDetails,
             service.status,
@@ -56,7 +56,7 @@ export class ServicePaymentMongoRepositories implements IPaymentRepositories {
             service.jobName,
             service.createdAt,
             service.updatedAt
-        )
+        );
         
     }
 
@@ -70,19 +70,19 @@ export class ServicePaymentMongoRepositories implements IPaymentRepositories {
         status:payment.status,
         paymentId:payment.paymentId,
         amount:payment.amount,
-        'serviceDetails.phone':payment.serviceDetails.phone,
-        'serviceDetails.vehicleNumber':payment.serviceDetails.vehicleNumber
+        "serviceDetails.phone":payment.serviceDetails.phone,
+        "serviceDetails.vehicleNumber":payment.serviceDetails.vehicleNumber
 
         
         
             
-    },{new:true,upsert:true})
-    if(!service)return null
+    },{new:true,upsert:true});
+    if(!service)return null;
     return new ServicePaymentEntity(
         service.id,
-        service.userId?.toString() || '',
-        service.employeeId?.toString() || '',
-        service.serviceId?.toString() || '',
+        service.userId?.toString() || "",
+        service.employeeId?.toString() || "",
+        service.serviceId?.toString() || "",
         service.amount,
         service.serviceDetails,
         service.status,
@@ -90,7 +90,7 @@ export class ServicePaymentMongoRepositories implements IPaymentRepositories {
         service.jobName,
         service.createdAt,
         service.updatedAt
-    )
+    );
     
 
         

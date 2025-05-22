@@ -7,7 +7,7 @@ export class GetAllproductsuseCase{
     ) {}
 
     async execute():Promise<Product_Entities[]>{
-        return await this.produtrepositories.getAll()
+        return await this.produtrepositories.getAll();
 
     }
 

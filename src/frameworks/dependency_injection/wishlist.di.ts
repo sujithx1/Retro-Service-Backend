@@ -7,11 +7,11 @@ import { User_getwishlistsbyUserId } from "../../use-cases/wishlist/getwishlists
 
 
 
-const wishlistrepositories=new WishlistMongoRepository()
+const wishlistrepositories=new WishlistMongoRepository();
 
 
-const createwishlist=new CreateWishlistuseCase(wishlistrepositories)
-const getwishlist_byuserId=new User_getwishlistsbyUserId(wishlistrepositories)
-const deletewishlistByid=new User_deletewishlistuseCase(wishlistrepositories)
+const createwishlist=new CreateWishlistuseCase(wishlistrepositories);
+const getwishlist_byuserId=new User_getwishlistsbyUserId(wishlistrepositories);
+const deletewishlistByid=new User_deletewishlistuseCase(wishlistrepositories);
 
-export const wishlistcontroller=new WishlistController(createwishlist,getwishlist_byuserId,deletewishlistByid)
+export const wishlistcontroller=new WishlistController(createwishlist,getwishlist_byuserId,deletewishlistByid);

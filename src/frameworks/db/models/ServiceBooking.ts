@@ -55,4 +55,4 @@ const Service_booking_schema = new Schema<IService_Booking_types>(
 
 
 
-export const Service_BookingModel=mongoose.model('ServiceBooking',Service_booking_schema)   
+export const Service_BookingModel=mongoose.model("ServiceBooking",Service_booking_schema);   

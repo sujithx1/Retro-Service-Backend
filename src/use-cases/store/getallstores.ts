@@ -1,7 +1,7 @@
 import { StoreEntities } from "../../entities/StoreEntities";
 import { IproductRepositories } from "../../interfaces/repositories/product/IproductRepositories";
 import { IstoreRepositories } from "../../interfaces/repositories/store/Istorerepositories";
-import { Locationuser_types } from "../../types/user";
+// import { Locationuser_types } from "../../types/user";
 import { CustomError } from "../../utils/errors/custom.errors";
 import { AppError } from "../../utils/errors/error.enum";
 interface User_storetypes {

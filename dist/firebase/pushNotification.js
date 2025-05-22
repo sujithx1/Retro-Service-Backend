@@ -17,8 +17,8 @@ const fireBaseAdmin_1 = __importDefault(require("./fireBaseAdmin"));
 const notifyMechanics = (tokens) => __awaiter(void 0, void 0, void 0, function* () {
     const message = {
         notification: {
-            title: 'New Booking',
-            body: 'A new service has been booked!',
+            title: "New Booking",
+            body: "A new service has been booked!",
         },
         tokens,
     };
@@ -34,7 +34,7 @@ const notifyMechanics = (tokens) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (err) {
-        console.error('🔥 Error sending push notification:', err);
+        console.error("🔥 Error sending push notification:", err);
     }
 });
 exports.notifyMechanics = notifyMechanics;

@@ -1,3 +1,5 @@
+import { StoreResponseDto } from "../../../DTO/dto";
+import { StoreMap } from "../../../DTO/map/store.map";
 import { StoreEntities } from "../../../entities/StoreEntities";
 import { WalletEntities } from "../../../entities/walletEntities";
 import { IstoreRepositories } from "../../../interfaces/repositories/store/Istorerepositories";
@@ -27,7 +29,7 @@ export class SendOtp{
             owner_phone: string; 
             password: string; 
         } //
-    ): Promise<StoreEntities| void> {
+    ): Promise<StoreResponseDto| void> {
         console.log(storeDetails.owner_email);
     
         const storeOwner = await this.storeRepositories.findByowner_email(storeDetails.owner_email);
@@ -37,8 +39,8 @@ export class SendOtp{
 
 
         
-            const storeId=await generateStoreID(storeDetails.name)
-            const hashPassword=await hashpass(storeDetails.password)
+            const storeId=await generateStoreID(storeDetails.name);
+            const hashPassword=await hashpass(storeDetails.password);
             
             const newstore=new StoreEntities(
                 "",
@@ -48,9 +50,9 @@ export class SendOtp{
                 storeDetails.owner_phone,
                 true,
                hashPassword,
-                storeId)
+                storeId);
 
-           const store= await this.storeRepositories.create(newstore)
+           const store= await this.storeRepositories.create(newstore);
             await sendOtp(storeDetails.owner_email, username, storeId,true);
 
             const wallet=new WalletEntities(
@@ -60,12 +62,12 @@ export class SendOtp{
                     0,
                 
                     
-                )
+                );
                     
-                this.walletrepositories.create(wallet)
+                this.walletrepositories.create(wallet);
                     
 
-            return store
+            return StoreMap.toResponse(store);
 
                }
     
@@ -81,7 +83,7 @@ export class SendOtp{
                 storeDetails.password,
                 ""
             
-            )
+            );
           await redisClient.setEx("storeotp", 60, JSON.stringify(otp));
           
           await redisClient.setEx("storeData", 60, JSON.stringify(storeData));
