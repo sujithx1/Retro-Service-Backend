@@ -65,7 +65,7 @@ export class Usercontroller {
 
       res.status(200).json({ message: "Enter Otp check your Email" });
     } catch (error) {
-   return next(error)
+   return next(error);
     }
   }
   async OtpChecking(req: Request, res: Response,next:NextFunction) {
@@ -100,7 +100,7 @@ export class Usercontroller {
         .status(201)
         .json({ mesage: "user registerd ", user });
     } catch (error) {
-         return next(error)
+         return next(error);
     }
   }
 
@@ -129,7 +129,7 @@ export class Usercontroller {
           user,
         });
     } catch (error) {
-         return next(error)
+         return next(error);
     }
   }
 
@@ -154,8 +154,7 @@ export class Usercontroller {
         })
         .status(200)
         .json({ message: "login success", user, token: access_token });
-    } catch (error: any) {
-      console.log("error -> usercntrol - > googleSignin", error.message);
+    } catch (error) {
       next(error);
     }
   }
@@ -169,9 +168,8 @@ export class Usercontroller {
       if (userToken) res.clearCookie("user_refreshToken");
 
       res.status(200).json({ message: "success logout" });
-    } catch (error: any) {
-      console.log("error userlogout", error.message);
-      next(error);
+    } catch (error) {
+     next(error);
     }
   }
 
@@ -354,7 +352,7 @@ export class Usercontroller {
     next: NextFunction
   ) {
     try {
-      const { userId, feedback, employeeId ,type,paymentId,amount,rating,bookingId} = req.body;
+      const { userId, feedback, employeeId ,type,amount,rating,bookingId} = req.body;
       console.log(req.body);
 
       if (!userId    || !feedback || !employeeId ||!type ||!rating||!bookingId)

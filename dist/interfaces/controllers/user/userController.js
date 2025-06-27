@@ -137,7 +137,6 @@ class Usercontroller {
                     .json({ message: "login success", user, token: access_token });
             }
             catch (error) {
-                console.log("error -> usercntrol - > googleSignin", error.message);
                 next(error);
             }
         });
@@ -151,7 +150,6 @@ class Usercontroller {
                 res.status(200).json({ message: "success logout" });
             }
             catch (error) {
-                console.log("error userlogout", error.message);
                 next(error);
             }
         });
@@ -287,7 +285,7 @@ class Usercontroller {
     User_post_report_feedBack_employee_controll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { userId, feedback, employeeId, type, paymentId, amount, rating, bookingId } = req.body;
+                const { userId, feedback, employeeId, type, amount, rating, bookingId } = req.body;
                 console.log(req.body);
                 if (!userId || !feedback || !employeeId || !type || !rating || !bookingId)
                     return next(new custom_errors_1.CustomError(" missing Feild", 401, error_enum_1.AppError.ValidationError));
