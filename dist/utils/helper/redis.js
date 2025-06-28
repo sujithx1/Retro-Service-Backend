@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const redis_1 = require("redis");
 const redisClient = (0, redis_1.createClient)({
-    url: process.env.REDIS_URL,
+    url: "redis://default:Ryd92nVSW4229Q6ovcHRNEP8jJwlZep7@redis-17917.c265.us-east-1-2.ec2.redns.redis-cloud.com:17917",
 });
 redisClient.on("error", (err) => {
     console.error("Redis Error:", err);
