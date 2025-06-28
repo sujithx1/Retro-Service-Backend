@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.productcontroller = void 0;
+const productController_1 = require("../../interfaces/controllers/products/productController");
+const productmongorepositories_1 = require("../../interfaces/repositories/product/productmongorepositories");
+const getproductsbystoreId_1 = require("../../use-cases/store/getproductsbystoreId");
+const getproductbyid_1 = require("../../use-cases/store/product/getproductbyid");
+const SearchProduct_1 = require("../../use-cases/store/product/SearchProduct");
+const productrepositories = new productmongorepositories_1.ProductMongoRepositories();
+const getproductsbyStoreId = new getproductsbystoreId_1.Store_getproductsbystoreId(productrepositories);
+const getproductByid = new getproductbyid_1.ProductgetbyIduseCase(productrepositories);
+const search_productByname = new SearchProduct_1.GetProductSearchuseCase(productrepositories);
+exports.productcontroller = new productController_1.ProductController(getproductsbyStoreId, getproductByid, search_productByname);

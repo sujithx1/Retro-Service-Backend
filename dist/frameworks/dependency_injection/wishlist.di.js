@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.wishlistcontroller = void 0;
+const wishlistcontroller_1 = require("../../interfaces/controllers/wishlistcontroller/wishlistcontroller");
+const Wishlistrepositories_1 = require("../../interfaces/repositories/wishlist/Wishlistrepositories");
+const create_usecase_1 = require("../../use-cases/wishlist/create.usecase");
+const deletewishlistByid_1 = require("../../use-cases/wishlist/deletewishlistByid");
+const getwishlistsuser_1 = require("../../use-cases/wishlist/getwishlistsuser");
+const wishlistrepositories = new Wishlistrepositories_1.WishlistMongoRepository();
+const createwishlist = new create_usecase_1.CreateWishlistuseCase(wishlistrepositories);
+const getwishlist_byuserId = new getwishlistsuser_1.User_getwishlistsbyUserId(wishlistrepositories);
+const deletewishlistByid = new deletewishlistByid_1.User_deletewishlistuseCase(wishlistrepositories);
+exports.wishlistcontroller = new wishlistcontroller_1.WishlistController(createwishlist, getwishlist_byuserId, deletewishlistByid);

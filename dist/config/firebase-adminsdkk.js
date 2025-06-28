@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.universeDomain = exports.clientCertUrl = exports.authProviderCertUrl = exports.tokenUri = exports.authUri = exports.clientId = exports.clientEmail = exports.privateKey = exports.privateKeyId = exports.projectId = exports.type = void 0;
+exports.type = process.env.FIREBASE_TYPE;
+exports.projectId = process.env.FIREBASE_PROJECT_ID;
+exports.privateKeyId = process.env.FIREBASE_PRIVATE_KEY_ID;
+exports.privateKey = process.env.FIREBASE_PRIVATE_KEY;
+exports.clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+exports.clientId = process.env.FIREBASE_CLIENT_ID;
+exports.authUri = process.env.FIREBASE_AUTH_URI;
+exports.tokenUri = process.env.FIREBASE_TOKEN_URI;
+exports.authProviderCertUrl = process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL;
+exports.clientCertUrl = process.env.FIREBASE_CLIENT_X509_CERT_URL;
+exports.universeDomain = process.env.FIREBASE_UNIVERSE_DOMAIN;
